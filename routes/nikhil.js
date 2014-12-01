@@ -276,8 +276,8 @@ function updateForm(req,res){
 
 	var getFixedRecordSql = 'SELECT `seller_id`,a.product_id,`product_name`,`product_desc`,'+
 	'`product_condition`,`product_status`,`category_id`,`price_per_unit`,'+
-	'`units_in_stock`,`product_listed_as`,`bid_expiry_time`,b.bid_start_price FROM product a, bid_header_item b '+
-	' WHERE a.product_id = b.product_id and a.product_id = ? AND isActiveProduct = 1 and product_listed_as = \'Fixed-Price\'';
+	'`units_in_stock`,`product_listed_as`,`bid_expiry_time` FROM product a '+
+	' WHERE a.product_id = ? AND isActiveProduct = 1 and product_listed_as = \'Fixed-Price\'';
 	var finalquery;
 	var updates = [productId];
 	getAuctionRecordSql = mysql.format(getAuctionRecordSql, updates);

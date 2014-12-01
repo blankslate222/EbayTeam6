@@ -3,9 +3,9 @@ var mysql = require('mysql');
 
 function getConnection(){
 	var connection = mysql.createConnection({
-	    host     : 'localhost',
-	    user     : 'root',
-	    password : 'admin',
+	    host     : 'ebayteam6.cj2nm3ydyfao.us-west-2.rds.amazonaws.com',
+	    user     : 'ebayteam6',
+	    password : 'ebayteam6',
 	    database : 'ebay',
 	    multipleStatements: true
 	});
