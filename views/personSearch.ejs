@@ -1,0 +1,304 @@
+<html>
+<head>
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/js/jquery.slides.min.js"></script>
+<script type="text/javascript" src="/js/ejs_production.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script type="text/javascript">
+var prod_cond = {};
+var name = "";
+var email = "";
+var city = "";
+var zip = "";
+var mem_id = 0;
+var type = 0;
+
+$(function() {
+$("#name").autocomplete({
+    source: function(request, response) {
+    $.ajax({
+    url: "/autocomplete/personName",
+    type: "POST",
+    dataType: "json",
+    data: { name: request.term},
+    success: function( data ) {
+             
+        response( $.map( data, function( item ) {
+        return {
+            label: item.person_fname,
+            value: item.person_fname,
+        }
+        }));
+    },
+    error: function (error) {
+       alert('error: ' + error);
+    }
+    });
+    },
+    minLength: 1
+    });
+});
+
+$(function() {
+$("#city").autocomplete({
+    source: function(request, response) {
+    $.ajax({
+    url: "/autocomplete/personCity",
+    type: "POST",
+    dataType: "json",
+    data: { city: request.term},
+    success: function( data ) {
+             
+        response( $.map( data, function( item ) {
+        return {
+            label: item.person_city,
+            value: item.person_city,
+        }
+        }));
+    },
+    error: function (error) {
+       alert('error: ' + error);
+    }
+    });
+    },
+    minLength: 1
+    });
+});
+
+$(function() {
+$("#email").autocomplete({
+    source: function(request, response) {
+    $.ajax({
+    url: "/autocomplete/personEmail",
+    type: "POST",
+    dataType: "json",
+    data: { email: request.term},
+    success: function( data ) {
+             
+        response( $.map( data, function( item ) {
+        return {
+            label: item.person_email,
+            value: item.person_email,
+        }
+        }));
+    },
+    error: function (error) {
+       alert('error: ' + error);
+    }
+    });
+    },
+    minLength: 1
+    });
+});
+
+$(function() {
+$("#zip").autocomplete({
+    source: function(request, response) {
+    $.ajax({
+    url: "/autocomplete/personZip",
+    type: "POST",
+    dataType: "json",
+    data: { zip: request.term},
+    success: function( data ) {
+             
+        response( $.map( data, function( item ) {
+        return {
+            label: item.person_zip,
+            value: item.person_zip,
+        }
+        }));
+    },
+    error: function (error) {
+       alert('error: ' + error);
+    }
+    });
+    },
+    minLength: 1
+    });
+});
+
+
+$(function() {
+$("#mem_id").autocomplete({
+    source: function(request, response) {
+    $.ajax({
+    url: "/autocomplete/membershipid",
+    type: "POST",
+    dataType: "json",
+    data: { memId: request.term},
+    success: function( data ) {
+             
+        response( $.map( data, function( item ) {
+        return {
+            label: item.membership_id,
+            value: item.membership_id,
+        }
+        }));
+    },
+    error: function (error) {
+       alert('error: ' + error);
+    }
+    });
+    },
+    minLength: 1
+    });
+});
+
+
+
+
+ 			$.ajax({
+                    url: "/personType",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    	    for(key in data) {
+                    	    	var label = document.createElement('label');
+                    	    	label.setAttribute("for",data[key].person_type);
+                    	    	var inputTag = document.createElement('input');
+                    	    	inputTag.name="person_type";
+                    	    	inputTag.id=data[key].person_type;
+                    	    	inputTag.value=data[key].person_type;
+                    	    	inputTag.type="radio";
+                    	    	inputTag.className="basic_aspect_chbx";
+                    	    	inputTag.style.position='static';
+                    	    	label.appendChild(inputTag);
+                    	    	label.appendChild(document.createTextNode( '\u00A0' ));
+                    	    	label.appendChild(document.createTextNode(data[key].person_type));
+                    	    	document.getElementById('person_type').appendChild(label);
+                    	    	document.getElementById('person_type').appendChild(document.createElement('br'));
+                    	    }
+                    	    
+                    },
+                    error: function() {
+                        
+                    }
+             });
+             
+             
+             
+	function search() {
+		document.getElementById('ResultSetItems').innerHTML = "";
+		type = $("input[name=person_type]:checked").val();
+		name = document.getElementById('name').value;
+		email = document.getElementById('email').value;
+		city = document.getElementById('city').value;
+		zip = document.getElementById('zip').value;
+		mem_id = document.getElementById('mem_id').value;
+		
+		 $.ajax({
+                    url: "/search/person",
+                    type: 'GET',
+                    dataType: 'json',
+                    data:{"type":type, "name":name, "email":email, "city":city, "zip":zip, "mem_id":mem_id},
+                    success: function(data) {
+                    	   var result = new EJS({url: '../templates/personGrid.ejs'}).render(data);
+                    	    document.getElementById('ResultSetItems').innerHTML=result;
+                    	    document.getElementById('ResultSetItems').parentNode.parentNode.className += " c-std";
+                    },
+                    error: function() {
+                        
+                    }
+             });
+	}
+</script>
+</head>
+<body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto">
+<div id="gh-gb" tabindex="-1"></div>
+<div class="header">
+	<div class="gh-acc-exp-div">
+	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
+	<!--[if lt IE 9]><div id="gh" class="gh-IE8 gh-flex gh-w gh-simpleH no-touch "><![endif]--><!--[if (gte IE 9)|!(IE)]><!-->
+	<div id="gh" class="gh-w gh-simpleH no-touch gh-flex"><!--<![endif]-->
+	<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img width="117" height="120" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo"></a><![endif]--><!--[if (gte IE 9)|!(IE)]><!--><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo" height="200" width="250"></a><!--<![endif]--></h1></td>
+			<td id="gh-title">Advance Search</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u">
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <a href="/signin" _sp="m570.l1524">Sign in</a>&nbsp;
+				<span id="gh-ug-flex">or <a href="/register" _sp="m570.l2621">register</a></span></span>
+			</li>
+		</ul>
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<a href="http://my.ebay.com/ws/eBayISAPI.dll?MyEbay&amp;gbh=1" _sp="m570.l2919" class="gh-eb-li-a">My eBay</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
+	<div class="ribbon">
+		<div class="icon">
+		</div>
+	</div>
+	</div>
+
+
+	<div id="Center">
+		<div id="CenterPanel">
+			<div class="sbx-c">
+				<div class="cont" style="width:100%position:relative">
+				<h2 class="sbx-h rct-hm rct-bg">Find People</h2>
+					<fieldset>
+						<div style="width:40%;display:inline-block;height:100px"><legend id="kw_lengend">Enter person name</legend>
+						<div class="space-top">
+						<input aria-labelledby="kw_lengend" name="name" autocomplete="on" id="name" size="50" maxlength="300" value="" placeholder="Enter name of the person" type="text">
+						</div>
+						<div style="width:40%;display:inline-block;height:100px" class="space-top"><legend id="kw_lengend">Enter person email</legend>
+						<div class="space-top">
+						<input aria-labelledby="kw_lengend" name="email" id="email" size="50" maxlength="300" value="" placeholder="Enter the email address" type="text">
+						</div>
+						</div>
+						</div>
+						
+						
+						<div style="display:inline-block;width:40%;position:absolute;margin-left:120px"><legend id="kw_lengend">Enter person city</legend>
+						<div class="space-top">
+						<input aria-labelledby="kw_lengend" name="city" id="city" size="50" maxlength="300" value="" placeholder="Enter name of the city" type="text">
+						</div>
+						<div style="width:40%;display:inline-block;height:100px" class="space-top"><legend id="kw_lengend">Enter person zip code</legend>
+						<div class="space-top">
+						<input aria-labelledby="kw_lengend" name="zip" id="zip" size="50" maxlength="300" value="" placeholder="Enter the zip code" type="text">
+						</div>
+						</div>
+						</div>
+						
+					</fieldset>
+					<fieldset>
+						<div style="width:40%;display:inline-block;height:100px"><legend id="kw_lengend">Membership Id</legend>
+						<div class="space-top">
+						<input aria-labelledby="kw_lengend" name="mem_id" id="mem_id" size="50" maxlength="300" value="" placeholder="Enter membership id" type="text">
+						</div>
+						</div>
+						<div id="person_type" style="display:inline-block;width:30%;position:absolute;margin-left:120px" class="checkbox-set"><legend>Person type</legend></div>
+						<button type="submit" class="btn btn-prim" style="margin-left:400px;" onclick="search()">Search</button>
+					</fieldset>
+					
+			</div>
+		</div>
+		</div>
+	</div>
+	
+	
+<div id="CenterWrapper">
+<div id="Center" class="rr_present">
+<div id="CenterPanel" class="full-width left ">
+<div id="CenterPanelInner">
+	<div id="ResultSetItems" class="clearfix">
+		
+	</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

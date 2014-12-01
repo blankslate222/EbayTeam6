@@ -1,0 +1,37 @@
+<%=data.length%> record(s) found
+<% for(var i=0; i<data.length; i++) {%>
+<li style="list-style: none outside none;width:100%;border-collapse: collapse;position: relative;padding: 9px 0px;margin: 0px;left: 0px;border-width: 1px 0px;border-style: solid;border-color: transparent transparent #E4E4E4;color: #777;" class="sresult lvresult clearfix li" r="5">
+				<div class="lvpic pic p225 img left">
+					<div class="lvpicinner full-width picW s225">
+						<a href="" class="img imgWr2">
+				     		<img src="/images/<%=data[i].category_id%>.JPG" class="img" alt=<%=data[i].product_desc%> height="225" width="168">
+				     	</a>
+					</div>
+				</div>
+				<h3 class="lvtitle">
+					<a href="/product/details?productidfordisplay=<%=data[i].product_id%>" class="vip" style="display:block" title="Click this link to access <%=data[i].product_desc%>"><%=data[i].product_desc%></a>
+				</h3>
+				<ul class="lvprices left space-zero" style="list-style:none outside none">
+					<li class="lvextras">
+						<div class="hotness bold">Price per unit: <%=data[i].price_per_unit%></div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">Units left: <%=data[i].units_in_stock%></div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">Product Condition: <%=data[i].product_condition%></div>
+					</li>
+    			</ul>
+    			<ul class="lvprices left space-zero full-width" style="list-style:none outside none">
+					<li class="lvextras">
+						<div class="hotness bold">Time left for bid closure</div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">Category: <%=data[i].category_name%></div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">Bid status: <%=data[i].product_listed_as%></div>
+					</li>
+				</ul>
+			</li>
+<% } %>

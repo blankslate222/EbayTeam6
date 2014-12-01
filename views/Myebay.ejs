@@ -1,0 +1,93 @@
+<html>
+<head>
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/js/jquery.slides.min.js"></script>
+<script type="text/javascript" src="/js/ejs_production.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-2.1.1.js" ></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<body class="sz1200 index redux today stdln en_US rvi" >
+<div id="gh-gb" tabindex="-1"></div>
+<div class="header">
+	<div class="gh-acc-exp-div">
+	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
+	<!--[if lt IE 9]><div id="gh" class="gh-IE8 gh-flex gh-w gh-simpleH no-touch "><![endif]--><!--[if (gte IE 9)|!(IE)]><!-->
+	<div id="gh" class="gh-w gh-simpleH no-touch gh-flex"><!--<![endif]-->
+	<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1">
+<a href="/" class="iclg" _sp="m570.l2586" id="gh-la"><img style=" position:absolute; top:-5px;left:0" alt="" src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/EBay_logo.svg/318px-EBay_logo.svg.png" id="gh-logo" height="50" width="50"></a></h1></td>
+			
+			<td id="gh-title" >Customer Information</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u">
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi!<font color = "blue"></font color>&nbsp;
+				<span id="gh-ug-flex"> <font color = "blue">Last login time :</font color></span></span>
+			</li>
+		</ul>
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<a href="" class="gh-eb-li-a">My eBay</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
+	<div class="ribbon">
+		<div class="icon">
+		</div>
+	</div>
+	</div>
+<!-- <div class="modal-content" style="background-color:#F2F2F2;"> -->
+<!--  <div class="modal-body"  style="background-color:#F2F2F2;">   -->
+ 
+  <!--  <label><font size="4"> <b>Customer Information</b></font></label> -->
+   <form action="/deleteAccount" method="post" >
+    <div class="col-md-3 col-md-offset-2" >
+	       <% for(var j=0; j<users.length;j++)
+	            {    	                
+            %>
+                   <p><strong>First Name:  </strong><%= users[j].person_fname %>  &nbsp <a href="#"  onClick="MyWindow=window.open('editFname','MyWindow','width=400,height=300'); return false;"> edit </a></p> </input>
+           		   <p><strong>Last Name:  </strong> <%= users[j].person_lname %> &nbsp <a href="#"  onClick="MyWindow=window.open('editLname','MyWindow','width=400,height=300'); return false;"> edit </a></p> </input>
+           		    <p><strong>Email: </strong><%= users[j].person_email %> </p>
+           		      <p><strong>Address: </strong><%=users[j].person_address%> &nbsp <a href="#" onClick="MyWindow=window.open('editAddress','MyWindow','width=400,height=300'); return false;"> edit </a></p>
+           		               		   <p><strong>City: </strong><%=users[j].person_city%> &nbsp <a href="#" onClick="MyWindow=window.open('editCity','MyWindow','width=400,height=300'); return false;"> edit </a></p>
+           		               		   <p><strong>Zipcode: </strong><%=users[j].person_zip%> &nbsp <a href="#" onClick="MyWindow=window.open('editZip','MyWindow','width=400,height=300'); return false;"> edit </a></p>
+           	<% 
+	            }
+	       %> 
+	       <br>	  
+	     <!--  <p><strong> The products you bought are: <br> <br>     -->      		        
+           <% 
+	           for(var i=0; i < data.length;i++) 
+	             
+	          	 { 
+	         %> 
+	          	 	 
+           		   <a><%=(i+1)%>: <%=data[i].product_name%> whose amount is : <%=data[i].order_amount%></a></strong></p>
+	       <% 
+	       		}
+	       	%>
+	        <div class="row">
+			<div class="col-xs-6" color:red;>
+ 			<input type="submit" value="Delete Account" STYLE="color:#FFFAF0; background-color:#c41200;" name="action" class="form-control" >
+  			</div>	 
+			</div> 
+
+
+ </form>
+</body>
+</html>

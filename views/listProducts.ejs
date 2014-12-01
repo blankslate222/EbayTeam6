@@ -1,0 +1,41 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script>
+function listAllBids(element){
+	console.log("inside submitform function "+$(element).attr('data-value'));
+    $("input[name=productid]").val($(element).attr('data-value'));
+    $("#formBid").submit();
+}
+
+function displayProductDetails(element){
+	alert("inside submitform function "+$(element).attr('data-value'));
+    $("input[name=productidfordisplay]").val($(element).attr('data-value'));
+    $("#formProductDetail").submit();
+}
+
+</script>
+</head>
+<body>
+	<table border="1">	
+   		   <form style="display: none" action="/product/details" method="post" id='formProductDetail'><input type="hidden" name="productidfordisplay" /></form>
+ 		   <form style="display: none" action="/product/bids" method="post" id='formBid'><input type="hidden" name="productid" /></form>
+ 		   <% productList.forEach(function(product){ %>
+				<tr><td>
+				<a href="#" data-value=<%=product.product_id%> onclick=displayProductDetails(this) style="color: #a50508; text-decoration:none"><%=product.product_name%></a> 				 
+				</td>
+				<td>
+				<%=product.product_desc%> 				
+				</td>
+				<td>
+				<%=product.product_condition%> 
+				</td>
+				<td>
+				<a href="#" data-value=<%= product.product_id%> onclick=listAllBids(this) style="color: #a50508; text-decoration:none">[<%=product.numberOfBids%> bids]</a> 				
+				</td>
+				</tr>
+			<%}); %>
+	</table>
+</body>
+</html>

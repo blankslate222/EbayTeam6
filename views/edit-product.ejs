@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Product</title>
+   
+     	<link rel="stylesheet" href= '/stylesheets/anytime.css' />
+ 	<script src="/js/jquery.js"></script>
+	<script src='/js/anytime.js'></script>
+  </head>
+  <body>
+<div id="middle">
+		<h3>Edit a listed product</h3>
+	<form method="post" action="/product/update" name="edit_product_form" target="_self">
+	<input type = "hidden" name = "seller_id" value="<%=product[0].seller_id%>"/>
+	<input type = "hidden" name = "product_id" value="<%=product[0].product_id%>"/>
+	
+		<table>
+			<tr>
+				<td>Product Name</td>
+				<td><input type="text" name="product_name" required="required" value="<%=product[0].product_name%>" ></td>
+			</tr>
+			<tr>
+				<td>Product Description</td>
+				<td><textarea name='product_desc'
+						required="required"><%=product[0].product_desc%>
+						</textarea></td>
+			</tr>
+			<tr>
+				<td>Product Category</td>
+				<td><select name="category_id">
+				<% for(var i=0;i<category.length;i++){
+				
+				if(currentCategory == category[i].category_id){%>
+					<option value="<%=category[i].category_id%>" selected><%=category[i].category_name%></option>
+ 				
+ 				<%} else {%>
+ 				<option value="<%=category[i].category_id%>"><%=category[i].category_name%></option>
+ 				<%}%>
+ 				<%}%>
+				</select></td>
+			</tr>
+			<tr>
+				<td>Product Status</td>
+				<td><select name="product_status">
+				<%for(var i=0;i<productStatus.length;i++){
+					if(product[0].product_status == productStatus[i]){%>
+         			<option value="<%=productStatus[i]%>" selected><%=productStatus[i]%></option>
+ 				 <%} else{%>
+ 					<option value="<%=productStatus[i]%>"><%=productStatus[i]%></option>
+ 					<%}%>
+ 			<%}%>
+				</select></td>
+			</tr>
+			<tr>
+				<td>Product Condition</td>
+				<td><select name="product_condition" selected = "<%=currentCondition%>">
+				<%for(var i=0;i<productCondition.length;i++){
+         				if(product[0].product_condition == productCondition[i]){%>
+         			<option value="<%=productCondition[i]%>" selected><%=productCondition[i]%></option>
+ 				 <%} else{%>
+ 					<option value="<%=productCondition[i]%>"><%=productCondition[i]%></option>
+ 					<%}%>
+ 				<%}%>
+				</select></td>
+			</tr>
+			<tr>
+			<td>Product Listed As</td>
+				<td><input type="text" name="product_listed_as" required = "required" value="<%=product[0].product_listed_as%>" readonly>
+				</td>
+			</tr>
+			<%if(product[0].product_listed_as == 'Fixed-Price') {%>
+			<tr>
+				<td>Price Per Unit</td>
+				<td><input type="text" name="price_per_unit" required = "required" value="<%=product[0].price_per_unit%>">
+				</td>
+			</tr>
+			<tr>
+				<td>Units In Stock</td>
+				<td><input type="text" name="units_in_stock" required = "required" value="<%=product[0].units_in_stock%>"></td>
+			</tr>		
+			<%}%>
+				<%if(product[0].product_listed_as == 'Auction') {%>
+			<tr>
+				<td>Bid Expiry Time</td>
+				<td><input type="text" name='bid_expiry' id="date" value='<%=product[0].bid_expiry_time%>' required /></td>
+			</tr>
+			<tr>
+				<td>Bid Start Amount in dollars:</td>
+				<td><input type='text' name='start_amount' value='<%=product[0].bid_start_price%>' required></td>
+			</tr>		
+			<%}%>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="Update Product"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="button" onClick="location.href='/seller/<%=product[0].seller_id%>/about'"
+					value="Cancel"></td>
+			</tr>
+		</table>
+	</form>
+	</div>
+	<script>
+  AnyTime.picker( "date");
+  
+  $('#sell_mode').change(function(){
+
+	   var selection = $(this).val();
+	   if(selection == 'Fixed-Price')
+	   {
+	      $('#fixed-price').show();
+	      $('#auction').hide();
+	      $('input[name=price_per_unit]').prop('required',true);
+	      $('input[name=units_in_stock]').prop('required',true);
+	        $('input[name=bid_expiry]').prop('required',false);
+	      $('input[name=start_amount]').prop('required',false);
+	   }
+	   else
+	   {
+		   $('#fixed-price').hide();
+	      $('#auction').show();
+	      $('input[name=bid_expiry]').prop('required',true);
+	      $('input[name=start_amount]').prop('required',true);
+	            $('input[name=price_per_unit]').prop('required',false);
+	      $('input[name=units_in_stock]').prop('required',false);
+	   } 
+
+	});
+	</script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<ul id="ListViewInner" >
+<%=data.length%> record(s) found
+<% for(var i=0; i<data.length; i++) {%>
+<li style="list-style: none outside none;width:100%;border-collapse: collapse;position: relative;padding: 9px 0px;margin: 0px;left: 0px;border-width: 1px 0px;border-style: solid;border-color: transparent transparent #E4E4E4;color: #777;" class="sresult lvresult clearfix li" r="5">
+				<div class="lvpic pic p225 img left">
+					<div class="lvpicinner full-width picW s225">
+						<a href="" class="img imgWr2">
+				     		<img src="/images/1.JPG" class="img" alt="Person image" height="225" width="168">
+				     	</a>
+					</div>
+				</div>
+				<h3 class="lvtitle">
+					<a href="" class="vip" style="display:block" title="Click this link to access <%=data[i].person_fname%>"><%=data[i].person_fname%></a>
+				</h3>
+				<ul class="lvprices left space-zero" style="list-style:none outside none">
+					<li class="lvextras">
+						<div class="hotness bold">Last Name: <%=data[i].person_lname%></div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">Email: <%=data[i].person_email%></div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">City: <%=data[i].person_city%></div>
+					</li>
+    			</ul>
+    			<ul class="lvprices left space-zero full-width" style="list-style:none outside none">
+					<li class="lvextras">
+						<div class="hotness bold">Zip Code: <%=data[i].person_zip%></div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">Type: <%=data[i].person_type%></div>
+					</li>
+					<li class="lvextras">
+						<div class="hotness bold">Membership Id: <%=data[i].membership_id%></div>
+					</li>
+				</ul>
+			</li>
+<% } %>
+</ul>

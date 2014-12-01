@@ -1,0 +1,260 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script src="/js/countdown.min.js" type="text/javascript"></script>
+<script src="/js/bootbox.min.js" type="text/javascript"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="http://localhost:8090/socket.io/socket.io.js" type="text/javascript"></script>
+<link rel='stylesheet' href='/stylesheets/style-R.css' />
+<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+<style>
+</style>
+<script>
+function listAllBids(element){
+	console.log("inside submitform function "+$(element).attr('data-value'));
+   	$("input[name=productid]").val($(element).attr('data-value'));
+    $("#formListBid").submit();
+}
+
+function buyProduct(element){
+	console.log("inside submitform function "+$(element).attr('data-value'));
+   	//$("input[name=productid]").val($(element).attr('data-value'));
+   	$("input[name=productqty]").val(document.getElementById("quantity").value)
+   	$("input[name=seller_rating]").val(document.getElementById("seller_rating").value)
+    $("#buyProduct").submit();
+}
+
+function placeBid(){
+	console.log("inside place bid");
+bootbox.dialog({
+  message: "Please confirm the bid amount: $"+document.getElementById("MaxBidId").value,
+  title: "eBay - Place Bid",
+  buttons: {
+    success: {
+      label: "OK!",
+      className: "btn-success",
+      callback: function() {
+	   	$("input[name=newbidamt]").val(document.getElementById("MaxBidId").value);
+ 	   $("#placeBid").submit();
+      }
+    },
+    danger: {
+      label: "Cancel",
+      className: "btn-danger",
+      callback: function() {
+       // Example.show("uh oh, look out!");
+      }
+    }
+  }
+});   
+}
+</script>
+</head>
+<body bgcolor="#f5f5f1">
+<form style="display: none" action="/product/details" method="post" id='formProductDetail'><input type="hidden" name="productidfordisplay" value="<%= productDetails[0].product_id%>"/></form>
+<div id="Body" style="padding-top: 100px; min-width: 1060px; max-width: 1070px;">
+	<div id="CenterPanel">
+	<div id="PicturePanel" class="pp-c">
+		<div id="mainImgHldr" style="width:300px; !important" align="center" >
+			<img id="icImg" class="img img300" style="border: 1px solid #ccc !important;" itemprop="image" src="http://i.ebayimg.com/00/s/NjY4WDU5NQ==/z/DLkAAOSw7NNUExTR/$_35.JPG" style="" onload="picTimer=new Date().getTime();" clk="0"  mskuskip="false">
+		</div>
+		<div class="spacer"></div>
+		<a href="" target="_blank" style="float: left; width:295px;"><img src="http://p.ebaystatic.com/aw/ads/houseads/Q22014_DailyDeals_Generic_Affiliates_Remnant_300x250.gif" border="0" width=295px alt="Daily Deals"></a>
+	</div>
+	<h1 class="it-ttl" itemprop="name" id="itemTitle"><span class="g-hdn">Details about  &nbsp;</span><%=productDetails[0].product_name%></h1>
+	<div class="it-rlBr  it-rlBr300 " style=""> </div>
+	<div class="u-flL lable"> Item condition:</div>	
+	<div class="u-flL condText"> <%=productDetails[0].product_condition%></div>	
+	<div class="spacer"></div>
+	<div class="spacer"></div>
+	<div class="spacer"></div>
+	<% if (productDetails[0].product_status !== 'Sold' && productDetails[0].product_listed_as === 'Auction') { %>
+		<div class="u-flL lable" style="width: 100px; text-align:right;"> Time left:</div>
+		<div class="u-flL condText"><div id="bidexpiry-timer"></div> </div>	
+	<% } %>
+	<div class="spacer"></div>
+	<div class="spacer"></div>
+	<div class="spacer"></div>
+	<div class="c-std vi-ds3cont-box-marpad">
+	<% if (productDetails[0].product_listed_as === 'Auction') { %>
+	<div class="actPanel  vi-noborder" style="width: 390px;">	
+		<div class="spacer"></div>
+		<div class="u-cb">
+			<div class="vi-bbox-dspn u-flL lable pdT4" style="padding-left:19px;">Current bid:</div> 
+			<div class="u-flL w29 vi-price" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" style="width:30%">
+				<span class="notranslate" id="prcIsum_bidPrice" itemprop="price">USD&nbsp;<%=productDetails[0].currentBid%></span>
+				<div class="spacer"></div>
+			</div>
+			<span class="u-dspblk">
+				<div class="u-flL pdT4 pdR8">
+					<span>
+ 					<form style="display: none" action="/product/bids" method="post" id='formListBid'><input type="hidden" name="productid" /></form>
+					[&nbsp;<a href="#" rel="nofollow" data-value=<%= productDetails[0].product_id%> onclick=listAllBids(this) id="vi-VR-bid-lnk" class="vi-bidC"><span id="qty-test"><%=productDetails[0].noOfBids%>
+					</span>
+					<span>&nbsp;bids</span></a>&nbsp;]</span>
+				</div>
+			</span> 
+		</div> 
+		<div class="vi-bbox-dspn u-cb spcr"></div>
+		<div class="spacer"></div>
+		<div class="u-cb">
+			<div class="vi-bbox-dspn u-flL lable pdT3" style="width:26%">&nbsp;</div>
+			<div class="u-flL u-b w29 " id="" style="width:30%">
+				<% if (productDetails[0].product_status === 'Sold') { %>
+					<input id="MaxBidId" placeholder="" aria-labelledby="maxbidlabel" class="notranslate MaxBidClass" type="text" autocomplete="off" size="11" maxlength="10" name="maxbid" disabled value=""> 
+				<% } else {%>
+					<input id="MaxBidId" placeholder="" aria-labelledby="maxbidlabel" class="notranslate MaxBidClass" type="text" autocomplete="off" size="11" maxlength="10" name="maxbid" value=""> 				
+				<% } %>
+			</div>
+			<div class=""></div>
+			<!-- TODO: remove hardcoded Id's -->
+ 			<form style="display: none" action="/product/placebid" method="post" id='placeBid'><input id="productIdValue" type="hidden" name="productid" value="<%=productDetails[0].product_id%>"><input type="hidden" name="newbidamt"><input type="hidden" name="customerid" value=<%=customerId%>></form>
+			<div class="u-flL ">
+				<!-- inserting code for another button -->
+ 				<!-- code ends  -->
+				<a role="button" _sp="p2047675.l4023" id="bidBtn_btn" onclick=placeBid() style="" class="btn btn-prim btn-m vi-VR-btnWdth-L" href="#" vib="vib" rel="nofollow">Place bid</a>
+			</div>
+			<!-- ShowStatusOnLoad -->
+		</div>
+		<div class="u-cb vi-bbox-dspn">
+			<div class="u-flL lable" style="width:26%">&nbsp;</div>
+			<div id="w1-16-_mtb" class="notranslate u-flL bid-note">Enter value more than $&nbsp;<%=productDetails[0].currentBid%></div>
+		</div>
+			<!-- //TODO : remove hardcoded ID for Shipping cost -->
+		<div class="u-cb spcr vi-bbox-spcr10"></div>
+	</div>
+	<% } else if (productDetails[0].product_listed_as === 'Fixed Price') {%>
+	<div class="actPanel  vi-noborder" style="width: 390px;">	
+		<div class="spacer"></div>
+		<div class="u-cb">
+			<div class="vi-bbox-dspn u-flL lable pdT4" style="padding-left:5px;">Product Price:</div> 
+			<div class="u-flL w29 vi-price" itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" style="width:30%">
+				<span class="notranslate" id="prcIsum_bidPrice" itemprop="price">USD&nbsp;<%=productDetails[0].price_per_unit%></span>
+				<div class="spacer"></div>
+			</div>
+		</div> 
+		<div class="vi-bbox-dspn u-cb spcr"></div>
+		<div class="spacer"></div>
+		<div class="u-cb">
+			<div class="vi-bbox-dspn u-flL lable pdT3" style="width:26%; text-align: right;">Quantity:</div>
+			<div class="u-flL u-b w29 " id="" style="width:30%">
+				<input id="quantity" placeholder="" aria-labelledby="productqtylabel" class="notranslate MaxBidClass" type="text" autocomplete="off" size="11" maxlength="10" name="productqty" value=""> 
+			</div>
+			<div class=""></div>
+			<!-- TODO: remove hardcoded Id's -->
+ 			<form style="display: none" action="/product/buy" method="post" id='buyProduct'><input id="productIdValue" type="hidden" name="productidfordisplay" value="<%=productDetails[0].product_id%>"><input type="hidden" name="productqty"><input type="hidden" name="customerid" value=<%=customerId%>><input type="hidden" name="productPrice" value=<%=productDetails[0].price_per_unit%>><input type="hidden" name="seller_id" value=<%=sellerDetails[0].seller_id%>><input type="hidden" name="seller_rating" value=""></form>
+			<div class="u-flL ">
+				<!-- inserting code for another button -->
+ 				<!-- code ends  -->
+				<a role="button" _sp="p2047675.l4023" id="bidBtn_btn" onclick=buyProduct() style="" class="btn btn-prim btn-m vi-VR-btnWdth-L" href="#" vib="vib" rel="nofollow">Buy Now</a>
+			</div>
+			<!-- ShowStatusOnLoad -->
+		</div>
+		<div class="u-cb vi-bbox-dspn">
+			<div class="u-flL lable" style="width:22%">&nbsp;</div>
+		</div>
+			<!-- //TODO : remove hardcoded ID for Shipping cost -->
+		<div class="u-cb spcr vi-bbox-spcr10"></div>
+	</div>
+	<div class="vi-bbox-dspn u-flL lable pdT3" style="width:26%; text-align: right;">Seller Rating:</div>
+	<div class="u-flL u-b w29 " id="" style="width:30%">
+		<input id="seller_rating" placeholder="" aria-labelledby="sellerratinglabel" class="notranslate MaxBidClass" type="text" autocomplete="off" size="11" maxlength="10" name="seller_rating" value=""> 
+	</div>
+	<div class="spacer"></div>
+	<div class="spacer"></div>
+	<div class="spacer"></div>
+	<% } %>
+	<div class="spacer"></div>
+	
+	<div class="vi-bbox-dspn u-flL w29" style="width:100%; color:red;" align="center"><%=errormsg%></div>
+	<div class="spacer"></div>
+	<div class="spacer"></div>
+	<div id="why2buy">
+		<div class="w2b w2bsls">
+    		<div class="w2b-cnt w2b-2 w2b-red"><span class="w2b-sgl">Hassle-free returns</span></div>
+        	<div class="w2b-cnt w2b-2 w2b-brdr"><span class="w2b-sgl">100% positive feedback</span></div>
+        </div>
+	</div>
+	<div class="vi-bbox-dspn u-cb spcr"></div>
+		<img src="/images/bottom.gif" height="320" width="390" border="0" alt="">
+	</div>
+			<div class="right-box">
+			<div class="user-scorecard">
+			<div class="passport-container">
+				<h2 class="si-ttl">Seller Information</h2>
+				<div class="mbg" >
+					<a href="/seller/<%=sellerDetails[0].seller_id%>"><span class="mbg-nw"><%=sellerDetails[0].person_email%></span></a> (<%=sellerDetails[0].noOfProductsSold%>&nbsp;
+					<span class="vi-mbgds3-bkImg vi-mbgds3-bigStar" alt="feedback score: 15517" title="feedback score: 15517"></span>)
+					<br>
+					<div id="si-fb">100%&nbsp;Positive feedback</div>
+					<div class="si-rlDot"></div>
+					<div class="si-ss-eu">					
+					<div class="u-flL si-ss-lbl " id="" style="">
+					Visit store: <a href="" style="text-decoration:none; color: #1958bd;">Yelp</a></div>
+					<br>					
+					</div>
+					<div style="margin-top: 5px;">
+					<a href="" style="text-decoration:none; color: #1958bd; "> See other Items	</a>
+					</div>
+					<div class="si-rlDot"></div>
+					<div class="si-pd">
+						Registered as a Business Seller
+					</div>				
+				</div>
+			</div>
+			</div>
+			<a href="" target="_blank" style="float: right;"><img src="http://p.ebaystatic.com/aw/ads/houseads/eBayGiftCard_300x250-2.jpg" border="0" alt=""></a>
+			<input type="text" style="display:none" id='expirytime' value="<%=productDetails[0].bid_expiry_time%>">
+			<input type="text" style="display:none" id='productlistedas' value="<%=productDetails[0].product_listed_as%>">
+			<input type="text" style="display:none" id='productstatus' value="<%=productDetails[0].product_status%>">
+		</div>
+	<script>
+		if (document.getElementById("productlistedas").value === 'Auction' && document.getElementById("productstatus").value !== 'Sold')
+		{
+ 		var timer = document.getElementById("bidexpiry-timer")
+			, now = new Date(document.getElementById('expirytime').value)
+			, deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(),now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+ 
+		timer.innerHTML = countdown(deadline).toString();
+		console.log("deadline is:"+deadline);
+		console.log("expiry time:"+document.getElementById("expirytime"));
+		console.log("value is"+countdown(deadline).toString());
+		var myVar =	setInterval(function(){
+					console.log("Countdown value"+countdown(deadline ).toString()+"x");
+				if (countdown(deadline).toString() !== ""){
+					console.log("Countdown value"+countdown(deadline ).toString());
+					timer.innerHTML = countdown(deadline ).toString();
+				}
+				else{
+					console.log("It should stop now");
+					clearInterval(myVar);
+				}
+			}, 1000);
+		}
+	</script>
+	<script type="text/javascript"> 
+		// Start the socket
+		var socket = new io.connect('http://localhost:8090');
+		socket.connect();
+		socket.on('message', function(msg){
+			console.log(msg);
+			var resultArray = msg.split(":");
+			if (resultArray[0] === "There is an expired auction"){
+				console.log("This is a successful auction ending");
+				console.log("Product Id:"+resultArray[1]);
+				var productId = document.getElementById("productIdValue").value;
+				if(productId === resultArray[1]){
+					console.log("This screen needs to be refreshed");
+					$("#formProductDetail").submit();										
+				}else{
+					console.log("Nothing needs to be done");
+				}
+			}
+			else{
+				console.log("nothing needs to be done");
+			}
+		});
+	</script>
+</body>
+</html>

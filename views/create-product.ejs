@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Product </title>
+    
+     	<link rel="stylesheet" href= '/stylesheets/anytime.css' />
+ 	<script src="/js/jquery.js"></script>
+	<script src='/js/anytime.js'></script>
+  </head>
+  <body>
+<div id="middle">
+		<h3>Add a new product</h3>
+	<form method="post" action="/product/new" name="new_product_form" target="_self">
+	<input type = "hidden" name = "seller_id" value="<%=seller_id%>"/>
+		<table>
+			<tr>
+				<td>Product Name</td>
+				<td><input type="text" name="product_name" required="required"></td>
+			</tr>
+			<tr>
+				<td>Product Description</td>
+				<td><textarea name='product_desc'
+						placeholder="a short description" required="required"></textarea></td>
+			</tr>
+			<tr>
+				<td>Product Category</td>
+				<td><select name="category_id">
+				<%for(var i=0;i<category.length;i++){%>
+         			<option value="<%=category[i].category_id%>"><%=category[i].category_name%></option>
+ 				<%}%>
+				</select></td>
+			</tr>
+			<tr>
+				<td>Product Status</td>
+				<td><select name="product_status">
+				<%for(var i=0;i<productStatus.length;i++){%>
+         			<option value="<%=productStatus[i]%>"><%=productStatus[i]%></option>
+ 				<%}%>
+				</select></td>
+			</tr>
+			<tr>
+				<td>Product Condition</td>
+				<td><select name="product_condition">
+				<%for(var i=0;i<productCondition.length;i++){%>
+         			<option value="<%=productCondition[i]%>"><%=productCondition[i]%></option>
+ 				<%}%>
+				</select></td>
+			</tr>
+			<tr>
+				<td>Mode Of Sale</td>
+				<td><select name="sell_mode" id="sell_mode" required='required'>
+						<option>choose mode</option>
+					<% for(var i=0; i<sell_mode.length; i++){%>
+   						<option value="<%=sell_mode[i]%>"><%=sell_mode[i]%></option>
+ 					<%}%>
+					</select>
+				</td>
+			</tr>
+		</table>
+	<div id='fixed-price' style="display: none">
+		<table>
+			<tr>
+				<td>Units In Stock</td>
+				<td><input type="text" name="units_in_stock"></td>
+			</tr>
+			<tr>
+				<td>Price per unit</td>
+				<td><input type='text' name='price_per_unit'/></td>
+			</tr>
+		</table>
+	</div>
+
+
+	<div id='auction' style="display: none">
+		<table>
+			<tr>
+				<td>Expiry Date</td>
+				<td><input type="text" name='bid_expiry' id="date" /></td>
+			</tr>
+			<tr>
+				<td>Bid Start Amount in dollars:</td>
+				<td><input type='text' name='start_amount'></td>
+			</tr>
+		</table>
+	</div>
+	<table>
+		<tr><td><input type="submit" value="Create Product"></td></tr>
+		<tr><td><input type="button" onClick="location.href='/seller/<%=seller_id%>'" value="Cancel"></td></tr>
+					
+	</table>
+	</form>
+	</div>
+	
+<script>
+  AnyTime.picker( "date");
+  
+  $('#sell_mode').change(function(){
+
+	   var selection = $(this).val();
+	   if(selection == 'Fixed-Price')
+	   {
+	      $('#fixed-price').show();
+	      $('#auction').hide();
+	      $('input[name=price_per_unit]').prop('required',true);
+	      $('input[name=units_in_stock]').prop('required',true);
+	        $('input[name=bid_expiry]').prop('required',false);
+	      $('input[name=start_amount]').prop('required',false);
+	   }
+	   else
+	   {
+		   $('#fixed-price').hide();
+	      $('#auction').show();
+	      $('input[name=bid_expiry]').prop('required',true);
+	      $('input[name=start_amount]').prop('required',true);
+	            $('input[name=price_per_unit]').prop('required',false);
+	      $('input[name=units_in_stock]').prop('required',false);
+	   } 
+
+	});
+  </script>
+	
+  </body>
+</html>

@@ -1,0 +1,251 @@
+<html>
+<head>
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/js/jquery.slides.min.js"></script>
+<script type="text/javascript" src="/js/ejs_production.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script type="text/javascript">
+var prod_cond = {};
+var search_prod_cond = "";
+var search_prod_bid_status = "";
+var category = 0;
+var text = "";
+var u_range = 0;
+var l_range = 0;
+ 			$.ajax({
+                    url: "/productConditions",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    	    prod_cond=data;
+                    	    for(key in data) {
+                    	    	var label = document.createElement('label');
+                    	    	label.setAttribute("for",data[key].product_condition);
+                    	    	var inputTag = document.createElement('input');
+                    	    	inputTag.name="product_cond";
+                    	    	inputTag.id=data[key].product_condition;
+                    	    	inputTag.value=data[key].product_condition;
+                    	    	inputTag.type="radio";
+                    	    	inputTag.className="basic_aspect_chbx";
+                    	    	//$(inputTag).css({'position':''});
+                    	    	inputTag.style.position='static';
+                    	    	label.appendChild(inputTag);
+                    	    	label.appendChild(document.createTextNode( '\u00A0' ));
+                    	    	label.appendChild(document.createTextNode(data[key].product_condition));
+                    	    	document.getElementById('prod_cond_f').appendChild(label);
+                    	    	document.getElementById('prod_cond_f').appendChild(document.createElement('br'));
+                    	    }
+                    	    
+                    },
+                    error: function() {
+                        
+                    }
+             });
+             
+             
+             $.ajax({
+                    url: "/productBidStatus",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    	    for(key in data) {
+                    	    	var label = document.createElement('label');
+                    	    	label.setAttribute("for",data[key].product_listed_as);
+                    	    	var inputTag = document.createElement('input');
+                    	    	inputTag.name="product listed as";
+                    	    	inputTag.id=data[key].product_listed_as;
+                    	    	inputTag.value=data[key].product_listed_as;
+                    	    	inputTag.type="radio";
+                    	    	inputTag.className="basic_aspect_chbx";
+                    	    	//$(inputTag).css({'position':''});
+                    	    	inputTag.style.position='static';
+                    	    	label.appendChild(inputTag);
+                    	    	label.appendChild(document.createTextNode( '\u00A0' ));
+                    	    	label.appendChild(document.createTextNode(data[key].product_listed_as));
+                    	    	document.getElementById('bid_status_f').appendChild(label);
+                    	    	document.getElementById('bid_status_f').appendChild(document.createElement('br'));
+                    	    }
+                    	    
+                    },
+                    error: function() {
+                        
+                    }
+             });
+             
+             
+             
+             $.ajax({
+                    url: "/categories",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    		document.getElementById('e1-1').innerHTML="";
+                    		var defOption = document.createElement('option');
+                    		defOption.value=0;
+                    		defOption.appendChild(document.createTextNode('All Categories'));
+                    		document.getElementById('e1-1').appendChild(defOption);
+                    	    for(key in data) {
+                    	    	var optionTag = document.createElement('option');
+                    	    	optionTag.value=data[key].category_id;
+                    	    	optionTag.appendChild(document.createTextNode(data[key].category_name));
+                    	    	document.getElementById('e1-1').appendChild(optionTag);
+                    	    }
+                    	    
+                    },
+                    error: function() {
+                        
+                    }
+             });
+             
+             
+             
+$(function() {
+$("#_nkw").autocomplete({
+    source: function(request, response) {
+    $.ajax({
+    url: "/autocomplete/productName",
+    type: "POST",
+    dataType: "json",
+    data: { name: request.term},
+    success: function( data ) {
+             
+        response( $.map( data, function( item ) {
+        return {
+            label: item.product_name,
+            value: item.product_name,
+        }
+        }));
+    },
+    error: function (error) {
+       alert('error: ' + error);
+    }
+    });
+    },
+    minLength: 1
+    });
+});
+             
+	function search() {
+		search_prod_cond = $("input[name=product_cond]:checked").val();
+		
+		search_prod_bid_status = $("input[name=bid_status]:checked").val();
+		category = document.getElementById('e1-1').options[document.getElementById('e1-1').selectedIndex].value;
+		text = document.getElementById('_nkw').value;
+		
+		u_range = document.getElementById('_udlo').value;
+		l_range = document.getElementById('_udhi').value;
+		
+		 $.ajax({
+                    url: "/search",
+                    type: 'GET',
+                    dataType: 'json',
+                    data:{"search_prod_cond":search_prod_cond, "search_prod_bid_status":search_prod_bid_status, "category":category, "text":text, "u_range":u_range, "l_range":l_range},
+                    success: function(data) {
+                    	    
+                    	    
+                    	    var result = new EJS({url: '../templates/grid.ejs'}).render(data);
+                    	    document.getElementById('ListViewInner').innerHTML=result;
+                    	    document.getElementById('ResultSetItems').parentNode.parentNode.className += " c-std";
+                    },
+                    error: function() {
+                        
+                    }
+             });
+	}
+</script>
+</head>
+<body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto">
+<div id="gh-gb" tabindex="-1"></div>
+<div class="header">
+	<div class="gh-acc-exp-div">
+	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
+	<!--[if lt IE 9]><div id="gh" class="gh-IE8 gh-flex gh-w gh-simpleH no-touch "><![endif]--><!--[if (gte IE 9)|!(IE)]><!-->
+	<div id="gh" class="gh-w gh-simpleH no-touch gh-flex"><!--<![endif]-->
+	<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img width="117" height="120" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo"></a><![endif]--><!--[if (gte IE 9)|!(IE)]><!--><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo" height="200" width="250"></a><!--<![endif]--></h1></td>
+			<td id="gh-title">Advance Search</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u">
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi!<font color = "blue"><%= req.session.uname%></font color>&nbsp;
+				<span id="gh-ug-flex"> <font color = "blue">Last login time :<%=req.session.lasttimelog%></font color></span></span>
+			</li>
+		</ul>
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<a href="" class="gh-eb-li-a">My eBay</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
+	<div class="ribbon">
+		<div class="icon">
+		</div>
+	</div>
+	</div>
+
+
+	<div id="Center">
+		<div id="CenterPanel">
+			<div class="sbx-c">
+				<div class="cont" style="width:100%position:relative">
+				<h2 class="sbx-h rct-hm rct-bg">Find Items</h2>
+					<fieldset>
+						<div style="width:40%;display:inline-block;height:100px"><legend id="kw_lengend">Enter keywords or item number</legend>
+						<div class="space-top">
+						<input aria-labelledby="kw_lengend" name="_nkw" id="_nkw" size="50" maxlength="300" value="" placeholder="Enter name of the product" type="text">
+						</div>
+						<label for="e1-1" class="inline-block space-top">
+						<legend>In this category:</legend>
+						<select class="block" name="_sacat" id="e1-1">
+							<option value="0">All Categories</option>
+							<option value="1">Antiques</option>
+							<option value="2">Art</option>
+							<option value="3">Baby</option>
+							<option value="4">Books</option>
+							<option value="5">Business &amp; Industrial</option>
+							<option value="6">Cameras &amp; Photo</option>
+						</select>
+						</label></div>
+						<div id="prod_cond_f" style="display:inline-block;width:30%;position:absolute;margin-left:120px" class="checkbox-set"><legend>Product Condition</legend></div>
+						<div id="bid_status_f" style="display:inline-block;width:30%;position:absolute;margin-left:300px" class="checkbox-set"><legend>Product listed as</legend></div>
+						</fieldset>
+					
+					<fieldset id="price_f" class="checkbox-set">
+						<legend>Price</legend>
+				<input aria-label="Include a price range value for search results" title="Include a price range value for search results" id="_mPrRngCbx" name="_mPrRngCbx" type="checkbox">
+				<label for="_mPrRngCbx">Show items priced from</label> $ <input class="price" id="_udlo" name="_udlo" placehoder="All Categories" value="" title="Enter minimum price range value" aria-label="Enter minimum price range value" type="text"> to $ <input class="price" id="_udhi" name="_udhi" maxlength="13" value="" title="Enter maximum price range value" aria-label="Enter maximum price range value" type="text">
+					<button type="submit" class="btn btn-prim" style="margin-left:50px" onclick="search()">Search</button>
+					</fieldset>
+					
+			</div>
+		</div>
+		</div>
+	</div>
+	
+<div id="CenterWrapper">
+<div id="Center" class="rr_present">
+<div id="CenterPanel" class="full-width left">
+<div id="CenterPanelInner">
+	<div id="ResultSetItems" class="clearfix">
+		<ul id="ListViewInner" >
+			
+		</ul>
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

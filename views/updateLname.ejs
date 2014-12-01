@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+label {
+    cursor: default;
+    color:#c41200;  
+    align:right;  
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-2.1.1.js" ></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>  
+</head>
+ <body>
+ <div class="modal-content" style="background-color:#c41200;">
+ <div class="modal-body"  style="background-color:#f5f5f1;">
+ <div>
+  <body>
+   <label><font size="4"> <b>Update Last name</b></font></label>
+   <form action="/updateLname" method="post" class="updateName">
+    <div>
+	       <% for(var i in data) 
+	            {                     
+            %>
+           		   <p><strong>Last Name: </strong>&nbsp<input name="lname" id="lname" value='<%= data[i].person_lname %>'></input>
+           		 	           		        
+           <% 
+	            }
+	       %>
+<div class="row">
+<div class="col-xs-4" color:red;>
+ </br> <input type="submit" value="Update" STYLE="color:#FFFAF0; background-color:#c41200;" name="action" class="form-control" >
+  </div>
+ </div> 
+ </div>
+ <script>
+    window.onunload = refreshParent;
+    function refreshParent() {
+        window.opener.location.reload();
+    }
+</script>
+ </form>
+  </body>
+</html>

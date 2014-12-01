@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Seller</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+   <div>
+ <h3><%=details[0].person_fname%>'s sales page</h3> 
+ Rating : <b><%=rating%></b>
+ </div>
+ 
+ <%if(products.length > 0){%> <!-- outer if -->
+ <br>
+ <div>
+ <h2>Products</h2>
+  <%for(var i=0; i<products.length;i++){%>
+ 	<!-- load an image in here as well -->
+ 	<p>
+ <a href='/product/<%=products[i].product_id%>'><%=products[i].product_name%></a> 
+  <form method="post" action="/" id="update_form<%=i%>">
+	<table>
+	<tr>
+	<td><input type="hidden" name="product_id" value="<%=products[i].product_id%>"></td>
+	<td><input type="submit" id="delete" value="Delete" onclick="return submitform(this.id, this.form)"/></td> 
+	<td><input type="submit" id="update" value="Update" onclick="return submitform(this.id, this.form)"/></td>
+	</tr>
+	</table>
+	</form>
+ 	</p>
+ <%}%>
+ </div>
+ <br>
+ <%} else{%> <!-- outer if -->
+ 
+ You do not have your product listed yet. Tell us what you would like to sell.
+ <a href='/product/new'>Create a product listing </a> for your business. 
+ 
+ <%}%>
+ <br>
+ <%if(sellerHome == 'Y'){%> <!-- inner if -->
+ <div>
+ <h2>History</h2>
+ <%if(history.length == 0){%>
+ You have not sold any product yet.
+  <%} else{%>
+ <%for(var i=0; i<history.length;i++){%>
+ 	<p>
+ <%=history[i].quantity%> pieces of <a href='/product/<%=history[i].product_id%>'><%=history[i].product_name%></a> sold for <%=history[i].order_amount%> on <%=history[i].order_date%> 
+ 	</p>
+ <%}%>
+ <%}%>
+ 
+ </div>
+ <%}%> <!-- inner if --> 
+  	<script type="text/javascript">
+function submitform(operation, form) {
+
+	if(operation == 'delete')
+	{ 
+	
+		if(!confirm("Are you sure you want to delete this item?")){
+			return false;
+		}				
+		var action = '/' + 'product/delete';
+				
+				document.getElementById(form.id).action= action;
+		
+   	}
+   	
+   if(operation == 'update'){
+		if(!confirm("Are you sure you want to update this item?")){
+			return false;	
+		}
+		
+		
+		var action = '/'+'product/update';
+		var method = "get";
+		
+		document.getElementById(form.id).action= action;
+		document.getElementById(form.id).method= method;
+		
+   }
+  
+}
+</script>
+
+  </body>
+</html>
