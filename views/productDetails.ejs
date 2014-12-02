@@ -17,6 +17,11 @@ function listAllBids(element){
     $("#formListBid").submit();
 }
 
+function logout(){
+	console.log("inside logout form submit");
+    $("#logoutForm").submit();
+}
+
 function buyProduct(element){
 	console.log("inside submitform function "+$(element).attr('data-value'));
    	//$("input[name=productid]").val($(element).attr('data-value'));
@@ -52,8 +57,54 @@ bootbox.dialog({
 </script>
 </head>
 <body bgcolor="#f5f5f1">
+<div class="header">
+	<div class="gh-acc-exp-div">
+	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
+	<!--[if lt IE 9]><div id="gh" class="gh-IE8 gh-flex gh-w gh-simpleH no-touch "><![endif]--><!--[if (gte IE 9)|!(IE)]><!-->
+	<div id="gh" class="gh-w gh-simpleH no-touch gh-flex"><!--<![endif]-->
+	<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img width="117" height="120" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo"></a><![endif]--><!--[if (gte IE 9)|!(IE)]><!--><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo" height="200" width="250"></a><!--<![endif]--></h1></td>
+			<td class="gh-td"></td>
+			<td class="gh-td-s">
+			</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u" style="padding-left:10px">
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "#00509d"><%=userName%>,</font color>&nbsp;
+				<span id="gh-ug-flex"> <font color = "#00509d">you last signed in on <%=lastLoginTime%></font color></span></span>
+			</li>
+		</ul>
+		<div align="right">
+		<ul><li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
+			</li>
+		</ul>
+		<div>
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<a href="/getCustomerInfo" class="gh-eb-li-a">My eBay</a>
+				</div>				
+			</li>
+		</ul>
+	</div>
+	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
+	<div class="ribbon">
+		<div class="icon">
+		</div>
+	</div>
+</div>
 <form style="display: none" action="/product/details" method="post" id='formProductDetail'><input type="hidden" name="productidfordisplay" value="<%= productDetails[0].product_id%>"/></form>
-<div id="Body" style="padding-top: 100px; min-width: 1060px; max-width: 1070px;">
+<div id="gh-gb" tabindex="-1"></div>
+<div id="Body" style="padding-top: 10px; min-width: 1060px; max-width: 1070px;">
 	<div id="CenterPanel">
 	<div id="PicturePanel" class="pp-c">
 		<div id="mainImgHldr" style="width:300px; !important" align="center" >

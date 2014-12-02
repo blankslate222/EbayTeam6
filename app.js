@@ -119,7 +119,7 @@ setInterval(function() {
 	db.executeQuery(hasAuctionExpired, function(err,status, resultAuction){
 		//console.log("Inside set interval"+resultAuction.length);
 		if(err){
-			throw err;
+			console.log("unable to connect - try after sometime");
 		}
 		else{
 			//console.log(resultAuction.length);
@@ -130,7 +130,7 @@ setInterval(function() {
 					var auctionDetailsQuery = "select product_id, seller_id, (select customer_id from bid_line_item where bid_amount = (select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and product_id = product.product_id)) customer_id, (select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and product_id = product.product_id) order_amount, (select bid_id from bid_header_item where product_id = product.product_id) bid_id, 4 seller_rating from product where product_id = "+resultAuction[i].product_id;
 					db.executeQuery(auctionDetailsQuery, function(err,status, resultAuctionDetails){
 						if(err){
-							throw err;
+							console.log("unable to connect - try after sometime");
 						}
 						else{
 							if (resultAuctionDetails.length === 1){

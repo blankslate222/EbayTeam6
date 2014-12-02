@@ -37,7 +37,7 @@ function getCustomerInfo(req,res)
 					var jsonString = JSON.stringify(results);
 					var jsonParse = JSON.parse(jsonString);				
 					ejs.renderFile('./views/Myebay.ejs',{data:jsonParse,
-						users:jsonParse2},function(err, result) 
+						users:jsonParse2, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) 
 						{
 							// render on success
 							if (!err) 

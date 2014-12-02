@@ -9,6 +9,12 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-2.1.1.js" ></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+function logout(){
+	console.log("inside logout form submit");
+    $("#logoutForm").submit();
+}
+</script>
 </head>
 <body>
 
@@ -33,10 +39,20 @@
 	<div id="gh-top">
 		<ul id="gh-topl">
 			<li class="gh-t gh-spr" id="gh-eb-u">
-				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi!<font color = "blue"></font color>&nbsp;
-				<span id="gh-ug-flex"> <font color = "blue">Last login time :</font color></span></span>
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "#00509d"><%=userName%>,</font color>&nbsp;
+				<span id="gh-ug-flex"> <font color = "#00509d">you last signed in on <%=lastLoginTime%></font color></span></span>
 			</li>
 		</ul>
+		<div align="right">
+		<ul><li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
+			</li>
+		</ul>
+		<div>
+		
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
 				<div class="gh-menu">
@@ -56,7 +72,7 @@
  
   <!--  <label><font size="4"> <b>Customer Information</b></font></label> -->
    <form action="/deleteAccount" method="post" >
-    <div class="col-md-3 col-md-offset-2" >
+    <div class="col-md-3 col-md-offset-2" style="width:100%">
 	       <% for(var j=0; j<users.length;j++)
 	            {    	                
             %>
@@ -82,12 +98,12 @@
 	       		}
 	       	%>
 	        <div class="row">
-			<div class="col-xs-6" color:red;>
- 			<input type="submit" value="Delete Account" STYLE="color:#FFFAF0; background-color:#c41200;" name="action" class="form-control" >
-  			</div>	 
 			</div> 
 
-
  </form>
+ 			<div class="col-xs-6" color:red;>
+ 			<input type="submit" value="Delete Account" style="color:white; background-color:#c41200; width:50%;" name="action" class="form-control" >
+  			</div>	 
+ 
 </body>
 </html>
