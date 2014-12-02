@@ -261,11 +261,10 @@ if(req.body.product_name == null || req.body.product_desc == null || req.body.se
 }
 function updateForm(req,res){
 	
-	req.session.person = '1';
 	var currentCategory = '', categoryList = '', product = '';
 	var currentCondition='', currentStatus='', conditionList = '', statusList = '';
 	var productId = req.query.product_id; //or - req.params.product_id;
-	var getProductModeSql = 'SELECT product_listed_as from PRODUCT where product_id = ?';
+	var getProductModeSql = 'SELECT product_listed_as,seller_id from PRODUCT where product_id = ?';
 
 	var prod = [productId];
 	getProductModeSql = mysql.format(getProductModeSql, prod);
@@ -289,15 +288,26 @@ function updateForm(req,res){
 	conditionList = getProductConditionList();
 	statusList = getProductStatusList();
 
-	runQuery(categoryListSql,req,res, function(status, result){
-		categoryList = result;
+
 		runQuery(getProductModeSql, req, res, function(status, result){
+			var seller_in_session = result[0].seller_id;
+			if(req.session.pid != seller_in_session){
+				//display error message
+//				res.status(403);
+//				res.render('error-page',{
+//					errMsg : 'Forbidden request. You are not authorized to do this'
+//				});
+				res.send('not authorized');
+				return;
+			}
 			var prod_listed_as = result[0].product_listed_as;
 			if(prod_listed_as == 'Auction'){
 				finalquery = getAuctionRecordSql;
 			}else{
 				finalquery = getFixedRecordSql;
 			}
+			runQuery(categoryListSql,req,res, function(status, result){
+				categoryList = result;
 			runQuery(finalquery, req, res, function(status, result){
 				if(status == 200){
 					product = result;
@@ -308,6 +318,7 @@ console.log('BID START --'+product[0].bid_start_price);
 					res.status(status);
 //					res.send('found a hit. update the details please');
 					//render update form
+					
 					res.render('edit-product',{
 						product : product,
 						currentCategory : currentCategory,
@@ -349,13 +360,13 @@ if(req.body.product_name == null || req.body.product_desc == null || req.body.se
 	return;
 }
 
-//if(req.body.seller_id !== req.session.pid){
-//	console.log('error in 2');
-//	res.status(403).redirect('/error', {
-//		errMsg : 'operation not authorized for this user'
-//	});
-//	return;
-//}
+if(req.body.seller_id !== req.session.pid){
+	console.log('error in 2');
+	res.status(403).redirect('/error', {
+		errMsg : 'operation not authorized for this user'
+	});
+	return;
+}
 	//2 - compare fields with finite set of values with 
 	//the value set(status,condition,units in stock, price per unit)
 	var mode = req.body.product_listed_as;
