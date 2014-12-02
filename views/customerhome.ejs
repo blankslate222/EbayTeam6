@@ -157,17 +157,23 @@ $("#gh-ac").autocomplete({
 	<div id="gh-top">
 		<ul id="gh-topl">
 			<li class="gh-t gh-spr" id="gh-eb-u">
-				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "blue"><%= req.session.uname%></font color>&nbsp;
-				<span id="gh-ug-flex"> <font color = "blue">Last login time :<%=req.session.lasttimelog%></font color></span></span>
-				<form method = "post" action = "/logout">
-    <button type = "submit">Logout</button>
-    </form>
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "#00509d"><%=req.session.uname%>,</font color>&nbsp;
+				<span id="gh-ug-flex"> <font color = "#00509d">you last signed in on <%=req.session.lasttimelog%></font color></span></span>
 			</li>
 		</ul>
+		<div align="right">
+		<ul><li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
+			</li>
+		</ul>
+		<div>
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
 				<div class="gh-menu">
-					<a href="/getCustomerInfo">My eBay</a>
+					<a href="/getCustomerInfo" class="gh-eb-li-a">My eBay</a>
 				</div>
 				
 			</li>

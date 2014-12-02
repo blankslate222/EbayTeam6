@@ -1,6 +1,37 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>
-
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script src="/js/bootbox.min.js" type="text/javascript"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+<link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+<script>
+function placeBid(){
+	console.log("inside place bid new");
+	console.log("The max bid value is:"+document.getElementById("maxbid").value);
+	bootbox.dialog({
+		message: "Please confirm the bid amount: $"+document.getElementById("maxbid").value,
+		title: "eBay - Place Bid",
+		buttons: {
+			success: {
+			label: "OK!",
+			className: "btn-success",
+			callback: function() {
+				$("input[name=newbidamt]").val(document.getElementById("maxbid").value);
+				$("#placeBid").submit();
+				}
+			},
+			danger: {
+			label: "Cancel",
+			className: "btn-danger",
+			callback: function() {
+			// Example.show("uh oh, look out!");
+			}
+		}
+		}
+	});   
+}
+</script>
 <!--eBay V3- msxml 6.0 XXXXXXXXXXXXXXXXXXXXXXXXXX-->
 
 <!--srcId: ViewBids--><META name="XslBuildInfo" content="2014-11-04 13:43:58,,, uk`0d72f+6:db,RcmdId ViewBids,RlogId p4lc%60bqfiuf%3F%3Ctof3e34e*2%3Cgc-149e68bca27-0x193"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" type="text/css" href="http://include.ebaystatic.com/css/e899/us/offer/BidHistoryRedesign_e8991us.css"><link rel="stylesheet" type="text/css" href="http://include.ebaystatic.com/css/e899/us/offer/BidHistoryVisualRefresh_e8991us.css"><style type="text/css">					   
@@ -343,7 +374,52 @@ if (typeof GH != "undefined" && GH) {GH_config = {"siteId":"0","geoLang":"[]",si
 
  </script><div id="BidPanelDiv" style="visibility:hidden;position:absolute;z-index:2"></div><div id="lyrGrayout_sec" style="visibility:hidden;position:absolute;z-index:1"></div><div id="VizItemInfo"><h2 class="gh-ar-hdn">Item info Section</h2><div class="BHbidSecBorderGrey"><div class="n"><div class="e"><div class="w"> </div></div></div><div class="itemInfo itemInfoSection">Item info</div><div class="itemInfoSection"><table cellpadding="0" cellspacing="0" border="0" class="itemInfoContent"><tr><td valign="top"><div class="BHimgSecPad"><div align="center"><img border="0" src="http://i.ebayimg.com/00/s/MTE4NFgxMTAx/z/e3EAAOSwD0lUbF1k/$_0.JPG" alt=" " name="itemImage" width="96" height="96"></div></div></td><td class="itemInfoCntPadding"><div class="itemTitle"><a href="/product/details?productidfordisplay=<%=productDetails[0].product_id%>"><b class="g-hdn">Item Title: </b><%=productDetails[0].product_name%></a></div><div style="padding:10px 10px 0 0px;" class="txtT">
 
-									Buy It Now price is no longer available since bidding has started.</div></td></tr></table><table cellpadding="0" cellspacing="0" border="0" class="marAuto"><tr><td valign="top" class="BHCtBidLabel bidPriceLabel" align="right" nowrap>Current bid:</td><td class="itemVal priceData" style="color:#333333">US $<%=productDetails[0].currentBid%></td></tr><tr><td class="BHCtBidLabel itmSumLabelPadding" valign="top" align="right">Shipping:</td><td class="itemVal labelPadding">Free -- Economy Shipping</td></tr><tr><td class="BHCtBidLabel" valign="top" align="right" nowrap>Item number:</td><td class="itemVal"><%=productDetails[0].product_id%></td></tr></table><div class="linearBg3"></div><div><div class="BHbidSec"><div class="BHPlaceBid"><div class="BHPlaceBid-mid"><div class="BHmaxBidText" style="padding-bottom:15px;"><label for="maxbid">Enter your maximum bid:</label></div><div><form method="get" action="http://offer.ebay.com/ws/eBayISAPI.dll" style="margin:0px;padding:0px;" name="placebid"><div class="priceSection inpc"><input type="text" name="maxbid" id="maxbid" size="16" maxlength="10" style="height:24px;"><input type="hidden" name="MfcISAPICommand" value="MakeBid"><input type="hidden" name="fromPage" value="272"><input type="hidden" name="TFMode" id="TFMode" value="3"><input type="hidden" name="bidlyr" id="bidlyr" value="2"><input type="hidden" name="fb" value="2"><input type="hidden" name="co_partnerid" value=""><input type="hidden" name="item" value="181589917677"></div><span class="ebayBtn" id="PBsubmitBtnSpan" name="PBsubmitBtnSpan"><span><button type="submit" name="PBsubmitButton" id="PBsubmitButton">Place bid</button></span></span><div class="clearBoth"></div></form></div><div class="MaxBidPlusFont">(Enter value more than US $<%=productDetails[0].currentBid%>)</div></div></div></div></div></div><div class="s"><div class="e"><div class="w"> </div></div></div></div></div></td></tr></table><div style="clear:both"></div><script type="text/javascript" language="JavaScript" xmlns:bx="http://www.ebay.com/2004/bex">
+									Buy It Now price is no longer available since bidding has started.</div></td></tr></table>
+									<table cellpadding="0" cellspacing="0" border="0" class="marAuto">
+									<tr>
+									<td valign="top" class="BHCtBidLabel bidPriceLabel" align="right" nowrap>Current bid:</td>
+									<td class="itemVal priceData" style="color:#333333">US $<%=productDetails[0].currentBid%></td>
+									</tr><tr>
+									<td class="BHCtBidLabel itmSumLabelPadding" valign="top" align="right">Shipping:</td>
+									<td class="itemVal labelPadding">Free -- Economy Shipping</td>
+									</tr><tr>
+									<td class="BHCtBidLabel" valign="top" align="right" nowrap>Item number:</td>
+									<td class="itemVal"><%=productDetails[0].product_id%></td>
+									</tr></table>
+									<div class="linearBg3"></div>
+									<div>
+										<div class="BHbidSec">
+											<div class="BHPlaceBid">
+												<div class="BHPlaceBid-mid">
+													<div class="BHmaxBidText" style="padding-bottom:15px;">
+														<label for="maxbid">Enter your maximum bid:</label>
+													</div>
+													<div>
+ 													<form style="display: none" action="/product/placebid" method="post" id='placeBid'><input id="productIdValue" type="hidden" name="productid" value="<%=productDetails[0].product_id%>"><input type="hidden" name="newbidamt"><input type="hidden" name="customerid" value=<%=customerId%>></form>
+													<div class="priceSection inpc">
+														<input type="text" name="maxbid" id="maxbid" size="16" maxlength="10" style="height:24px;">
+														<input type="hidden" name="MfcISAPICommand" value="MakeBid">
+														<input type="hidden" name="fromPage" value="272">
+														<input type="hidden" name="TFMode" id="TFMode" value="3">
+														<input type="hidden" name="bidlyr" id="bidlyr" value="2">
+														<input type="hidden" name="fb" value="2">
+														<input type="hidden" name="co_partnerid" value="">
+														<input type="hidden" name="item" value="181589917677">
+													</div>
+													<span class="ebayBtn" id="PBsubmitBtnSpan" name="PBsubmitBtnSpan"><span>
+													<button type="button" name="PBsubmitButton" id="PBsubmitButton" onClick=placeBid()>Place bid</button>
+													</span></span>
+													<div class="clearBoth"></div>
+												</div>
+												<div class="MaxBidPlusFont">(Enter value more than US $<%=productDetails[0].currentBid%>)</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="s"><div class="e"><div class="w"> </div></div></div></div></div>
+							</td></tr></table>
+							<div style="clear:both"></div><script type="text/javascript" language="JavaScript" xmlns:bx="http://www.ebay.com/2004/bex">
 
 					ebay.oDocument.oPage.createConfig = function() {var  c = ebay.oDocument.addConfig(new EbayConfig('EBX.CrossLinking'));c.sLayer='ebx_layer';c.sHTML='<table align="center" style="border:2px solid #0098CF; margin-bottom: 15px;" width="85%" cellpadding="0" cellspacing="0" bgcolor="#EDF9FF"><tr valign="middle"><td width="36" style="padding: 0 10px 0 10px;"><img align="middle" alt=" " src="http://pics.ebaystatic.com/aw/pics/icon/iconInfo_16x16.gif" /></td><td width="80%" nowrap="nowrap" style="padding-right:10px" >You\'ve left eBay Express.</td><td align="left" nowrap="nowrap"><a href="http://www.express.<#1#>/">Shop again on eBay Express</a><span style="margin:0 10px 0 10px;">|</span><img align="bottom" src="http://pics.ebaystatic.com/aw/pics/express/icons/iconCart_15x10.gif" alt=""/> <a href="http://cart.express.<#1#>/ws/eBayISAPI.dll?ExpressCart&action.view=&from=Header">Shopping Cart<#2#></a></td><td width="135" nowrap="nowrap" style="padding: 0 20px 0 20px;"><img align="top" src="http://pics.ebaystatic.com/aw/pics/express/logos/logoExpress_95x39.gif" alt=""></img></td><td nowrap="nowrap" width="26" align="left"><a href="#1" id="b_close" name="b_close"><img align="middle" border="0" src="http://pics.ebaystatic.com/aw/pics/buttons/btnExpressClose.gif" alt="" ></img></a></td></tr></table>';c.sCartCountText=' (<#1#>)';c.sClose='b_close';c.aHost={'0':'ebay.com','77':'ebay.de','2':'ebay.co.uk','15':'ebay.com.au'};c.aHideOnParams=["fromebxris=1", "fromebxrisZ1"];} ;ebay.oDocument.oPage.createConfig();</script><!--Begin eBay Footer--><div id="glbfooter" class="gh-w gh-flex"><div><div id=rtm_html_1650></div><div id=rtm_html_1651></div></div><h2 class=gh-ar-hdn>Additional site navigation</h2><div id="gf-t-box"><table class="gf-t"><tr><td colspan=2><ul id="gf-l" ><li class="gf-li"><a href="http://community.ebay.com" 
 		 _exsp=m571.l3329 class="thrd gf-bar-a"

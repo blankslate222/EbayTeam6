@@ -3,71 +3,115 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , http = require('http')
-  , path = require('path')
-  , product = require('./routes/nikhil')
-  , bids = require('./routes/bidding');
+var express        = require('express');
+var morgan         = require('morgan');
+var bodyParser     = require('body-parser');
+var methodOverride = require('method-override');
+var errorHandler   = require('errorhandler');
+//var cookieParser   = require('cookie-parser'); 
+//var session        = require('express-session'); 
+var app            = express();
+//var app         = express.app();
+var routes         = require('./routes');
+var madhur         = require('./routes/madhur');
+var signup = require('./routes/signup');
+var login = require('./routes/login');
+var bids = require('./routes/bidding');
+var product = require('./routes/nikhil');
+var home = require('./routes/home');
 
 var io = require('socket.io');
-var db = require('./routes/db');
+var db = require('./routes/mysql');
 
-var app = express();
 
-// all environments
-app.set('port', process.env.PORT || 3000);
+var port = 8090;
+
+app.use(express.static(__dirname + '/public')); 	// set the static files location /public/img will be /img for users
+app.use(morgan('dev')); 					// log every request to the console
+app.use(bodyParser.urlencoded({ extended: false }))    // parse application/x-www-form-urlencoded
+app.use(bodyParser.json())    // parse application/json
+app.use(methodOverride()); 					// simulate DELETE and PUT
+//app.use(cookieParser());
 app.set('views', __dirname + '/views');
-app.set('js', __dirname + '/js');
 app.set('view engine', 'ejs');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(app.router);
+app.use(express.cookieParser());
+app.use(express.session({secret: '1234567890QWERTY'}));
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+var env = process.env.NODE_ENV || 'development';
+if ('development' == env) {
+	app.use(errorHandler());
 }
+var authenticate = function (req, res, next) {
+	 // your validation code goes here.
+	res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+	 var isAuthenticated = req.session.isLoggedin;
+	 console.log("is authenticated:  "+isAuthenticated)
+	 if (isAuthenticated) {
+	   next();
+	 }
+	 else {
+	   res.render('login');
+	 }
+	}
 
-
+app.get('/', routes.index);
+app.get('/productConditions', madhur.getDistinctProductConditions);
+app.get('/productBidStatus', madhur.getDistinctProductBidStatus);
+app.get('/search', madhur.productDetails);
+app.get('/personType', madhur.getPersonType);
+app.post('/autocomplete/personName', madhur.getPersonNames);
+app.post('/autocomplete/membershipid', madhur.getmemIds);
+app.post('/autocomplete/personZip', madhur.getPersonZip);
+app.post('/autocomplete/personCity', madhur.getPersonCities);
+app.post('/autocomplete/personEmail', madhur.getPersonEmail);
+app.post('/autocomplete/productName', madhur.getProductNames);
+app.get('/search/person', madhur.personDetails);
+app.get('/advancesearch/product', routes.profile);
+app.get('/advancesearch/person', routes.person);
+app.get('/categories', madhur.getCategories);
+app.get('/team6ebay/login',routes.loginpage);
+app.get('/team6ebay/persons/new',routes.addperson);
+app.post('/signup',signup.save);
+app.post('/login',login.UserLOgIn);
+app.post('/logout',login.logout);
 app.get('/products', product.list);
-
-app.get('/product/new', product.newProductPage);
+app.get('/product/new', product.newProductForm);
 app.post('/product/new', product.handleNewProduct);
 app.get('/product/update', product.updateForm);
 app.post('/product/update', product.handleProductUpdate);
-app.get('/product/delete', product.deletePrompt);
 app.post('/product/delete', product.handleDelete);
+app.get('/sell', product.aboutSeller);
+app.get('/seller/:id', product.aboutSeller);
+app.post('/product/placebid',bids.placeBid);
+app.post('/product/buy',bids.buyProduct);
 app.post('/product/bids', bids.listBidsForProduct);
 app.post('/product/details', bids.displayProductDetails);
-app.post('/product/placebid', bids.placeBid);
-app.post('/product/buy', bids.buyProduct);
+//
+app.get('/getCustomerInfo', home.getCustomerInfo);
+app.get('/editFname', home.editFname);
+app.get('/editLname', home.editLname);
+app.get('/editEmail', home.editEmail);
+app.get('/editAddress', home.editAddress);
+app.get('/editCity', home.editCity);
+app.get('/editZip', home.editZip);
 
-/*app.get('*', function(req,res){
-	res.status=404;
-	res.send("Nothing down this road! Go home!");
-});*/
+app.post('/updateFname', home.updateFname );
+app.post('/updateLname', home.updateLname );
+app.post('/updateEmail', home.updateEmail );
+app.post('/updateAddress', home.updateAddress );
+app.post('/updateCity', home.updateCity );
+app.post('/updateZip', home.updateZip);
 
-server = http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+app.post('/deleteAccount', home.deleteAccount);
+
+
+//
+//added get method of above to navigate from search to product details
+app.get('/product/details', bids.displayProductDetails);
+var server = app.listen(port, function() {
+	console.log('Express server listening on port ' + port);
 });
-
 var socket = io.listen(server);
-/*
-socket.on('connection', function(client){
-	console.log("There is an expired auction");
-	msg="There is an expired auction";
-	socket.send(msg);
-	
- client.on('message', function(msg){
-	  socket.send(msg);
-  })
-}); 				
-*/
 var minutes = 0.1, the_interval = minutes * 60 * 1000;
 setInterval(function() {
   //console.log("I am doing my 1 minutes check");
@@ -96,7 +140,7 @@ setInterval(function() {
 										throw err;
 									}
 									else{
-										msg="There is an expired auction:"+resultAuctionDetails[0].product_id;
+										var msg="There is an expired auction:"+resultAuctionDetails[0].product_id;
 										socket.send(msg);
 									}
 								});
@@ -114,3 +158,7 @@ setInterval(function() {
 
   // do your stuff here
 }, the_interval);
+
+
+
+

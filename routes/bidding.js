@@ -8,7 +8,7 @@ function listBidsForProduct(req, res){
 	console.log("Inside list bids for Product");	
 	var productId = req.param("productid");
 	console.log("product ID:"+productId);	
-	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (SELECT BID_START_PRICE FROM BID_HEADER_ITEM WHERE bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
+	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (select bid_start_price from bid_header_item where bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
 	db.executeQuery(fetchProductDetails, function(err,status, resultProductDetails){
 		if(err){
 			throw err;
@@ -26,7 +26,7 @@ function listBidsForProduct(req, res){
 					console.log("number of Bidders:"+resultProductDetails[0].noOfBidders);
 					console.log("bid person email:"+resultBidList[0].person_email);
 					console.log("bid amount:"+resultBidList[0].bid_amount);
-					ejs.renderFile('./views/listBidsForProduct.ejs',{ productDetails : resultProductDetails, bidList : resultBidList},function(err, result) {
+					ejs.renderFile('./views/listBidsForProduct.ejs',{ productDetails : resultProductDetails, bidList : resultBidList, customerId : req.session.pid},function(err, result) {
 						// render on success
 						if (!err) {
 							res.end(result);
@@ -56,7 +56,7 @@ function displayProductDetailsWithMessage(req, res, errorMessage){
 		console.log('keys -'+keys);
 	console.log("product ID new:"+ productId);	
 	console.log("errormessage:"+errorMessage); 
-	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (SELECT BID_START_PRICE FROM BID_HEADER_ITEM WHERE bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
+	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (select bid_start_price from bid_header_item where bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
 	db.executeQuery(fetchProductDetails, function(err,status, resultProductDetails){
 		if(err){
 			throw err;
@@ -75,7 +75,7 @@ function displayProductDetailsWithMessage(req, res, errorMessage){
 					console.log("person_email:"+resultSellerDetails[0].person_email);
 					console.log("errorMessage:"+errorMessage);
 					if(resultProductDetails[0].product_status === "Sold")  errorMessage = "This product has been sold. The Auction has ended.";
-					ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: 1, errormsg:errorMessage},function(err, result) {
+					ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
 						// render on success
 						if (!err) {
 							res.end(result);
@@ -103,7 +103,7 @@ function displayProductDetails(req, res){
 		var keys = Object.keys( req.body );
 		console.log('keys -'+keys);
 	console.log("product ID new:"+ productId);	
-	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (SELECT BID_START_PRICE FROM BID_HEADER_ITEM WHERE bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
+	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (select bid_start_price from bid_header_item where bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
 	db.executeQuery(fetchProductDetails, function(err,status, resultProductDetails){
 		if(err){
 			throw err;
@@ -122,8 +122,8 @@ function displayProductDetails(req, res){
 					console.log("person_email:"+resultSellerDetails[0].person_email);
 					var errorMessage = "";
 					if(resultProductDetails[0].product_status === "Sold")  errorMessage = "This product has been sold. The Auction has ended.";
-					ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: 1, errormsg:errorMessage},function(err, result) {
-						// render on success
+					ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
+						// render on success,
 						if (!err) {
 							res.end(result);
 						}
@@ -146,10 +146,11 @@ function placeBid(req, res){
 	var newBidAmt = req.param("newbidamt");
 	console.log("productId:"+productId);
 	console.log("customerId:"+customerId);
+	console.log("req.session.pid:"+req.session.pid);
 	console.log("newBidAmt:"+newBidAmt);
 //	var ebayplacebid = "set @in_product_id=1; set @in_bid_amt=10.56; set @in_customerid=1; call EBAY_PLACE_BID(@in_product_id, @in_bid_amt, @in_customerid, @out_err_code); select @out_err_code as out_err_code";
 	var checkIfCustomerExists = "select person_id from person where person_id="+customerId;
-	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (SELECT BID_START_PRICE FROM BID_HEADER_ITEM WHERE bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
+	var fetchProductDetails = "select product.product_id product_id, product_condition, product_listed_as, price_per_unit, product_status, product_name, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (select bid_start_price from bid_header_item where bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
 	db.executeQuery(fetchProductDetails, function(err,status, resultProductDetails){
 		if(err){
 			throw err;
@@ -177,7 +178,7 @@ function placeBid(req, res){
 							if (status === 404){
 								console.log("Error - Not a valid customer");
 								errorMessage = "Error - Not a valid customer";
-								ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: 1, errormsg:errorMessage},function(err, result) {
+								ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
 									// render on success
 									if (!err) {
 										res.end(result);
@@ -200,7 +201,7 @@ function placeBid(req, res){
 										if (status === 404){
 											console.log("Error - This item is not up for bidding");
 											errorMessage = "Error - This product is not up for auction";
-											ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: 1, errormsg:errorMessage},function(err, result) {
+											ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
 												// render on success
 												if (!err) {
 													res.end(result);
@@ -231,7 +232,7 @@ function placeBid(req, res){
 																if (status === 404){
 																	console.log("Error -  Product is not up for auction");
 																	errorMessage = "Error - This product is not up for auction";
-																	ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: 1, errormsg:errorMessage},function(err, result) {
+																	ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
 																		// render on success
 																		if (!err) {
 																			res.end(result);
@@ -257,7 +258,7 @@ function placeBid(req, res){
 															console.log("minBidAmtReqd:"+minBidAmtReqd);															
 															console.log("Bid amount lesser than previous bid");
 															errorMessage = "Error - Bid amount should be greater than $"+minBidAmtReqd
-															ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: 1, errormsg:errorMessage},function(err, result) {
+															ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
 																// render on success
 																if (!err) {
 																	res.end(result);
@@ -273,14 +274,14 @@ function placeBid(req, res){
 															console.log("newBidAmt:"+newBidAmt);
 															console.log("minBidAmtReqd:"+minBidAmtReqd);
 															console.log("Successfully placed bid");
-															var insertBidQry = "INSERT INTO BID_LINE_ITEM(bid_id, customer_id, bid_amount, bid_timestamp) values ("+resultBidId[0].bid_id+", "+customerId+", "+newBidAmt+", SYSDATE())";
+															var insertBidQry = "insert into bid_line_item(bid_id, customer_id, bid_amount, bid_timestamp) values ("+resultBidId[0].bid_id+", "+customerId+", "+newBidAmt+", SYSDATE())";
 															db.executeQuery(insertBidQry, function(err,status, resultInsert){
 																if(err){
 																	throw err;
 																}
 																else{
 																	console.log("procedure successuflly executed"+status);
-																	var fetchNewProductDetails = "select product.product_id product_id, product_name, product_listed_as, price_per_unit, product_status, product_condition, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (SELECT BID_START_PRICE FROM BID_HEADER_ITEM WHERE bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
+																	var fetchNewProductDetails = "select product.product_id product_id, product_name, product_listed_as, price_per_unit, product_status, product_condition, product_desc,IFNULL((select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id), (select bid_start_price from bid_header_item where bid_header_item.product_id = product.product_id)) currentBid, (select count(distinct customer_id) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBidders, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids, bid_expiry_time, bid_id  from product, bid_header_item where product.product_id = bid_header_item.product_id and product.product_id = "+productId;
 																	db.executeQuery(fetchNewProductDetails, function(err,status, resultNewProductDetails){
 																		if(err){
 																			throw err;
@@ -289,7 +290,7 @@ function placeBid(req, res){
 																			console.log("product_desc:"+resultNewProductDetails[0].product_desc);
 																			var errorMessage = "";
 																			if(resultNewProductDetails[0].product_status === "Sold")  errorMessage = "This product has been sold. The Auction has ended.";
-																			ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultNewProductDetails, sellerDetails: resultSellerDetails, customerId: 1, errormsg:errorMessage},function(err, result) {
+																			ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultNewProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
 																				// render on success
 																				if (!err) {
 																					res.end(result);
@@ -383,7 +384,7 @@ function buyProduct (req, res){
 	var data = {	            
 		product_id : input.productidfordisplay,
 		seller_id : input.seller_id,
-		customer_id: 1, //get from session variable
+		customer_id: req.session.pid,
 		quantity:input.productqty,
 		order_amount:l_orderAmount,
 		bid_id: b_id,
