@@ -4,6 +4,7 @@
 var ejs = require("ejs");
 var mysql = require('mysql');
 var db = require('./mysql');
+var moment = require('moment');
 function list(req,res){
 
 	var sql = 'select product_id, product_name, product_desc, product_condition, (select count(1) from bid_line_item, bid_header_item where product.product_id = bid_header_item.product_id and bid_header_item.bid_id = bid_line_item.bid_id ) numberOfBids  from product';
@@ -70,8 +71,8 @@ function runQuery(sql,req,res,callback){
 		if(status == 500 || status == 400){
 			console.log('error in 10');
 			//redirect to error from here - should send appropriate messages
-			res.redirect('/index', {
-				errMsg : ''
+			res.render('error-nikhil', {
+				errMsg : 'Bad request. Query failed to execute.'
 			});
 		}else{
 			callback(status, result);
@@ -79,30 +80,27 @@ function runQuery(sql,req,res,callback){
 		}
 		
 	});
-	//return;
+	return;
 }
 
 function newProductForm(req,res){
 	
-	//req.session.user = '1';
 	var categoryList = '', productCondition = '', productStatus = '';
 	var categoryListSql = "select distinct `category_id`, `category_name` from category";
-	
+	console.log('user in sess --'+req.session.pid);
 	runQuery(categoryListSql,req,res, function(status, result){
 		categoryList = result;
-	//	console.log("inside category list callback");
-		console.log(categoryList);
+	//	
 		
 		//also get select list for prod_condition and status
 		productCondition = getProductConditionList();
 		productStatus = getProductStatusList();
 		var sell_mode = getSellMode();
-//		res.status(status);
-//		res.send(categoryList);
+		
 		res.render("create-product",{
 			//add the session attributes to display
 			 category : categoryList,
-			 seller_id : '1',
+			 seller_id : req.session.pid,
 			 productCondition : productCondition,
 			 productStatus : productStatus,
 			 sell_mode : sell_mode
@@ -114,9 +112,9 @@ function newProductForm(req,res){
 
 
 function handleNewProduct(req,res){
-	req.session.pid = '1';
 	
-	var insertProductSql = "INSERT INTO PRODUCT SET ?";
+	var bidtime;
+	var insertProductSql = "INSERT INTO product SET ?";
 	var units_in_stock = req.body.units_in_stock;
 	//validations
 	var condList = getProductConditionList();
@@ -126,82 +124,88 @@ function handleNewProduct(req,res){
 	//console.log('new product -'+ newProduct);
 if(req.body.product_name == null || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
 	console.log('error in 1');
-	res.status(400).redirect('/error', {
+	res.status(400).render('error-nikhil', {
 		errMsg : 'mandatory fields cannot be null'
 	});
 	return;
 }
 
-//if(req.body.seller_id !== req.session.pid){
-//	console.log('error in 2');
-//	res.status(403).redirect('/error', {
-//		errMsg : 'operation not authorized for this user'
-//	});
-//	return;
-//}
+if(req.body.seller_id != req.session.pid){
+	console.log('body -'+req.body.seller_id);
+	console.log('session id' + req.session.pid);
+	console.log('error in 2');
+	res.status(403).render('error-nikhil', {
+		errMsg : 'operation not authorized for this user'
+	});
+	return;
+}
 	//2 - compare fields with finite set of values with 
 	//the value set(status,condition,units in stock, price per unit)
 	var mode = req.body.sell_mode;
 	var modeList = getSellMode();
 	if(modeList.indexOf(mode) == -1){
 		console.log('error in 3');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'invalid value for field sell mode'
 		});
 		return;
 	}
 	
 	if(mode=='Fixed-Price'){
+		bidtime = null;
 	if (isNaN(parseFloat(req.body.units_in_stock)) || req.body.units_in_stock < 0) {
 		console.log('error in 4');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'units in stock must be a valid positive number'
 		});
 		return;
 	}
 	if (isNaN(parseFloat(req.body.price_per_unit)) || req.body.price_per_unit < 0) {
 		console.log('error in 5');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'price per unit must be a valid positive number'
 		});
 		return;
 	}
 }
 	if(mode=='Auction'){
+		
+		
+		var bidexpiry = moment(req.body.bid_expiry,'YYYY-MM-DD HH:mm:ss');
+		var now = moment().format('YYYY-MM-DD HH:mm:ss');
+		
 		if (isNaN(parseFloat(req.body.start_amount)) || req.body.start_amount < 0) {
 			console.log('error in 6');
-			res.status(400).redirect('/error', {
+			res.status(400).render('error-nikhil', {
 				errMsg : 'start amount must be a valid positive number'
 			});
 			return;
 		}
-		if(req.body.bid_expiry == null){
+		if( !bidexpiry.isValid()|| !bidexpiry.isAfter(now) ){
 			console.log('error in 7');
-			res.status(400).redirect('/error', {
-				errMsg : 'please specify the auction end time - bid expiry'
+			res.status(400).render('error-nikhil', {
+				title : 'please specify a valid bid expiry time greater than current time'
 			});
-			return;		
+			return;
 		}
+		bidtime = bidexpiry;
 		units_in_stock = 1;
 	}
 	if(condList.indexOf(req.body.product_condition) == -1){
 		console.log('error in 8');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'invalid value for field product condition'
 		});
 		return;
 	}
 	if(statusList.indexOf(req.body.product_status) == -1){
 		console.log('error in 9');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'invalid value for field product status'
 		});
 		return;
 	}
-	var bidtime = req.body.bid_expiry;
-		if(bidtime == ''){
-			bidtime = null;
-		}
+
 	// row insertion
 	var newProduct = {
 			seller_id : req.body.seller_id,
@@ -216,7 +220,7 @@ if(req.body.product_name == null || req.body.product_desc == null || req.body.se
 			bid_expiry_time : bidtime,
 			isActiveProduct : '1'
 		};
-	console.log(newProduct);
+	//console.log(newProduct);
 	
 	var inserts = [newProduct];
 	insertProductSql = mysql.format(insertProductSql, inserts);
@@ -250,21 +254,30 @@ if(req.body.product_name == null || req.body.product_desc == null || req.body.se
 			return;
 		}
 
-		//console.log("inside new product callback");
-		//console.log(result);
-		
-//		res.status(201);
-//		res.send("record inserted"+result);
-		//redirect to seller view
 	});
 	return;
 }
+function auctionCheck(productId,req,res){
+	var prodsql = 'select distinct c.bid_expiry_time,a.bid_id from bid_header_item a, bid_line_item b, product c'+
+	' where a.product_id = ? and a.product_id = c.product_id and a.bid_id = b.bid_id';
+var updcheck = [productId];
+prodsql = mysql.format(prodsql,updcheck);
+runQuery(prodsql, req, res, function(status, result1){
+	if (result1.length != 0 &&
+		moment(result1[0].bid_expiry_time,'YYYY-MM-DD HH:mm:ss').isAfter(moment().format('YYYY-MM-DD HH:mm:ss'))){
+		res.status(403).render('error-nikhil',{
+			errMsg : 'Product cannot be updated right now. There are active bids for this product.'
+		});
+		return;
+	}
+});
+}
 function updateForm(req,res){
-	
+
 	var currentCategory = '', categoryList = '', product = '';
 	var currentCondition='', currentStatus='', conditionList = '', statusList = '';
 	var productId = req.query.product_id; //or - req.params.product_id;
-	var getProductModeSql = 'SELECT product_listed_as,seller_id from PRODUCT where product_id = ?';
+	var getProductModeSql = 'SELECT product_listed_as,seller_id from product where product_id = ?';
 
 	var prod = [productId];
 	getProductModeSql = mysql.format(getProductModeSql, prod);
@@ -289,36 +302,39 @@ function updateForm(req,res){
 	statusList = getProductStatusList();
 
 
-		runQuery(getProductModeSql, req, res, function(status, result){
-			var seller_in_session = result[0].seller_id;
-			if(req.session.pid != seller_in_session){
-				//display error message
-//				res.status(403);
-//				res.render('error-page',{
-//					errMsg : 'Forbidden request. You are not authorized to do this'
-//				});
-				res.send('not authorized');
-				return;
-			}
-			var prod_listed_as = result[0].product_listed_as;
-			if(prod_listed_as == 'Auction'){
-				finalquery = getAuctionRecordSql;
-			}else{
-				finalquery = getFixedRecordSql;
-			}
-			runQuery(categoryListSql,req,res, function(status, result){
-				categoryList = result;
+	runQuery(getProductModeSql, req, res, function(status, result){
+
+		var seller_in_session = result[0].seller_id;
+		if(req.session.pid != seller_in_session){
+			//display error message
+			res.status(403);
+			res.render('error-page',{
+				errMsg : 'Forbidden request. You are not authorized to perform this operation.'
+			});
+			return;
+		}
+
+		var prod_listed_as = result[0].product_listed_as;
+
+		if(prod_listed_as == 'Auction'){
+			auctionCheck(productId, req ,res);
+			finalquery = getAuctionRecordSql;
+		}else{
+			finalquery = getFixedRecordSql;
+		}
+		runQuery(categoryListSql,req,res, function(status, result){
+			categoryList = result;
 			runQuery(finalquery, req, res, function(status, result){
 				if(status == 200){
 					product = result;
 					currentCategory = result[0].category_id;
 					currentCondition = result[0].product_condition;
 					currentStatus = result[0].product_status;
-console.log('BID START --'+product[0].bid_start_price);
+//					console.log('BID START --'+product[0].bid_start_price);
 					res.status(status);
 //					res.send('found a hit. update the details please');
 					//render update form
-					
+
 					res.render('edit-product',{
 						product : product,
 						currentCategory : currentCategory,
@@ -329,23 +345,29 @@ console.log('BID START --'+product[0].bid_start_price);
 						productStatus : statusList
 					});
 				}else{
-					res.status(status).send('Bad request. The product you are trying to update does not exist');
+					res.status(status).render('error-nikhil',{
+						errMsg : 'Bad request. The product you are trying to update does not exist'
+					});
+					return;
 					//render error message
 				}
 			});
 		});
 	});
-			
-	
-	
+
 	return;
 }
 
+
 function handleProductUpdate(req,res){
 	
-	var productId = '', units_in_stock;
-	var updateProductSql='UPDATE ebay.product SET ? WHERE product_id = ?';
+	var productId = req.body.product_id, units_in_stock, mode = req.body.product_listed_as ;
+	var updateProductSql='UPDATE product SET ? WHERE product_id = ?';
 	
+	if(mode == 'Auction'){
+		//check if any active bids - in bid line item table n reject if yes
+		auctionCheck(productId, req ,res);
+	}
 	//validations
 	var condList = getProductConditionList();
 	var statusList = getProductStatusList();
@@ -354,26 +376,26 @@ function handleProductUpdate(req,res){
 	//console.log('new product -'+ newProduct);
 if(req.body.product_name == null || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
 	console.log('error in 1');
-	res.status(400).redirect('/error', {
+	res.status(400).render('error-nikhil', {
 		errMsg : 'mandatory fields cannot be null'
 	});
 	return;
 }
 
-if(req.body.seller_id !== req.session.pid){
+if(req.body.seller_id != req.session.pid){
 	console.log('error in 2');
-	res.status(403).redirect('/error', {
+	res.status(403).render('error-nikhil', {
 		errMsg : 'operation not authorized for this user'
 	});
 	return;
 }
 	//2 - compare fields with finite set of values with 
 	//the value set(status,condition,units in stock, price per unit)
-	var mode = req.body.product_listed_as;
+	
 	var modeList = getSellMode();
 	if(modeList.indexOf(mode) == -1){
 		console.log('error in 3');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'invalid value for field sell mode'
 		});
 		return;
@@ -382,31 +404,34 @@ if(req.body.seller_id !== req.session.pid){
 	if(mode=='Fixed-Price'){
 	if (isNaN(parseFloat(req.body.units_in_stock)) || req.body.units_in_stock < 0) {
 		console.log('error in 4');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'units in stock must be a valid positive number'
 		});
 		return;
 	}
 	if (isNaN(parseFloat(req.body.price_per_unit)) || req.body.price_per_unit < 0) {
 		console.log('error in 5');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'price per unit must be a valid positive number'
 		});
 		return;
 	}
 }
 	if(mode=='Auction'){
+		var bidexpiry = moment(req.body.bid_expiry,'YYYY-MM-DD HH:mm:ss');
+		var now = moment().format('YYYY-MM-DD HH:mm:ss');
+		
 		if (isNaN(parseFloat(req.body.start_amount)) || req.body.start_amount < 0) {
 			console.log('error in 6');
-			res.status(400).redirect('/error', {
+			res.status(400).render('error-nikhil', {
 				errMsg : 'start amount must be a valid positive number'
 			});
 			return;
 		}
-		if(req.body.bid_expiry == null){
+		if( !bidexpiry.isValid()|| !bidexpiry.isAfter(now) ){
 			console.log('error in 7');
-			res.status(400).redirect('/error', {
-				errMsg : 'please specify the auction end time - bid expiry'
+			res.status(400).render('error-nikhil', {
+				title : 'please specify a valid bid expiry time greater than current time'
 			});
 			return;
 		}
@@ -414,14 +439,14 @@ if(req.body.seller_id !== req.session.pid){
 	}
 	if(condList.indexOf(req.body.product_condition) == -1){
 		console.log('error in 8');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'invalid value for field product condition'
 		});
 		return;
 	}
 	if(statusList.indexOf(req.body.product_status) == -1){
 		console.log('error in 9');
-		res.status(400).redirect('/error', {
+		res.status(400).render('error-nikhil', {
 			errMsg : 'invalid value for field product status'
 		});
 		return;
@@ -443,7 +468,7 @@ if(req.body.seller_id !== req.session.pid){
 			bid_expiry_time : bidtime
 		};
 	
-	productId = req.body.product_id;
+	
 	var updates = [updProduct, productId];
 	updateProductSql = mysql.format(updateProductSql, updates);
 	
@@ -478,31 +503,47 @@ if(req.body.seller_id !== req.session.pid){
 }
 
 function handleDelete(req,res){
-	var productId = req.body.product_id;
-//	var seller = req.session.pid;
-//	if(seller !== req.body.seller_id){
-//		res.status(403).redirect('/error', {
-//			errMsg : 'Forbidden - not authorized to perform this operation'
-//		});
-//		return;
-//	}
-var deleteSql = 'UPDATE product SET isActiveProduct=0 WHERE product_id = ?';
-var deletes = [productId];
-deleteSql = mysql.format(deleteSql, deletes);
 
-runQuery(deleteSql, req, res, function(status, result){
-	res.status(200);
-//	res.send('deleted record successfully');
-	//redirect to seller view
-	res.status(status).redirect('/sell');
-});
-	return;
+	var productId = req.body.product_id;
+	var seller = req.session.pid;
+	if(seller != req.body.seller_id){
+		res.status(403).render('error-nikhil', {
+			errMsg : 'Forbidden - not authorized to perform this operation'
+		});
+		return;
+	}
+	
+	var deleteSql = 'UPDATE product SET isActiveProduct=0 WHERE product_id = ?';
+	var deletes = [productId];
+	deleteSql = mysql.format(deleteSql, deletes);
+
+	var prodsql = 'select distinct c.bid_expiry_time,a.bid_id from bid_header_item a, bid_line_item b, product c'+
+		' where a.product_id = ? and a.product_id = c.product_id and a.bid_id = b.bid_id';
+	var deletecheck = [productId];
+	prodsql = mysql.format(prodsql,deletecheck);
+	
+	runQuery(prodsql, req, res, function(status, result1){
+		if (result1.length != 0 &&
+			moment(result1[0].bid_expiry_time,'YYYY-MM-DD HH:mm:ss').isAfter(moment().format('YYYY-MM-DD HH:mm:ss'))){
+			res.status(403).render('error-nikhil',{
+				errMsg : 'Product cannot be deleted. There are active bids for this product.'
+			});
+			return;
+		}
+		runQuery(deleteSql, req, res, function(status, result){
+			res.status(200);
+//			res.send('deleted record successfully');
+			//redirect to seller view
+			res.status(status).redirect('/sell');
+		});
+		return;
+	});
+
 }
 function aboutSeller(req,res){
 	//calculate average rating from order_history
 	//fetch history from order_history
 	//use the list function to display products of a seller
-	req.session.pid = '1';
 	var seller = '', averageRating = 0, person_in_session='', sellerProduct = '';
 	var sellerHistorySql = '', sellerSql = '', history = '', seller_details='', productSql = '';
 	
@@ -534,13 +575,13 @@ function aboutSeller(req,res){
 	sellerHistorySql = mysql.format(sellerHistorySql, sells);
 	
 //	sellerSql = 'SELECT person_id, person_fname, person_lname from ebay.person where person_id = '+seller;
-	sellerSql = 'SELECT person_id, person_fname, person_lname FROM ebay.person WHERE '+
+	sellerSql = 'SELECT person_id, person_fname, person_lname FROM person WHERE '+
 	' isActive = \'A\' AND person_id = ?';
 	sellerSql = mysql.format(sellerSql, sells);
 	
 //	productSql = 'SELECT product_id, product_name FROM ebay.product WHERE '+
 //	' seller_id = '+seller;
-	productSql = 'SELECT product_id, product_name FROM ebay.product WHERE '+
+	productSql = 'SELECT product_id, product_name, seller_id FROM product WHERE '+
 	' isActiveProduct = 1 AND seller_id = ?';
 	productSql = mysql.format(productSql, sells);
 		
@@ -559,13 +600,16 @@ function aboutSeller(req,res){
 				if(isNaN(averageRating)){
 					averageRating = 0;
 				}
-				console.log('seller rating --' + averageRating);
-				console.log('history --' + history);
-				console.log('seller details --' + seller_details);
-				console.log('seller product --' + sellerProduct)
+//				console.log('seller rating --' + averageRating);
+//				console.log('history --' + history);
+//				console.log('seller details --' + seller_details);
+//				console.log('seller product --' + sellerProduct)
 				if(seller_details.length == 0){
 					res.status(400);
-					res.send("Bad request. The seller does not exist!");
+					res.render('error-nikhil',{
+						errMsg : "Bad request. The seller does not exist!"
+						});
+					
 				}else{
 				res.status(200);
 				res.render('seller-screen', {
