@@ -24,13 +24,14 @@
     			</ul>
     			<ul class="lvprices left space-zero full-width" style="list-style:none outside none">
 					<li class="lvextras">
-						<div class="hotness bold">Time left for bid closure</div>
+						<div class="hotness bold">Bid closure status: <% if(data[i].bid_expiry_time != null) {
+						%> Hurry up!!! Bid is about to expire<%} else {%>NA<%}%></div>
 					</li>
 					<li class="lvextras">
 						<div class="hotness bold">Category: <%=data[i].category_name%></div>
 					</li>
 					<li class="lvextras">
-						<div class="hotness bold">Bid status: <%=data[i].product_listed_as%></div>
+						<div class="hotness bold">Product is for: <%=data[i].product_listed_as%></div>
 					</li>
 				</ul>
 			</li>
