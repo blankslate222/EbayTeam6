@@ -46,7 +46,7 @@ function productDetails(req,res) {
 	var l_range = req.param('l_range');
 	var operator = "and ";
 	
-	var query = "select p.product_id,p.seller_id,p.product_name,p.product_desc,p.product_condition,p.product_status,p.category_id,p.units_in_stock,p.price_per_unit,p.product_listed_as, c.category_name from product p, category c where c.category_id=p.category_id";
+	var query = "select p.bid_expiry_time, p.product_id,p.seller_id,p.product_name,p.product_desc,p.product_condition,p.product_status,p.category_id,p.units_in_stock,p.price_per_unit,p.product_listed_as, c.category_name from product p, category c where c.category_id=p.category_id and p.product_status != 'Sold' and p.isActiveProduct=1";
 	//var query = "select  from product";
 	console.log(query);
 	if(isNotNull(search_prod_cond) || isNotNull(search_prod_bid_status) || isNotNull(category) || isNotNull(text) || ((u_range !== null) && (l_range !== null))) {
@@ -94,9 +94,9 @@ function personDetails(req,res) {
 	var city = req.param('city');
 	var mem_id = req.param('mem_id');
 	var operator = "and ";
-	var query = "select * from person";
+	var query = "select * from person where isactive=1";
 	if(isNotNull(name) || isNotNull(type) || isNotNull(email) || isNotNull(zip) || isNotNull(city) || isNotNull(mem_id)) {
-		query = query + " where ";
+		query = query + " and ";
 		
 		if(isNotNull(name)) {
 			query = query + "(person_fname='"+name+"' or person_lname='"+name+"') "+operator;
