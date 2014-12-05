@@ -4,13 +4,87 @@
 <link href="https://secureir.ebaystatic.com/rs/v/kp2d0yxoguy0xnebuz2qnu0zc2t.css" type="text/css" rel="stylesheet">
 <link href="https://secureir.ebaystatic.com/rs/v/ryt1iptmaazydbfqvfb5q025xe4.css" type="text/css" rel="stylesheet">
 </head>
+<script>
+	
+	function validate()
+	{
+		var fname = document.forms["SignupForm"]["fname"].value;
+		var lname = document.forms["SignupForm"]["lname"].value;
+		var address= document.forms["SignupForm"]["address"].value;
+		var city = document.forms["SignupForm"]["city"].value;
+		var zip = document.forms["SignupForm"]["zip"].value;
+		var membership = document.forms["SignupForm"]["membershipid"].value;
+		var person = document.forms["SignupForm"]["person"].value;
+		var email = document.forms["SignupForm"]["email"].value;
+		var pass = document.forms["SignupForm"]["pass"].value;
+		var atpos = email.indexOf("@");
+		var dotpos = email.lastIndexOf(".");
+		var isValidZip=  /(^\d{5}$)|(^\d{5}-*\d{4}$)/;
+
+		var isValidSsn = /(^\d{3}-\d{2}-\d{4}$)/;
+		if (fname == '' || fname == null)
+		{
+		
+		alert("First Name is required");
+			return false;
+		}	
+		else if (lname == '' || lname == null)
+		{
+		alert("Last Name  is required");
+			return false;
+		}
+		else if (address == '' || address == null)
+		{
+		alert("Address is required");
+			return false;
+		}
+		else if (city == '' || city == null)
+		{
+		alert("City is required");
+			return false;
+		}
+		else if (zip == '' || zip == null || isValidZip.test(zip) == false )
+		{
+		alert("Valid Zip code  is required... correct format is NNNNN/NNNNN-NNNN");
+			return false;
+		}
+		else if (membership == '' || membership == null || isValidSsn.test(membership) == false)
+		{
+		alert("Membership/SSN is required... Correct format is NNN-NN-NNNN");
+			return false;
+		}
+		
+		else if(person == '' || person == null )
+		{
+			alert("Please SignUp as Customer or Seller...");
+			return false;
+			
+		}
+		else if(email == '' || email == null )
+		{
+			alert("Email is required");
+			return false;
+			
+		}
+		else if (pass == '' || pass == null || pass.length<6)
+		{
+		alert("Password is required...it should contain minimum 6 character");
+			return false;
+		}
+		else if (atpos< 1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+        alert("Not a valid e-mail address");
+        return false;
+		}
+	
+	}
+	</script>
 <body>
 <div class="sz980"><div class="pgWidth"><div id="gh" class="gh-flex gh-w gh-minH no-touch ">
 <table class="gh-tbl"><tbody><tr><td class="gh-td"><a href="" class="iclg" _sp="m570.l2586" id="gh-la">eBay
 <img width="250" height="200" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="https://secureir.ebaystatic.com/rs/v/fxxj3ttftm5ltcqnto1o4baovyl.png" id="gh-logo"></a></td></tr></tbody></table></div>
 <h1 class="mg"><span class="shpt" id="maincontent">Get started with eBay</span><a name="mainContent" tabindex="-1" style="top: 0px; left: -9999px; position: absolute;">Get started with eBay</a></h1><table class="mgtb " role="presentation"><tr><td width="80%" valign="top">
 <div class="pdb20"><h2 class="fntNml"><span class="col"> Create your personal account.</span></h2></div></td><td width="20%" valign="top"></td></tr><tr><td width="80%" valign="top" class="contd cntCr"><div class="prg">
-<form action="/signup" method="post" name="SignupForm" id="SignupForm">
+<form action="/signup" method="post" name="SignupForm" id="SignupForm" onsubmit="return validate();">
 <div id="ppa_id"><div class="txc">
 
 			<div class="rfl" id="firstname_d"><div class="fv-w"><label  for="firstname">First name</label>
@@ -117,7 +191,7 @@
 			<div class="rcl"></div></div></div></div></div><div>
 			<div class="h40"><div class="rfl">
 			<input id="sbtBtn" class="btn btn-prim" type="submit" value="Submit"></div></div>
-				
+				<div><h3><%=err%></h3></div>
 			</div></form>
 			</div></td>
 <td width="20%" valign="top" id="lcont"><div class="pdLft"><div><div class="si-lr"><div class="si-re"><div class="si-pd"><div class="si-sp si-fl g-hlp si-fn">
