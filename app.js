@@ -50,7 +50,7 @@ var authenticate = function (req, res, next) {
 	   next();
 	 }
 	 else {
-	   res.render('login');
+	   res.render('login',{result : ""});
 	 }
 	}
 
@@ -67,7 +67,7 @@ app.post('/autocomplete/personEmail', madhur.getPersonEmail);
 app.post('/autocomplete/productName', madhur.getProductNames);
 app.get('/search/person', madhur.personDetails);
 app.get('/advancesearch/product', routes.profile);
-app.get('/advancesearch/person', routes.person);
+app.get('/advancesearch/person',authenticate, routes.person);
 app.get('/categories', madhur.getCategories);
 app.get('/team6ebay/login',routes.loginpage);
 app.get('/team6ebay/persons/new',routes.addperson);
@@ -75,25 +75,25 @@ app.post('/signup',signup.save);
 app.post('/login',login.UserLOgIn);
 app.post('/logout',login.logout);
 app.get('/products', product.list);
-app.get('/product/new', product.newProductForm);
-app.post('/product/new', product.handleNewProduct);
-app.get('/product/update', product.updateForm);
-app.post('/product/update', product.handleProductUpdate);
-app.post('/product/delete', product.handleDelete);
-app.get('/seller-details', product.aboutSeller);
+app.get('/product/new', authenticate, product.newProductForm);
+app.post('/product/new', authenticate, product.handleNewProduct);
+app.get('/product/update',authenticate, product.updateForm);
+app.post('/product/update', authenticate, product.handleProductUpdate);
+app.post('/product/delete', authenticate, product.handleDelete);
+app.get('/seller-details', authenticate, product.aboutSeller);
 app.get('/seller/:id', product.aboutSeller);
-app.post('/product/placebid',bids.placeBid);
-app.post('/product/buy',bids.buyProduct);
-app.post('/product/bids', bids.listBidsForProduct);
+app.post('/product/placebid',authenticate, bids.placeBid);
+app.post('/product/buy',authenticate, bids.buyProduct);
+app.post('/product/bids',authenticate, bids.listBidsForProduct);
 app.post('/product/details', bids.displayProductDetails);
 //
-app.get('/getCustomerInfo', home.getCustomerInfo);
-app.get('/editFname', home.editFname);
-app.get('/editLname', home.editLname);
-app.get('/editEmail', home.editEmail);
-app.get('/editAddress', home.editAddress);
-app.get('/editCity', home.editCity);
-app.get('/editZip', home.editZip);
+app.get('/getCustomerInfo',authenticate, home.getCustomerInfo);
+app.get('/editFname', authenticate, home.editFname);
+app.get('/editLname', authenticate, home.editLname);
+app.get('/editEmail', authenticate, home.editEmail);
+app.get('/editAddress', authenticate, home.editAddress);
+app.get('/editCity', authenticate, home.editCity);
+app.get('/editZip', authenticate, home.editZip);
 
 app.post('/updateFname', home.updateFname );
 app.post('/updateLname', home.updateLname );
