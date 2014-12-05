@@ -32,7 +32,7 @@ function logout(){
 			<td class="gh-td"><h1 id="gh-l-h1">
 <a href="/" class="iclg" _sp="m570.l2586" id="gh-la"><img style=" position:absolute; top:-5px;left:0" alt="" src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/EBay_logo.svg/318px-EBay_logo.svg.png" id="gh-logo" height="50" width="50"></a></h1></td>
 			
-			<td id="gh-title" >Customer Information</td>
+			<td id="gh-title" >Person Information</td>
 			</tr>
 		</tbody>
 	</table>
@@ -72,7 +72,7 @@ function logout(){
  
   <!--  <label><font size="4"> <b>Customer Information</b></font></label> -->
    <form action="/deleteAccount" method="post" >
-    <div class="col-md-3 col-md-offset-2" style="width:100%">
+    <div class="col-md-3 col-md-offset-2" style="width:100%; margin-left:125px; margin-top: 25px;">
 	       <% for(var j=0; j<users.length;j++)
 	            {    	                
             %>
@@ -85,6 +85,8 @@ function logout(){
            	<% 
 	            }
 	       %> 
+	        <input type="submit" value="Deactivate Account" style="color:white; background-color:#c41200; width:50%;" name="action" class="form-control" >
+			<a href="/seller-details">Seller History</a>       
 	       <br>	  
 	     <!--  <p><strong> The products you bought are: <br> <br>     -->      		        
            <% 

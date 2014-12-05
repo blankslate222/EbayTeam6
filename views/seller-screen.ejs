@@ -62,6 +62,9 @@
 	<table class="mgtb " role="presentation"><tbody><tr><td width="80%" valign="top">
 	</td></tr><tr><td width="20%" valign="top" id="lcont"><div class="pdLft"><div><div class="si-lr"><div class="si-re"><div class="si-pd"><div class="si-sp si-fl g-hlp si-fn"><div>
  <h3><%=details[0].person_fname%>'s sales page</h3> 
+  <%if(sellerHome == 'Y'){%> <!-- inner if -->
+   <a href='/product/new'>Create a New product listing </a> for your business.<br> 
+ 	<%}%>
  Rating : <b><%=rating%></b>
  </div>
  
@@ -73,6 +76,7 @@
  	<!-- load an image in here as well -->
  	<p>
  <a href='/product/<%=products[i].product_id%>'><%=products[i].product_name%></a> 
+  <%if(sellerHome == 'Y'){%> 
   <form method="post" action="/" id="update_form<%=i%>">
 	<table>
 	<tr>
@@ -83,6 +87,7 @@
 	</tr>
 	</table>
 	</form>
+	<%}%>
  	</p>
  <%}%>
  </div>
@@ -106,7 +111,6 @@
  	</p>
  <%}%>
  <%}%>
- 
  </div>
  <%}%> <!-- inner if --> 
   	<script type="text/javascript">

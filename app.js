@@ -80,7 +80,7 @@ app.post('/product/new', product.handleNewProduct);
 app.get('/product/update', product.updateForm);
 app.post('/product/update', product.handleProductUpdate);
 app.post('/product/delete', product.handleDelete);
-app.get('/sell', product.aboutSeller);
+app.get('/seller-details', product.aboutSeller);
 app.get('/seller/:id', product.aboutSeller);
 app.post('/product/placebid',bids.placeBid);
 app.post('/product/buy',bids.buyProduct);

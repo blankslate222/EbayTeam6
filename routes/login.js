@@ -50,16 +50,13 @@ function checkLogInData(callback,username,password){
 				req.session.uname= results[0].person_fname;
 				req.session.email = results[0].person_email; 
 				req.session.lasttimelog = results[0].last_login;
+				req.session.person_type = results[0].person_type;
 				
-				if(results[0].person_type == 0 && results[0].isactive == 1){
+				if(results[0].isactive == 1){
 					
 					console.log("Customer.");
 					res.render('customerhome',{req:req});
 
-				}else if (results[0].person_type == 1 && results[0].isactive == 1){
-					
-					console.log("Seller.");
-					res.render('seller-screen',{req:req});
 				}
 				else
 					{

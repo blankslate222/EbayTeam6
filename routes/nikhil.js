@@ -35,12 +35,12 @@ function list(req,res){
 }
 
 function getProductConditionList(){
-	var conditionList = ['new','refurbished','used'];
+	var conditionList = ['New','Refurbished','Used'];
 	return conditionList;
 }
 
 function getProductStatusList(){
-	var statusList = ['in-stock','out-of-stock'];
+	var statusList = ['In-stock','Out-of-stock'];
 	return statusList;
 }
 
@@ -125,7 +125,7 @@ function handleNewProduct(req,res){
 if(req.body.product_name == null || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
 	console.log('error in 1');
 	res.status(400).render('error-nikhil', {
-		errMsg : 'mandatory fields cannot be null'
+		errMsg : 'Mandatory fields cannot be null'
 	});
 	return;
 }
@@ -135,7 +135,7 @@ if(req.body.seller_id != req.session.pid){
 	console.log('session id' + req.session.pid);
 	console.log('error in 2');
 	res.status(403).render('error-nikhil', {
-		errMsg : 'operation not authorized for this user'
+		errMsg : 'Operation not authorized for this user'
 	});
 	return;
 }
@@ -146,7 +146,7 @@ if(req.body.seller_id != req.session.pid){
 	if(modeList.indexOf(mode) == -1){
 		console.log('error in 3');
 		res.status(400).render('error-nikhil', {
-			errMsg : 'invalid value for field sell mode'
+			errMsg : 'Invalid value for field sell mode'
 		});
 		return;
 	}
@@ -156,14 +156,14 @@ if(req.body.seller_id != req.session.pid){
 	if (isNaN(parseFloat(req.body.units_in_stock)) || req.body.units_in_stock < 0) {
 		console.log('error in 4');
 		res.status(400).render('error-nikhil', {
-			errMsg : 'units in stock must be a valid positive number'
+			errMsg : 'Units in stock must be a valid positive number'
 		});
 		return;
 	}
 	if (isNaN(parseFloat(req.body.price_per_unit)) || req.body.price_per_unit < 0) {
 		console.log('error in 5');
 		res.status(400).render('error-nikhil', {
-			errMsg : 'price per unit must be a valid positive number'
+			errMsg : 'Price per unit must be a valid positive number'
 		});
 		return;
 	}
@@ -177,14 +177,14 @@ if(req.body.seller_id != req.session.pid){
 		if (isNaN(parseFloat(req.body.start_amount)) || req.body.start_amount < 0) {
 			console.log('error in 6');
 			res.status(400).render('error-nikhil', {
-				errMsg : 'start amount must be a valid positive number'
+				errMsg : 'Start amount must be a valid positive number'
 			});
 			return;
 		}
 		if( !bidexpiry.isValid()|| !bidexpiry.isAfter(now) ){
 			console.log('error in 7');
 			res.status(400).render('error-nikhil', {
-				title : 'please specify a valid bid expiry time greater than current time'
+				errMsg : 'Please specify a valid bid expiry time greater than current time'
 			});
 			return;
 		}
@@ -576,7 +576,7 @@ function aboutSeller(req,res){
 	
 //	sellerSql = 'SELECT person_id, person_fname, person_lname from ebay.person where person_id = '+seller;
 	sellerSql = 'SELECT person_id, person_fname, person_lname FROM person WHERE '+
-	' isActive = \'A\' AND person_id = ?';
+	' isactive = \'1\' AND person_id = ?';
 	sellerSql = mysql.format(sellerSql, sells);
 	
 //	productSql = 'SELECT product_id, product_name FROM ebay.product WHERE '+
