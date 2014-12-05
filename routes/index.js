@@ -16,7 +16,7 @@ exports.person = function(req, res){
 };
 
 exports.addperson = function(req, res){
-	  res.render('signup');
+	  res.render('signup',{err:''});
 	  };
 exports.loginpage = function(req, res){
 		  res.render('login', {result : ''});
@@ -26,29 +26,3 @@ exports.loginpage = function(req, res){
 			res.render('audit.ejs');
 		};
 		
-exports.save = function(req,res){
-		    
-		    var input = JSON.parse(JSON.stringify(req.body));
-		    
-		    req.getConnection(function (err, connection) {
-		        
-		        var data = {
-		            
-		            person_fname    : input.fname,
-		            person_lname    : input.lname,
-		            
-		        
-		        };
-		        
-		        var query = connection.query("INSERT INTO person set ? ",data, function(err, rows)
-		        {
-		  
-		          if (err)
-		              console.log("Error inserting : %s ",err );
-		         
-		          res.redirect('/signup');
-		          
-		        });
-		    
-		    });
-		};
