@@ -22,6 +22,10 @@ exports.loginpage = function(req, res){
 		  res.render('login', {result : ''});
 		};
 		
+		exports.audit = function(req, res){
+			res.render('audit.ejs');
+		};
+		
 exports.save = function(req,res){
 		    
 		    var input = JSON.parse(JSON.stringify(req.body));

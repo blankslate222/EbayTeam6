@@ -103,7 +103,10 @@ app.post('/updateCity', home.updateCity );
 app.post('/updateZip', home.updateZip);
 
 app.post('/deleteAccount', home.deleteAccount);
+// Auditing
 
+app.get('/audit', routes.audit);
+app.get('/auditLogs', madhur.getAuditLogs);
 
 //
 //added get method of above to navigate from search to product details

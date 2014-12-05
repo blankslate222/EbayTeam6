@@ -1,0 +1,133 @@
+<html>
+<head>
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/js/jquery.slides.min.js"></script>
+<script src="/js/moment.js"></script>
+<script type="text/javascript" src="/js/ejs_production.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script type="text/javascript">
+
+ 		$.ajax({
+                    url: "/auditLogs",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                    var myTable1 = document.getElementById('auditTable');
+                    		for(key in data) {
+                    			var myTable = document.createElement('tr');
+                    	    	
+                    	    	
+                    	    	var dateTd = document.createElement('td');
+                    	    	var userTd = document.createElement('td');
+                    	    	var ipTd = document.createElement('td');
+                    	    	var EventTd = document.createElement('td');
+                    	    	var databaseTd = document.createElement('td');
+                    	    	var entityTypeTd = document.createElement('td');
+                    	    	var entityNameTd = document.createElement('td');
+                    	    	var queryTd = document.createElement('td');
+                    	    	
+                    	    	dateTd.align="center";
+                    	    	userTd.align="center";
+                    	    	ipTd.align="center";
+                    	    	EventTd.align="center";
+                    	    	databaseTd.align="center";
+                    	    	entityTypeTd.align="center";
+                    	    	entityNameTd.align="center";
+                    	    	queryTd.align="center";
+                    	    	
+                    	    	dateTd.appendChild(document.createTextNode(moment(data[key].date).format('MMM Do YYYY')));
+                    	    	userTd.appendChild(document.createTextNode(data[key].user));
+                    	    	ipTd.appendChild(document.createTextNode(data[key].ip));
+                    	    	EventTd.appendChild(document.createTextNode(data[key].event));
+                    	    	databaseTd.appendChild(document.createTextNode(data[key].db));
+                    	    	entityTypeTd.appendChild(document.createTextNode(data[key].obj_type));
+                    	    	entityNameTd.appendChild(document.createTextNode(data[key].obj_name));
+                    	    	queryTd.appendChild(document.createTextNode(data[key].query));
+                    	    	
+                    	    	myTable.appendChild(dateTd);
+                    	    	myTable.appendChild(userTd);
+                    	    	myTable.appendChild(ipTd);
+                    	    	myTable.appendChild(EventTd);
+                    	    	myTable.appendChild(databaseTd);
+                    	    	myTable.appendChild(entityTypeTd);
+                    	    	myTable.appendChild(entityNameTd);
+                    	    	myTable.appendChild(queryTd);
+                    	    	myTable1.appendChild(myTable);
+                    	    }
+                    	    
+                    },
+                    error: function() {
+                        
+                    }
+             });
+
+</script>
+</head>
+
+
+<body>
+
+<body class="sz1200 index redux today stdln en_US rvi" >
+<div id="gh-gb" tabindex="-1"></div>
+<div class="header">
+	<div class="gh-acc-exp-div">
+	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
+	<!--[if lt IE 9]><div id="gh" class="gh-IE8 gh-flex gh-w gh-simpleH no-touch "><![endif]--><!--[if (gte IE 9)|!(IE)]><!-->
+	<div id="gh" class="gh-w gh-simpleH no-touch gh-flex"><!--<![endif]-->
+	<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img width="117" height="120" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo"></a><![endif]--><!--[if (gte IE 9)|!(IE)]><!--><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo" height="200" width="250"></a><!--<![endif]--></h1></td>
+			<td id="gh-title">Audit</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u">
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi!<font color = "blue"></font color>&nbsp;
+				<span id="gh-ug-flex"> <font color = "blue">Last login time :</font color></span></span>
+			</li>
+		</ul>
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<a href="" class="gh-eb-li-a">My eBay</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
+	<div class="ribbon">
+		<div class="icon">
+		</div>
+	</div>
+	</div>
+	
+	<div id="Center">
+		<div id="CenterPanel">
+			<div class="sbx-c">
+				<div class="cont" style="width:100%position:relative">
+					<h2 class="sbx-h rct-hm rct-bg">Audit Logs</h2>
+					<table style="border-collapse:separate;border-spacing:5px;background: #fff;border: 1px solid #DCDCDC;padding: 20px 20px 20px 20px;" width="100%" cellspacing="20" id="auditTable">
+						<tr  style="padding-bottom: 1em;">
+							<th><b>Date</b></th>
+							<th><b>User</b></th>
+							<th><b>Ip address</b></th>
+							<th><b>Event</b></th>
+							<th><b>Database</b></th>
+							<th><b>Entity Type</b></th>
+							<th><b>Entity Name</b></th>
+							<th><b>Query</b></th>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

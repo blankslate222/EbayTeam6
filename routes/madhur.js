@@ -247,6 +247,21 @@ function getCategories(req,res) {
 	},query);
 }
 
+function getAuditLogs(req,res) {
+	var query = "select * from dba_audit";
+	mysql.fetchData(function(err,results){
+		if(err){
+			throw err;
+		}
+		else
+		{
+			console.log("results: "+results);
+			res.type('application/json');
+			res.end(JSON.stringify(results));
+		}
+	},query);
+}
+
 exports.getDistinctProductConditions=getDistinctProductConditions;
 exports.getDistinctProductBidStatus=getDistinctProductBidStatus;
 exports.productDetails=productDetails;
@@ -259,3 +274,4 @@ exports.getmemIds=getmemIds;
 exports.getPersonZip=getPersonZip;
 exports.getProductNames=getProductNames;
 exports.getCategories=getCategories;
+exports.getAuditLogs=getAuditLogs;
