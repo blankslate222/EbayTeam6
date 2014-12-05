@@ -78,6 +78,64 @@ function getCustomerInfo(req,res)
 	}
 
 
+function getCustomerInfoById(req,res)
+{
+	var user;
+	var jsonParse2;
+	var getAllUsers="select *  from person where person_id='"+req.params.id+"' ";
+	console.log(getAllUsers);
+	var customerHistorySql = 'SELECT a.product_id, b.product_name, a.customer_id, a.quantity, a.order_amount, a.bid_id'+
+	'  FROM ebay.order_history a, ebay.product b '+
+	'WHERE a.customer_id = "'+req.params.id+'" AND a.product_id = b.product_id'+
+	' ORDER BY a.order_id desc';	
+	console.log("Query is:"+getAllUsers);
+	console.log("Query is:"+customerHistorySql);
+
+	mysql.fetchData(function(err,results)
+			{
+		if(err)
+		{
+			throw err;
+		}
+		else 
+		{
+			mysql.fetchData(function(err,results1)
+					{
+				user = results1;
+				console.log('users length -'+user.length);
+				var jsonString2= JSON.stringify(user);
+				jsonParse2= JSON.parse(jsonString2);
+				var rows = results;
+				var jsonString = JSON.stringify(results);
+				var jsonParse = JSON.parse(jsonString);				
+				ejs.renderFile('./views/Myebay.ejs',{data:jsonParse,
+					users:jsonParse2, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) 
+					{
+						// render on success
+						if (!err) 
+						{
+							res.end(result);
+						}
+						// render or error
+						else 
+						{
+							res.end('An error occurred');
+							console.log(err);
+						}
+					});
+				return;
+					},getAllUsers);
+
+
+		}
+
+
+
+			},customerHistorySql);
+
+}
+
+
 	
 	function editFname(req,res)
 	{
@@ -689,5 +747,5 @@ exports.updateEmail=updateEmail;
 exports.updateAddress=updateAddress;
 exports.updateCity=updateCity;
 exports.updateZip=updateZip;
-
+exports.getCustomerInfoById=getCustomerInfoById;
 exports.deleteAccount=deleteAccount;

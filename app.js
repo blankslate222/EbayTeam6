@@ -88,6 +88,7 @@ app.post('/product/bids',authenticate, bids.listBidsForProduct);
 app.post('/product/details', bids.displayProductDetails);
 //
 app.get('/getCustomerInfo',authenticate, home.getCustomerInfo);
+app.get('/customer/:id',authenticate, home.getCustomerInfoById);
 app.get('/editFname', authenticate, home.editFname);
 app.get('/editLname', authenticate, home.editLname);
 app.get('/editEmail', authenticate, home.editEmail);
