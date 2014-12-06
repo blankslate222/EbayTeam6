@@ -1,12 +1,20 @@
 <html>
 <head>
+<link rel="shortcut icon" href="images/ebay-header.jpeg" type="image/jpeg">
+<title> eBay Customer home</title>
 <link rel='stylesheet' href='/stylesheets/style.css' />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/js/jquery.slides.min.js"></script>
+<script src="/js/moment.js"></script>
 <script type="text/javascript" src="/js/ejs_production.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-<script>
+<script type="text/javascript">
+var lastTimeLoggedIn = moment(new Date("<%=req.session.lasttimelog%>")).format('lll');
+
+function setTime() {
+	document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+}
     		$.ajax({
                     url: "/categories",
                     type: 'GET',
@@ -89,10 +97,15 @@ $("#gh-ac").autocomplete({
                     }
              });
 	}
+	
+	function logout(){
+	console.log("inside logout form submit");
+    $("#logoutForm").submit();
+}
     
   </script>
 </head>
-<body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto">
+<body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto" onload="setTime()">
 <div id="gh-gb" tabindex="-1"></div>
 <div class="header">
 	<div class="gh-acc-exp-div">
@@ -158,24 +171,22 @@ $("#gh-ac").autocomplete({
 		<ul id="gh-topl">
 			<li class="gh-t gh-spr" id="gh-eb-u">
 				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "#00509d"><%=req.session.uname%>,</font color>&nbsp;
-				<span id="gh-ug-flex"> <font color = "#00509d">you last signed in on <%=req.session.lasttimelog%></font color></span></span>
+				<span id="gh-ug-flex"> <font id="lastLoggedIn" color = "#00509d">you last signed in on <%=req.session.lasttimelog%></font color></span></span>
 			</li>
 		</ul>
-		<div align="right">
-		<ul><li class="gh-eb-li gh-dd" data-imp="10">
-				<div class="gh-menu">
-					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
-						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
-				</div>				
-			</li>
-		</ul>
-		<div>
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
 				<div class="gh-menu">
 					<a href="/getCustomerInfo" class="gh-eb-li-a">My eBay</a>
 				</div>
 				
+			</li>
+			
+			<li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
 			</li>
 		</ul>
 	</div>

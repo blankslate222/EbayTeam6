@@ -4,15 +4,19 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+	if(req.session.uname) {
+		res.render('customerhome',{req:req});
+	} else {
+		res.render('index', { req:req, title: 'Home' });
+	}
 };
 
 exports.profile = function(req, res){
-	  res.render('productAdvance.ejs', {req:req, title: 'Express' });
+	  res.render('productAdvance.ejs', {req:req, title: 'My profile' });
 };
 
 exports.person = function(req, res){
-	  res.render('personSearch.ejs', { title: 'Express' });
+	  res.render('personSearch.ejs', { title: 'Person' });
 };
 
 exports.addperson = function(req, res){

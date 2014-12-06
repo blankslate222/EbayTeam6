@@ -1,5 +1,7 @@
 <html>
 <head>
+<link rel="shortcut icon" href="images/ebay-header.jpeg" type="image/jpeg">
+<title> eBay Product details</title>
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 <script src="/js/countdown.min.js" type="text/javascript"></script>
@@ -7,6 +9,7 @@
 <script src="/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="http://localhost:8090/socket.io/socket.io.js" type="text/javascript"></script>
 <link rel='stylesheet' href='/stylesheets/style-R.css' />
+<script src="/js/moment.js"></script>
 <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
 <style>
 </style>
@@ -15,6 +18,12 @@ function listAllBids(element){
 	console.log("inside submitform function "+$(element).attr('data-value'));
    	$("input[name=productid]").val($(element).attr('data-value'));
     $("#formListBid").submit();
+}
+
+var lastTimeLoggedIn = moment(new Date("<%=lastLoginTime%>")).format('lll');
+
+function setTime() {
+	document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
 }
 
 function logout(){
@@ -56,7 +65,7 @@ bootbox.dialog({
 }
 </script>
 </head>
-<body bgcolor="#f5f5f1">
+<body bgcolor="#f5f5f1" onload="setTime()">
 <div class="header">
 	<div class="gh-acc-exp-div">
 	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
@@ -76,24 +85,24 @@ bootbox.dialog({
 		<ul id="gh-topl">
 			<li class="gh-t gh-spr" id="gh-eb-u" style="padding-left:10px">
 				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "#00509d"><%=userName%>,</font color>&nbsp;
-				<span id="gh-ug-flex"> <font color = "#00509d">you last signed in on <%=lastLoginTime%></font color></span></span>
+				<span id="gh-ug-flex"> <font id="lastLoggedIn" color = "#00509d"></font color></span></span>
 			</li>
 		</ul>
-		<div align="right">
-		<ul><li class="gh-eb-li gh-dd" data-imp="10">
-				<div class="gh-menu">
-					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
-						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
-				</div>				
-			</li>
-		</ul>
-		<div>
+		
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
 				<div class="gh-menu">
 					<a href="/getCustomerInfo" class="gh-eb-li-a">My eBay</a>
 				</div>				
 			</li>
+			
+			<li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
+			</li>
+			
 		</ul>
 	</div>
 	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->

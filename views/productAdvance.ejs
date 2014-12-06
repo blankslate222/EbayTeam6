@@ -1,11 +1,14 @@
 <html>
 <head>
+<link rel="shortcut icon" href="images/ebay-header.jpeg" type="image/jpeg"/>
+<title> eBay Product search</title>
 <link rel='stylesheet' href='/stylesheets/style.css' />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/js/jquery.slides.min.js"></script>
 <script type="text/javascript" src="/js/ejs_production.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="/js/moment.js"></script>
 <script type="text/javascript">
 var prod_cond = {};
 var search_prod_cond = "";
@@ -14,6 +17,20 @@ var category = 0;
 var text = "";
 var u_range = 0;
 var l_range = 0;
+
+var lastTimeLoggedIn = moment(new Date("<%=req.session.lasttimelog%>")).format('MMM Do YYYY');
+var username = "<%= req.session.uname%>";
+
+function setTime() {
+	if(username == "" || username == null || username == "undefined") { 
+		document.getElementById('lastLoggedIn-u').innerHTML = "<a href='/team6ebay/login' _sp='m570.l1524'>Sign in</a>&nbsp;";
+		document.getElementById('lastLoggedIn').innerHTML = "or <a href='/team6ebay/persons/new' _sp='m570.l2621'>register</a>";
+	} else {
+		document.getElementById('lastLoggedIn-u').innerHTML = username;
+		document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+		document.getElementById('my-ebay-div').innerHTML = "<a href='/getCustomerInfo' class='gh-eb-li-a'>My eBay</a>";
+	}
+}
  			$.ajax({
                     url: "/productConditions",
                     type: 'GET',
@@ -156,7 +173,7 @@ $("#_nkw").autocomplete({
 	}
 </script>
 </head>
-<body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto">
+<body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto" onload="setTime()">
 <div id="gh-gb" tabindex="-1"></div>
 <div class="header">
 	<div class="gh-acc-exp-div">
@@ -174,14 +191,14 @@ $("#_nkw").autocomplete({
 	<div id="gh-top">
 		<ul id="gh-topl">
 			<li class="gh-t gh-spr" id="gh-eb-u">
-				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi!<font color = "blue"><%= req.session.uname%></font color>&nbsp;
-				<span id="gh-ug-flex"> <font color = "blue">Last login time :<%=req.session.lasttimelog%></font color></span></span>
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! &nbsp;<font id="lastLoggedIn-u" color = "blue"></font color>&nbsp;
+				<span id="gh-ug-flex"> <font id="lastLoggedIn" color = "blue"></font color></span></span>
 			</li>
 		</ul>
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
-				<div class="gh-menu">
-					<a href="" class="gh-eb-li-a">My eBay</a>
+				<div class="gh-menu" id="my-ebay-div">
+					
 				</div>
 			</li>
 		</ul>

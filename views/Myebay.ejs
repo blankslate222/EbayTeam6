@@ -1,5 +1,7 @@
 <html>
 <head>
+<link rel="shortcut icon" href="images/ebay-header.jpeg" type="image/jpeg">
+<title> My eBay </title>
 <link rel='stylesheet' href='/stylesheets/style.css' />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -8,8 +10,17 @@
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-2.1.1.js" ></script>
+<script src="/js/moment.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script>
+
+var lastTimeLoggedIn = moment(new Date("<%=lastLoginTime%>")).format('lll');
+
+function setTime() {
+	
+	document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+}
+
 function logout(){
 	console.log("inside logout form submit");
     $("#logoutForm").submit();
@@ -19,7 +30,7 @@ function logout(){
 <body>
 
 
-<body class="sz1200 index redux today stdln en_US rvi" style="height: auto;" >
+<body class="sz1200 index redux today stdln en_US rvi" style="height: auto;" onload="setTime()">
 <div id="gh-gb" tabindex="-1"></div>
 <div class="header">
 	<div class="gh-acc-exp-div">
@@ -29,8 +40,7 @@ function logout(){
 	<table class="gh-tbl">
 		<tbody>
 			<tr>
-			<td class="gh-td"><h1 id="gh-l-h1">
-<a href="/" class="iclg" _sp="m570.l2586" id="gh-la"><img style=" position:absolute; top:-5px;left:0" alt="" src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/EBay_logo.svg/318px-EBay_logo.svg.png" id="gh-logo" height="50" width="50"></a></h1></td>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img width="117" height="120" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo"></a><![endif]--><!--[if (gte IE 9)|!(IE)]><!--><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo" height="200" width="250"></a><!--<![endif]--></h1></td>
 			
 			<td id="gh-title" >Person Information</td>
 			</tr>
@@ -40,25 +50,23 @@ function logout(){
 		<ul id="gh-topl">
 			<li class="gh-t gh-spr" id="gh-eb-u">
 				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "#00509d"><%=userName%>,</font color>&nbsp;
-				<span id="gh-ug-flex"> <font color = "#00509d">you last signed in on <%=lastLoginTime%></font color></span></span>
+				<span id="gh-ug-flex"> <font id="lastLoggedIn" color = "#00509d"></font color></span></span>
 			</li>
 		</ul>
-		<div align="right">
-		<ul><li class="gh-eb-li gh-dd" data-imp="10">
-				<div class="gh-menu">
-					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
-						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
-				</div>				
-			</li>
-		</ul>
-		<div>
-		
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
 				<div class="gh-menu">
 					<a href="/seller-details" class="gh-eb-li-a">Seller Profile</a>
 				</div>
 			</li>
+			
+			<li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
+			</li>
+			
 		</ul>
 	</div>
 	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
