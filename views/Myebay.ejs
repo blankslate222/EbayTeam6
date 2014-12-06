@@ -19,7 +19,7 @@ function logout(){
 <body>
 
 
-<body class="sz1200 index redux today stdln en_US rvi" >
+<body class="sz1200 index redux today stdln en_US rvi" style="height: auto;" >
 <div id="gh-gb" tabindex="-1"></div>
 <div class="header">
 	<div class="gh-acc-exp-div">
@@ -56,7 +56,7 @@ function logout(){
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
 				<div class="gh-menu">
-					<a href="" class="gh-eb-li-a">My eBay</a>
+					<a href="/seller-details" class="gh-eb-li-a">Seller Profile</a>
 				</div>
 			</li>
 		</ul>
@@ -78,24 +78,30 @@ function logout(){
             %>
                    <p><strong>First Name:  </strong><%= users[j].person_fname %>  &nbsp <a href="#"  onClick="MyWindow=window.open('editFname','MyWindow','width=400,height=300'); return false;"> edit </a></p> </input>
            		   <p><strong>Last Name:  </strong> <%= users[j].person_lname %> &nbsp <a href="#"  onClick="MyWindow=window.open('editLname','MyWindow','width=400,height=300'); return false;"> edit </a></p> </input>
-           		    <p><strong>Email: </strong><%= users[j].person_email %> </p>
-           		      <p><strong>Address: </strong><%=users[j].person_address%> &nbsp <a href="#" onClick="MyWindow=window.open('editAddress','MyWindow','width=400,height=300'); return false;"> edit </a></p>
-           		               		   <p><strong>City: </strong><%=users[j].person_city%> &nbsp <a href="#" onClick="MyWindow=window.open('editCity','MyWindow','width=400,height=300'); return false;"> edit </a></p>
-           		               		   <p><strong>Zipcode: </strong><%=users[j].person_zip%> &nbsp <a href="#" onClick="MyWindow=window.open('editZip','MyWindow','width=400,height=300'); return false;"> edit </a></p>
+           		   <p><strong>Email: </strong><%= users[j].person_email %> </p>
+           		   <p><strong>Address: </strong><%=users[j].person_address%> &nbsp <a href="#" onClick="MyWindow=window.open('editAddress','MyWindow','width=400,height=300'); return false;"> edit </a></p>
+           		   <p><strong>City: </strong><%=users[j].person_city%> &nbsp <a href="#" onClick="MyWindow=window.open('editCity','MyWindow','width=400,height=300'); return false;"> edit </a></p>
+           		   <p><strong>Zipcode: </strong><%=users[j].person_zip%> &nbsp <a href="#" onClick="MyWindow=window.open('editZip','MyWindow','width=400,height=300'); return false;"> edit </a></p>
            	<% 
 	            }
 	       %> 
-	        <input type="submit" value="Deactivate Account" style="color:white; background-color:#c41200; width:50%;" name="action" class="form-control" >
-			<a href="/seller-details">Seller History</a>       
+	        <input type="submit" value="Deactivate Account" style="color:white; background-color:#c41200; width:200px;" name="action" class="form-control" >
 	       <br>	  
+		<h3>Purchase History</h3>
 	     <!--  <p><strong> The products you bought are: <br> <br>     -->      		        
            <% 
 	           for(var i=0; i < data.length;i++) 
 	             
 	          	 { 
 	         %> 
-	          	 	 
-           		   <a><%=(i+1)%>: <%=data[i].product_name%> whose amount is : <%=data[i].order_amount%></a></strong></p>
+	          	 <div class="product-details">
+	          	 	<table><tr><td style= "width:300px;">
+	          	 	Product Name: <%=data[i].product_name%> </td><td>
+	          	 	Order Value: $<%=data[i].order_amount%></td></tr>
+	          	 	<tr><td><br></td></tr><tr><td>
+	          	 	Order Date: <%=data[i].order_date%></td><td>
+	          	 	Quantity: <%=data[i].quantity%></td></tr></table>
+	          	 </div> 
 	       <% 
 	       		}
 	       	%>
@@ -103,9 +109,5 @@ function logout(){
 			</div> 
 
  </form>
- 			<div class="col-xs-6" color:red;>
- 			<input type="submit" value="Delete Account" style="color:white; background-color:#c41200; width:50%;" name="action" class="form-control" >
-  			</div>	 
- 
 </body>
 </html>

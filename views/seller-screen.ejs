@@ -69,29 +69,28 @@
  </div>
  
  <%if(products.length > 0){%> <!-- outer if -->
- <br>
- <div>
- <h2>Products</h2>
-  <%for(var i=0; i<products.length;i++){%>
- 	<!-- load an image in here as well -->
- 	<p>
- <a href='/product/<%=products[i].product_id%>'><%=products[i].product_name%></a> 
-  <%if(sellerHome == 'Y'){%> 
-  <form method="post" action="/" id="update_form<%=i%>">
-	<table>
-	<tr>
-	<td><input type="hidden" name="product_id" value="<%=products[i].product_id%>"></td>
-	<td><input type="hidden" name="seller_id" value="<%=products[i].seller_id%>"></td>
-	<td><input type="submit" id="delete" value="Delete" onclick="return submitform(this.id, this.form)"/></td> 
-	<td><input type="submit" id="update" value="Update" onclick="return submitform(this.id, this.form)"/></td>
-	</tr>
-	</table>
-	</form>
-	<%}%>
- 	</p>
- <%}%>
- </div>
- <br>
+ 	<br>
+ 	<div>
+ 	<h2>Products</h2>
+		<%for(var i=0; i<products.length;i++){%>
+		 	<p>
+			<%if(sellerHome == 'Y'){%> <!-- inner if -->
+			<form method="post" action="/" id="update_form<%=i%>">
+			<table>
+				<tr>
+				<td><input type="hidden" name="product_id" value="<%=products[i].product_id%>"></td>
+				<td><input type="hidden" name="seller_id" value="<%=products[i].seller_id%>"></td>
+				<td style="width:300px;"><a href="/product/details?productidfordisplay=<%=products[i].product_id%>" class="vip" style="display:block" ><%=products[i].product_name%></a></td>
+				<td><input type="submit" id="delete" value="Delete" onclick="return submitform(this.id, this.form)"/></td> 
+				<td><input type="submit" id="update" value="Update" onclick="return submitform(this.id, this.form)"/></td>
+				</tr>
+			</table>
+			</form>
+			<%}%>
+ 			</p>
+		<%}%>
+ 	</div>
+	 <br>
  <%} else{%> <!-- outer if -->
  
  You do not have your product listed yet. Tell us what you would like to sell.

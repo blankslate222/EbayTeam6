@@ -10,7 +10,7 @@ function getCustomerInfo(req,res)
 	var jsonParse2;
 	var getAllUsers="select *  from person where person_id='"+req.session.pid+"' ";
 	console.log(getAllUsers);
-	var customerHistorySql = 'SELECT a.product_id, b.product_name, a.customer_id, a.quantity, a.order_amount, a.bid_id'+
+	var customerHistorySql = 'SELECT a.product_id, b.product_name, a.customer_id, a.quantity, a.order_amount, a.bid_id, a.order_date'+
 	'  FROM ebay.order_history a, ebay.product b '+
 	'WHERE a.customer_id = "'+req.session.pid+'" AND a.product_id = b.product_id'+
 	' ORDER BY a.order_id desc';	

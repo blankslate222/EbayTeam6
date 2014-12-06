@@ -23160,3 +23160,11 @@ div.tp-rtd-bbl{
 .loc_option_title{
 	padding-right:10px
 }
+
+.product-details {
+border-top: 1px solid #e5e5e1;
+padding-top: 15px;
+padding-bottom: 15px;
+font-size: small;
+width: 50%;
+}

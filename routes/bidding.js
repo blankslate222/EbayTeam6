@@ -3,6 +3,7 @@
  */
 var db = require('./mysql');
 var ejs = require("ejs");
+var moment = require("moment");
 
 function listBidsForProduct(req, res){
 	console.log("Inside list bids for Product");	
@@ -375,6 +376,8 @@ function buyProduct (req, res){
 	var l_productqty = input.productqty;
 	var b_id=-1;
 	
+	var now = moment().format('YYYY-MM-DD HH:mm:ss');
+	
 	var data = {	            
 		product_id : input.productidfordisplay,
 		seller_id : input.seller_id,
@@ -382,7 +385,8 @@ function buyProduct (req, res){
 		quantity:input.productqty,
 		order_amount:l_orderAmount,
 		bid_id: b_id,
-		seller_rating:l_sellerRating
+		seller_rating:l_sellerRating,
+		order_date: now
 	};
 	
     db.execQueryWithParams(sqlStmt, data, function(err, rows) {
