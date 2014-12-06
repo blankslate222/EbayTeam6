@@ -5,6 +5,8 @@ var ejs = require("ejs");
 var mysql = require('mysql');
 var db = require('./mysql');
 var moment = require('moment');
+var redis = require('node-redis');
+var client = redis.createClient();
 function list(req,res){
 
 	var sql = 'select product_id, product_name, product_desc, product_condition, (select count(1) from bid_line_item, bid_header_item where product.product_id = bid_header_item.product_id and bid_header_item.bid_id = bid_line_item.bid_id ) numberOfBids  from product';
@@ -231,6 +233,26 @@ if(req.body.seller_id != req.session.pid){
 //		insertProductSql);
 
 		var insertId = result.insertId;
+		
+		
+		//Redis
+		redisQuery="select * from product where product_id="+insertId+";"
+		runQuery(redisQuery,req,res, function(status, result){
+
+			console.log("priniting new product id"+insertId);
+			client.get(redisQuery, function(err,redisResult){
+            	if(err){
+            		console.log("inside error while fetching from cache");
+            	}
+            	else{          		
+            		client.setex(insertId,1000,JSON.stringify(result))
+            		console.log("Printing results inserted into cache after new product creation:"+result);
+            	}
+			});
+		});
+		//Redis
+		
+		
 		if (mode == 'Auction') {
 			var bid_header = {
 					product_id : insertId,
@@ -242,7 +264,7 @@ if(req.body.seller_id != req.session.pid){
 				runQuery(insertBid, req, res, function(status, result){
 					console.log('updating bid');
 					res.status(200);
-					res.redirect('/sell');
+					res.redirect('/seller-details');
 					
 				});
 				return;
@@ -250,7 +272,7 @@ if(req.body.seller_id != req.session.pid){
 			console.log('insert id --' + result.insertId);
 			console.log('not an auction prod');
 			res.status(200);
-			res.redirect('/sell');
+			res.redirect('/seller-details');
 			return;
 		}
 
@@ -487,7 +509,7 @@ if(req.body.seller_id != req.session.pid){
 				runQuery(insertBid, req, res, function(status, result){
 					console.log('updating bid');
 					res.status(200);
-					res.redirect('/sell');
+					res.redirect('/seller-details');
 					
 				});
 				return;
@@ -495,7 +517,7 @@ if(req.body.seller_id != req.session.pid){
 			console.log('insert id --' + result.insertId);
 			console.log('not an auction prod');
 			res.status(200);
-			res.redirect('/sell');
+			res.redirect('/seller-details');
 			return;
 		}
 	});
@@ -534,7 +556,7 @@ function handleDelete(req,res){
 			res.status(200);
 //			res.send('deleted record successfully');
 			//redirect to seller view
-			res.status(status).redirect('/sell');
+			res.status(status).redirect('/seller-details');
 		});
 		return;
 	});
