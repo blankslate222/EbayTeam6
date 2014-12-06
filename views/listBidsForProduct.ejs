@@ -346,7 +346,7 @@ if (typeof GH != "undefined" && GH) {GH_config = {"siteId":"0","geoLang":"[]",si
 
 	c.sImageName = 'itemImage';
 
-	c.sImage = "http://i.ebayimg.com/00/s/MTE4NFgxMTAx/z/e3EAAOSwD0lUbF1k/$_0.JPG";
+	c.sImage = "/images/<%=productDetails[0].category_id%>.JPG";
 
 	c.iHeight = 96;
 
@@ -372,13 +372,14 @@ if (typeof GH != "undefined" && GH) {GH_config = {"siteId":"0","geoLang":"[]",si
 
  ebay.oDocument.oPage.createConfig();
 
- </script><div id="BidPanelDiv" style="visibility:hidden;position:absolute;z-index:2"></div><div id="lyrGrayout_sec" style="visibility:hidden;position:absolute;z-index:1"></div><div id="VizItemInfo"><h2 class="gh-ar-hdn">Item info Section</h2><div class="BHbidSecBorderGrey"><div class="n"><div class="e"><div class="w"> </div></div></div><div class="itemInfo itemInfoSection">Item info</div><div class="itemInfoSection"><table cellpadding="0" cellspacing="0" border="0" class="itemInfoContent"><tr><td valign="top"><div class="BHimgSecPad"><div align="center"><img border="0" src="http://i.ebayimg.com/00/s/MTE4NFgxMTAx/z/e3EAAOSwD0lUbF1k/$_0.JPG" alt=" " name="itemImage" width="96" height="96"></div></div></td><td class="itemInfoCntPadding"><div class="itemTitle"><a href="/product/details?productidfordisplay=<%=productDetails[0].product_id%>"><b class="g-hdn">Item Title: </b><%=productDetails[0].product_name%></a></div><div style="padding:10px 10px 0 0px;" class="txtT">
+ </script><div id="BidPanelDiv" style="visibility:hidden;position:absolute;z-index:2"></div><div id="lyrGrayout_sec" style="visibility:hidden;position:absolute;z-index:1"></div><div id="VizItemInfo"><h2 class="gh-ar-hdn">Item info Section</h2><div class="BHbidSecBorderGrey"><div class="n"><div class="e"><div class="w"> </div></div></div><div class="itemInfo itemInfoSection">Item info</div><div class="itemInfoSection"><table cellpadding="0" cellspacing="0" border="0" class="itemInfoContent"><tr><td valign="top"><div class="BHimgSecPad"><div align="center">
+ <img border="0" src="/images/<%=productDetails[0].category_id%>.JPG" alt=" " name="itemImage" width="96" height="96"></div></div></td><td class="itemInfoCntPadding"><div class="itemTitle"><a href="/product/details?productidfordisplay=<%=productDetails[0].product_id%>"><b class="g-hdn">Item Title: </b><%=productDetails[0].product_name%></a></div><div style="padding:10px 10px 0 0px;" class="txtT">
 
 									Buy It Now price is no longer available since bidding has started.</div></td></tr></table>
 									<table cellpadding="0" cellspacing="0" border="0" class="marAuto">
 									<tr>
 									<td valign="top" class="BHCtBidLabel bidPriceLabel" align="right" nowrap>Current bid:</td>
-									<td class="itemVal priceData" style="color:#333333">US $<%=productDetails[0].currentBid%></td>
+									<td class="itemVal" style="color:#333333">US $<%=productDetails[0].currentBid%></td>
 									</tr><tr>
 									<td class="BHCtBidLabel itmSumLabelPadding" valign="top" align="right">Shipping:</td>
 									<td class="itemVal labelPadding">Free -- Economy Shipping</td>
@@ -421,7 +422,8 @@ if (typeof GH != "undefined" && GH) {GH_config = {"siteId":"0","geoLang":"[]",si
 							</td></tr></table>
 							<div style="clear:both"></div><script type="text/javascript" language="JavaScript" xmlns:bx="http://www.ebay.com/2004/bex">
 
-					ebay.oDocument.oPage.createConfig = function() {var  c = ebay.oDocument.addConfig(new EbayConfig('EBX.CrossLinking'));c.sLayer='ebx_layer';c.sHTML='<table align="center" style="border:2px solid #0098CF; margin-bottom: 15px;" width="85%" cellpadding="0" cellspacing="0" bgcolor="#EDF9FF"><tr valign="middle"><td width="36" style="padding: 0 10px 0 10px;"><img align="middle" alt=" " src="http://pics.ebaystatic.com/aw/pics/icon/iconInfo_16x16.gif" /></td><td width="80%" nowrap="nowrap" style="padding-right:10px" >You\'ve left eBay Express.</td><td align="left" nowrap="nowrap"><a href="http://www.express.<#1#>/">Shop again on eBay Express</a><span style="margin:0 10px 0 10px;">|</span><img align="bottom" src="http://pics.ebaystatic.com/aw/pics/express/icons/iconCart_15x10.gif" alt=""/> <a href="http://cart.express.<#1#>/ws/eBayISAPI.dll?ExpressCart&action.view=&from=Header">Shopping Cart<#2#></a></td><td width="135" nowrap="nowrap" style="padding: 0 20px 0 20px;"><img align="top" src="http://pics.ebaystatic.com/aw/pics/express/logos/logoExpress_95x39.gif" alt=""></img></td><td nowrap="nowrap" width="26" align="left"><a href="#1" id="b_close" name="b_close"><img align="middle" border="0" src="http://pics.ebaystatic.com/aw/pics/buttons/btnExpressClose.gif" alt="" ></img></a></td></tr></table>';c.sCartCountText=' (<#1#>)';c.sClose='b_close';c.aHost={'0':'ebay.com','77':'ebay.de','2':'ebay.co.uk','15':'ebay.com.au'};c.aHideOnParams=["fromebxris=1", "fromebxrisZ1"];} ;ebay.oDocument.oPage.createConfig();</script><!--Begin eBay Footer--><div id="glbfooter" class="gh-w gh-flex"><div><div id=rtm_html_1650></div><div id=rtm_html_1651></div></div><h2 class=gh-ar-hdn>Additional site navigation</h2><div id="gf-t-box"><table class="gf-t"><tr><td colspan=2><ul id="gf-l" ><li class="gf-li"><a href="http://community.ebay.com" 
+					ebay.oDocument.oPage.createConfig = function() {var  c = ebay.oDocument.addConfig(new EbayConfig('EBX.CrossLinking'));c.sLayer='ebx_layer';c.sHTML='<table align="center" style="border:2px solid #0098CF; margin-bottom: 15px;" width="85%" cellpadding="0" cellspacing="0" bgcolor="#EDF9FF"><tr valign="middle"><td width="36" style="padding: 0 10px 0 10px;">
+					<img align="middle" alt=" " src="http://pics.ebaystatic.com/aw/pics/icon/iconInfo_16x16.gif" /></td><td width="80%" nowrap="nowrap" style="padding-right:10px" >You\'ve left eBay Express.</td><td align="left" nowrap="nowrap"><a href="http://www.express.<#1#>/">Shop again on eBay Express</a><span style="margin:0 10px 0 10px;">|</span><img align="bottom" src="http://pics.ebaystatic.com/aw/pics/express/icons/iconCart_15x10.gif" alt=""/> <a href="http://cart.express.<#1#>/ws/eBayISAPI.dll?ExpressCart&action.view=&from=Header">Shopping Cart<#2#></a></td><td width="135" nowrap="nowrap" style="padding: 0 20px 0 20px;"><img align="top" src="http://pics.ebaystatic.com/aw/pics/express/logos/logoExpress_95x39.gif" alt=""></img></td><td nowrap="nowrap" width="26" align="left"><a href="#1" id="b_close" name="b_close"><img align="middle" border="0" src="http://pics.ebaystatic.com/aw/pics/buttons/btnExpressClose.gif" alt="" ></img></a></td></tr></table>';c.sCartCountText=' (<#1#>)';c.sClose='b_close';c.aHost={'0':'ebay.com','77':'ebay.de','2':'ebay.co.uk','15':'ebay.com.au'};c.aHideOnParams=["fromebxris=1", "fromebxrisZ1"];} ;ebay.oDocument.oPage.createConfig();</script><!--Begin eBay Footer--><div id="glbfooter" class="gh-w gh-flex"><div><div id=rtm_html_1650></div><div id=rtm_html_1651></div></div><h2 class=gh-ar-hdn>Additional site navigation</h2><div id="gf-t-box"><table class="gf-t"><tr><td colspan=2><ul id="gf-l" ><li class="gf-li"><a href="http://community.ebay.com" 
 		 _exsp=m571.l3329 class="thrd gf-bar-a"
 	>Community</a></li><li class="gf-li"><a href="http://www.ebayinc.com" 
 		 _exsp=m571.l2602 class="thrd gf-bar-a"

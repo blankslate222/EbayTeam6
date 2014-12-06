@@ -47,7 +47,7 @@ function getProductStatusList(){
 }
 
 function getSellMode(){
-	var productListingType = ['Fixed-Price','Auction'];
+	var productListingType = ['Fixed Price','Auction'];
 	return productListingType;
 }
 
@@ -153,7 +153,7 @@ if(req.body.seller_id != req.session.pid){
 		return;
 	}
 	
-	if(mode=='Fixed-Price'){
+	if(mode=='Fixed Price'){
 		bidtime = null;
 	if (isNaN(parseFloat(req.body.units_in_stock)) || req.body.units_in_stock < 0) {
 		console.log('error in 4');
@@ -311,7 +311,7 @@ function updateForm(req,res){
 	var getFixedRecordSql = 'SELECT `seller_id`,a.product_id,`product_name`,`product_desc`,'+
 	'`product_condition`,`product_status`,`category_id`,`price_per_unit`,'+
 	'`units_in_stock`,`product_listed_as`,`bid_expiry_time` FROM product a '+
-	' WHERE a.product_id = ? AND isActiveProduct = 1 and product_listed_as = \'Fixed-Price\'';
+	' WHERE a.product_id = ? AND isActiveProduct = 1 and product_listed_as = \'Fixed Price\'';
 	var finalquery;
 	var updates = [productId];
 	getAuctionRecordSql = mysql.format(getAuctionRecordSql, updates);
@@ -423,7 +423,7 @@ if(req.body.seller_id != req.session.pid){
 		return;
 	}
 	
-	if(mode=='Fixed-Price'){
+	if(mode=='Fixed Price'){
 	if (isNaN(parseFloat(req.body.units_in_stock)) || req.body.units_in_stock < 0) {
 		console.log('error in 4');
 		res.status(400).render('error-nikhil', {
