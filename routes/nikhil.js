@@ -576,6 +576,7 @@ if(req.body.seller_id != req.session.pid){
         		console.log("inside error while fetching from cache");
         	}
         	else{  
+        		if(client.exists(productId)>0)
         		client.del(productId);
         		client.setex(productId,1000,JSON.stringify(result))
         		console.log("Printing results updated into cache with update:"+result);
@@ -617,8 +618,14 @@ function handleDelete(req,res){
 		}
 		runQuery(deleteSql, req, res, function(status, result){
 			res.status(200);
-//			res.send('deleted record successfully');
+            //res.send('deleted record successfully');
 			//redirect to seller view
+
+           //Redis
+		        		if(client.exists(productId)>0)
+		        		client.del(productId);
+			//Redis
+		        		
 			res.status(status).redirect('/seller-details');
 		});
 		return;

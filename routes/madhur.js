@@ -94,17 +94,37 @@ function productDetails(req,res) {
 	}
 	console.log(query);
 	
-	
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+
+
+		client.get(query, function(err,redisResult){
+        	if(err){
+        		console.log("inside error while fetching from cache");
+        	}
+        	else{
+        		if(!redisResult)
+        		{
+        			mysql.fetchData(function(err,results){
+        				if(err){
+        					throw err;
+        				}
+        				else
+        				{
+        					("Serving from DB");
+        					res.type('application/json');
+        					client.setex(query,1000,JSON.stringify(results))
+        					res.end(JSON.stringify(results));
+        				}
+        			},query);
+        		}
+        		else{
+        			console.log("serving from Redis Cache");
+	            	console.log("data:"+results);
+	            	res.type('application/json');
+	            	res.end(JSON.stringify(results));
+        		}
+        	}
+		});
+
 }
 
 function personDetails(req,res) {
@@ -143,130 +163,290 @@ function personDetails(req,res) {
 	}
 	console.log(query);
 	
-	
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 	
 }
 
 function getPersonType(req,res) {
 	var query = "select distinct person_type from person";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getPersonNames(req,res) {
-	var query = "select distinct person_fname from person where person_fname like '"+req.param('name')+"%' or person_lname like '"+req.param('name')+"%'";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getPersonCities(req,res) {
 	var query = "select distinct person_city from person where person_city like '"+req.param('city')+"%'";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getPersonEmail(req,res) {
 	var query = "select distinct person_email from person where person_email like '"+req.param('email')+"%'";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getPersonZip(req,res) {
 	var query = "select distinct person_zip from person where person_zip like '"+req.param('zip')+"%'";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getmemIds(req,res) {
 	var query = "select distinct membership_id from person where membership_id like '"+req.param('memId')+"%'";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getProductNames(req,res) {
 	var query = "select distinct product_name from product where product_name like '"+req.param('name')+"%'";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getCategories(req,res) {
 	var query = "select category_id,category_name from category";
-	mysql.fetchData(function(err,results){
-		if(err){
-			throw err;
-		}
-		else
-		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
-	},query);
+	client.get(query, function(err,redisResult){
+    	if(err){
+    		console.log("inside error while fetching from cache");
+    	}
+    	else{
+    		if(!redisResult)
+    		{
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					client.setex(query,1000,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+    		}
+    		else{
+    			console.log("serving from Redis Cache");
+            	console.log("data:"+results);
+            	res.type('application/json');
+            	res.end(JSON.stringify(results));
+    		}
+    	}
+	});
 }
 
 function getAuditLogs(req,res) {
