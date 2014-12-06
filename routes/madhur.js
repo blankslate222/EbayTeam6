@@ -21,14 +21,14 @@ function getDistinctProductConditions(req,res) {
 			          console.log("Serving results from DB");
 			          console.log("inserting the query results to redis");
 			          //client.set(query,JSON.stringify(results));
-			          client.setex(query,1000,JSON.stringify(results))
+			          client.setex(query,500,JSON.stringify(results))
 			          res.end(JSON.stringify(results));
             		}
             		else{
             			console.log("serving from Redis Cache");
-		            	console.log("data:"+results);
-		            	res.type('application/json');
-		            	res.end(JSON.stringify(results));
+                    	console.log("data:"+redisResult);
+                    	res.type('application/json');
+                    	res.end(redisResult);
             		}
             	}
 			});
@@ -111,16 +111,16 @@ function productDetails(req,res) {
         				{
         					("Serving from DB");
         					res.type('application/json');
-        					client.setex(query,1000,JSON.stringify(results))
+        					client.setex(query,500,JSON.stringify(results))
         					res.end(JSON.stringify(results));
         				}
         			},query);
         		}
         		else{
         			console.log("serving from Redis Cache");
-	            	console.log("data:"+results);
-	            	res.type('application/json');
-	            	res.end(JSON.stringify(results));
+                	console.log("data:"+redisResult);
+                	res.type('application/json');
+                	res.end(redisResult);
         		}
         	}
 		});
@@ -178,16 +178,16 @@ function personDetails(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -211,16 +211,16 @@ function getPersonType(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -242,16 +242,16 @@ function getPersonNames(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -274,16 +274,16 @@ function getPersonCities(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -306,16 +306,16 @@ function getPersonEmail(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -338,16 +338,16 @@ function getPersonZip(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -370,16 +370,16 @@ function getmemIds(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -402,16 +402,16 @@ function getProductNames(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
@@ -434,16 +434,16 @@ function getCategories(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,1000,JSON.stringify(results))
+    					client.setex(query,500,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
     		}
     		else{
     			console.log("serving from Redis Cache");
-            	console.log("data:"+results);
+            	console.log("data:"+redisResult);
             	res.type('application/json');
-            	res.end(JSON.stringify(results));
+            	res.end(redisResult);
     		}
     	}
 	});
