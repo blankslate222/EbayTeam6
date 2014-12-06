@@ -36,6 +36,15 @@ function list(req,res){
 	});
 }
 
+function getCategoryList(){
+	var catSql = 'select distinct category_id,category_name from category';
+	var categoryList='';
+	db.executeQuery(catSql,function(err,status,result){
+		categoryList = result;
+		return result;
+	});
+	//return categoryList;
+}
 function getProductConditionList(){
 	var conditionList = ['New','Refurbished','Used'];
 	return conditionList;
@@ -99,7 +108,7 @@ function newProductForm(req,res){
 		productStatus = getProductStatusList();
 		var sell_mode = getSellMode();
 		
-		res.render("create-product",{
+		res.render("create-product",{errMsg:'',
 			//add the session attributes to display
 			 category : categoryList,
 			 seller_id : req.session.pid,
@@ -121,12 +130,17 @@ function handleNewProduct(req,res){
 	//validations
 	var condList = getProductConditionList();
 	var statusList = getProductStatusList();
+
+	var sell_mode = getSellMode();
+	
+	
+
 	//1 - check for null fields
 	//newProduct = JSON.stringify(newProduct);
 	//console.log('new product -'+ newProduct);
 if(req.body.product_name == null || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
 	console.log('error in 1');
-	res.status(400).render('error-nikhil', {
+	res.status(400).render('create-product', {
 		errMsg : 'Mandatory fields cannot be null'
 	});
 	return;
@@ -145,11 +159,41 @@ if(req.body.seller_id != req.session.pid){
 	//the value set(status,condition,units in stock, price per unit)
 	var mode = req.body.sell_mode;
 	var modeList = getSellMode();
+	
 	if(modeList.indexOf(mode) == -1){
-		console.log('error in 3');
-		res.status(400).render('error-nikhil', {
-			errMsg : 'Invalid value for field sell mode'
+//		console.log('error in 3');
+//		res.render('create-product', {
+//			errMsg : 'Invalid value for field sell mode',
+//			category : category,
+//			 seller_id : req.session.pid,
+//			 productCondition : productCondition,
+//			 productStatus : productStatus,
+//			 sell_mode : sell_mode
+//			
+//		});
+//		return;
+		var categoryList = '', productCondition = '', productStatus = '';
+		var categoryListSql = "select distinct `category_id`, `category_name` from category";
+		console.log('user in sess --'+req.session.pid);
+		runQuery(categoryListSql,req,res, function(status, result){
+			categoryList = result;
+		//	
+			
+			//also get select list for prod_condition and status
+			productCondition = getProductConditionList();
+			productStatus = getProductStatusList();
+			var sell_mode = getSellMode();
+			
+			res.render("create-product",{errMsg:'Mode of sale cannot be null..',
+				//add the session attributes to display
+				 category : categoryList,
+				 seller_id : req.session.pid,
+				 productCondition : productCondition,
+				 productStatus : productStatus,
+				 sell_mode : sell_mode
+			});
 		});
+		
 		return;
 	}
 	

@@ -4,7 +4,7 @@ function checkLogInData(callback,username,password){
 	
 	console.log("USERNAME: " + username + "Password: " + password);
 	
-	var sql = "SELECT  person_id,person_email,person_fname,membership_id,person_type,last_login,isactive FROM person where person_email = '"+username+"' and password = '"+password+"'";
+	var sql = "SELECT  person_id,person_email,last_login,isactive FROM personvp where person_email = '"+username+"' and password = '"+password+"'";
 	console.log(sql);	
 	db.executeQuery(sql, function(err, status, result){
 			// console.log(rows);
@@ -12,7 +12,7 @@ function checkLogInData(callback,username,password){
 					if(result.length!==0){
 						//if (rows[0].count > 0) {
 							console.log("DATA : "+JSON.stringify(result));
-							var updateLoginTimeSql = "update person set last_login = now() where person_email =  '"+username+"'";
+							var updateLoginTimeSql = "update personvp set last_login = now() where person_email =  '"+username+"'";
 							db.executeQuery(updateLoginTimeSql,function(err, status, result){
 								
 							
@@ -47,10 +47,10 @@ function checkLogInData(callback,username,password){
 			{
 				req.session.isLoggedin = true;
 				req.session.pid= results[0].person_id;
-				req.session.uname= results[0].person_fname;
+				//req.session.uname= results[0].person_fname;
 				req.session.email = results[0].person_email; 
 				req.session.lasttimelog = results[0].last_login;
-				req.session.person_type = results[0].person_type;
+				//req.session.person_type = results[0].person_type;
 				
 				if(results[0].isactive == 1){
 					

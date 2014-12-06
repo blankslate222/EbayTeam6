@@ -32,7 +32,29 @@ function save(req,res){
 			res.status(status);
 			res.render('SuccessPage');
 		//res.send(result);
-	  }else{
+			
+	  }
+		
+		else{
+		res.status=status;
+		console.log(err);
+		res.render('signup',{err:'Email Id already in use...Please use different Email'});
+		  //res.send("something is not right");	
+		}
+		
+	});
+	
+	var sql1 = "insert into personvp(person_email,password,last_login,isactive) values('"+email+"','"+pwd+"',now(),'"+isactive+"')";
+	
+	db.executeQuery(sql1,function(err, status, result){
+		
+		if(status == 200){
+			res.status(status);
+			res.render('SuccessPage');
+		//res.send(result);
+	  }
+		
+		else{
 		res.status=status;
 		console.log(err);
 		res.render('signup',{err:'Email Id already in use...Please use different Email'});
@@ -41,6 +63,7 @@ function save(req,res){
 		
 	});
 		}
+	
 	
 }
 

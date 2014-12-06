@@ -46,17 +46,17 @@ function executeQuery(sql, callback){
    
 	conn.query(sql, function(err, results, fields){
 		if (err) {
-			// console.log("query error");
+			console.log("query error");
 			results = "Query Error";
 			status = 400;
 			callback(err, status, results);
 		} else if (results.length == 0) {
-			// console.log("no result");
+			console.log("no result");
 			results = '';
 			status = 404;
 			callback(err, status, results);
 		} else {
-			// console.log("num of rows = " + rows.length);
+			 console.log("num of rows = " + results.length);
 			status = 200;
 			callback(err,status,results);
 		}

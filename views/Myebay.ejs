@@ -103,12 +103,12 @@ function logout(){
 	          	 { 
 	         %> 
 	          	 <div class="product-details">
-	          	 	<table><tr><td style= "width:400px;">
-	          	 	Product Name: <%=data[i].product_name%> </td><td>
-	          	 	Order Value: $<%=data[i].order_amount%></td></tr>
-	          	 	<tr><td><br></td></tr><tr><td>
-	          	 	Order Date: <%=data[i].order_date%></td><td>
-	          	 	Quantity: <%=data[i].quantity%></td></tr></table>
+	          	 	<table><tr><td style= "width:150px; font-weight: bold; font-size: small;">
+	          	 	Product Name:</td><td style= "width:350px; font-size: small;"> <%=data[i].product_name%> </td><td style= "width:150px; font-weight: bold; font-size: small;">
+	          	 	Order Value: </td><td style= "width:350px; font-size: small;">$<%=data[i].order_amount%></td></tr>
+	          	 	<tr><td><br></td><td></td><td></td></tr><tr><td style= "width:150px; font-weight: bold; font-size: small;">
+	          	 	Order Date: </td><td style= "width:350px; font-size: small;"><%=data[i].order_date%></td><td style= "width:150px; font-weight: bold; font-size: small;">
+	          	 	Quantity:</td><td style= "width:350px; font-size: small;"> <%=data[i].quantity%></td></tr></table>
 	          	 </div> 
 	       <% 
 	       		}
