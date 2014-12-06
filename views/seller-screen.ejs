@@ -65,10 +65,11 @@ width: auto;
 		    
 		<span class="tblts"><a id="rmcallmeclk" class="ccclk" available="" href="javascript:;" ur="2"><b class="wcontact-links wcallme rp"></b><span class="mtxt"> Call me </span></a></span>
 		 
-	</span></div><div class="container"><ul id="errs"><li class="hdn">Draft has a listing policy warning/informational message</li></ul><div id="lyrCategoryBreadcrumb" class="row category hidden-phone"><div class="span24"><div class="well well-small"></div></div></div><div id="mainFormWrap" class="row" inflow=""><div id="mainForm" class="span19"><a name="describeSec"></a><span id="ccSecHdgPhonedescribe" class="mweb-h2 visible-phone"><span id="describe">Describe your item</span></span><span id="ccSecdescribe"><div class="describe well" inflow="{ &quot;property_name&quot; : &quot;sectionId&quot;, &quot;property_value&quot; : &quot;describe&quot;, &quot;section_title&quot; : &quot;Describe your item&quot; }"><div id="ccSecHdgdescribe" class="section-heading hidden-phone"><h2 id="describe">Welcome...</h2></div>
+	</span></div><div class="container"><ul id="errs"><li class="hdn">Draft has a listing policy warning/informational message</li></ul><div id="lyrCategoryBreadcrumb" class="row category hidden-phone"><div class="span24"><div class="well well-small"></div></div></div><div id="mainFormWrap" class="row" inflow=""><div id="mainForm" class="span19"><a name="describeSec"></a><span id="ccSecHdgPhonedescribe" class="mweb-h2 visible-phone"><span id="describe">Describe your item</span></span><span id="ccSecdescribe"><div class="describe well" inflow="{ &quot;property_name&quot; : &quot;sectionId&quot;, &quot;property_value&quot; : &quot;describe&quot;, &quot;section_title&quot; : &quot;Describe your item&quot; }">
+	<div><div id="ccSecHdgdescribe" class="section-heading hidden-phone" style="margin-bottom:0px;">
+	<h3><%=details[0].person_fname%>'s sales page</h3></div><div>Rating</div></div>
 	<table class="mgtb " role="presentation"><tbody><tr><td width="80%" valign="top">
 	</td></tr><tr><td width="20%" valign="top" id="lcont"><div class="pdLft"><div><div class="si-lr"><div class="si-re"><div class="si-pd"><div class="si-sp si-fl g-hlp si-fn"><div>
- <h3><%=details[0].person_fname%>'s sales page</h3> 
   <%if(sellerHome == 'Y'){%> <!-- inner if -->
    <a href='/product/new'>Create a New product listing </a> for your business.<br> 
  	<%}%>
@@ -78,7 +79,7 @@ width: auto;
  <%if(products.length > 0){%> <!-- outer if -->
  	<br>
  	<div>
- 	<h2>Products</h2>
+ 	<h4>My Current Products</h4>
 		<%for(var i=0; i<products.length;i++){%>
 		 	<p>
 			<%if(sellerHome == 'Y'){%> <!-- inner if -->
@@ -107,7 +108,7 @@ width: auto;
  <br>
  <%if(sellerHome == 'Y'){%> <!-- inner if -->
  <div>
- <h2>Seller History</h2>
+ <h4>Seller History</h4>
  <%if(history.length == 0){%>
  You have not sold any product yet.
   <%} else{%>
