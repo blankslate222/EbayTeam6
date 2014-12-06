@@ -521,6 +521,25 @@ if(req.body.seller_id != req.session.pid){
 			return;
 		}
 	});
+	
+	//Redis
+	redisQuery="select * from product where product_id="+productId+";"
+	runQuery(redisQuery,req,res, function(status, result){
+
+		console.log("priniting product id for update"+productId);
+		client.get(redisQuery, function(err,redisResult){
+        	if(err){
+        		console.log("inside error while fetching from cache");
+        	}
+        	else{  
+        		client.del(productId);
+        		client.setex(productId,1000,JSON.stringify(result))
+        		console.log("Printing results updated into cache with update:"+result);
+        	}
+		});
+	});
+	//Redis
+	
 	return;
 }
 
