@@ -1,6 +1,7 @@
 var ejs = require("ejs");
 var mysql = require('./mysql');
-
+var redis = require('node-redis');
+var client = redis.createClient();
 function getDistinctProductConditions(req,res) {
 	var query = "select distinct product_condition from product";
 	mysql.fetchData(function(err,results){
@@ -9,11 +10,32 @@ function getDistinctProductConditions(req,res) {
 		}
 		else
 		{
-			res.type('application/json');
-			res.end(JSON.stringify(results));
-		}
+			client.get(query, function(err,redisResult){
+            	if(err){
+            		console.log("inside error while fetching from cache");
+            	}
+            	else{
+            		if(!redisResult)
+            		{
+			          res.type('application/json');
+			          console.log("Serving results from DB");
+			          console.log("inserting the query results to redis");
+			          //client.set(query,JSON.stringify(results));
+			          client.setex(query,1000,JSON.stringify(results))
+			          res.end(JSON.stringify(results));
+            		}
+            		else{
+            			console.log("serving from Redis Cache");
+		            	console.log("data:"+results);
+		            	res.type('application/json');
+		            	res.end(JSON.stringify(results));
+            		}
+            	}
+			});
+		}	
 	},query);
-}
+	}
+
 
 function getDistinctProductBidStatus(req,res) {
 	var query = "select distinct product_listed_as from product";
