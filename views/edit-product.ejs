@@ -123,7 +123,7 @@
 				<td><input type="text" name="product_listed_as" required = "required" value="<%=product[0].product_listed_as%>" readonly>
 				</td>
 			</tr>
-			<%if(product[0].product_listed_as == 'Fixed-Price') {%>
+			<%if(product[0].product_listed_as == 'Fixed Price') {%>
 			<tr>
 				<td>Price Per Unit</td>
 				<td><input type="text" name="price_per_unit" required = "required" value="<%=product[0].price_per_unit%>">
@@ -162,7 +162,7 @@
   $('#sell_mode').change(function(){
 
 	   var selection = $(this).val();
-	   if(selection == 'Fixed-Price')
+	   if(selection == 'Fixed Price')
 	   {
 	      $('#fixed-price').show();
 	      $('#auction').hide();
