@@ -256,7 +256,7 @@ if(req.body.seller_id != req.session.pid){
 	var newProduct = {
 			seller_id : req.body.seller_id,
 			product_name : req.body.product_name,
-			product_desc : req.body.product_desc,
+			product_desc : req.body.product_desc.trim(),
 			product_condition : req.body.product_condition,
 			product_status : req.body.product_status,
 			category_id : req.body.category_id,
@@ -427,7 +427,7 @@ function updateForm(req,res){
 
 function handleProductUpdate(req,res){
 	
-	var productId = req.body.product_id, units_in_stock, mode = req.body.product_listed_as ;
+	var productId = req.body.product_id, units_in_stock=req.body.units_in_stock, mode = req.body.product_listed_as ;
 	var updateProductSql='UPDATE product SET ? WHERE product_id = ?';
 	
 	if(mode == 'Auction'){
@@ -570,16 +570,31 @@ if(req.body.seller_id != req.session.pid){
 	redisQuery="select * from product where product_id="+productId+";"
 	runQuery(redisQuery,req,res, function(status, result){
 
-		console.log("priniting product id for update"+productId);
+		console.log("priniting product id for update : "+productId);
 		client.get(redisQuery, function(err,redisResult){
         	if(err){
         		console.log("inside error while fetching from cache");
         	}
         	else{  
-        		if(client.exists(productId)>0)
-        		client.del(productId);
-        		client.setex(productId,1000,JSON.stringify(result))
-        		console.log("Printing results updated into cache with update:"+result);
+        		client.get(redisQuery, function(err,redisResult){
+                	if(err){
+                		console.log("inside error while fetching from cache");
+                	}
+                	else{
+                	if(!redisResult){
+                		console.log("inderting into cache");
+            		client.setex(productId,1000,JSON.stringify(result))
+            		//console.log("inderting into cache");
+            		console.log("Printing results updated into cache with update:"+result);
+                	}
+                	else{
+                		client.del(productId);
+                		client.setex(productId,1000,JSON.stringify(result))
+                		console.log("Printing results updated into cache with update:"+result);
+                	}
+                	}
+        		});
+        		
         	}
 		});
 	});
@@ -622,8 +637,7 @@ function handleDelete(req,res){
 			//redirect to seller view
 
            //Redis
-		        		if(client.exists(productId)>0)
-		        		client.del(productId);
+		     		client.del(productId);
 			//Redis
 		        		
 			res.status(status).redirect('/seller-details');

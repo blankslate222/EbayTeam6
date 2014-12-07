@@ -127,6 +127,58 @@ function productDetails(req,res) {
 
 }
 
+//without caching
+function productDetailsNoCaching(req,res) {
+	var search_prod_cond = req.param('search_prod_cond');
+	var search_prod_bid_status = req.param('search_prod_bid_status');
+	var category = req.param('category');
+	var text = req.param('text');
+	var u_range = req.param('u_range');
+	var l_range = req.param('l_range');
+	var operator = "and ";
+	
+	var query = "select p.bid_expiry_time, p.product_id,p.seller_id,p.product_name,p.product_desc,p.product_condition,p.product_status,p.category_id,p.units_in_stock,p.price_per_unit,p.product_listed_as, c.category_name from product p, category c where c.category_id=p.category_id and p.product_status != 'Sold' and p.isActiveProduct=1";
+	//var query = "select  from product";
+	console.log(query);
+	if(isNotNull(search_prod_cond) || isNotNull(search_prod_bid_status) || isNotNull(category) || isNotNull(text) || ((u_range !== null) && (l_range !== null))) {
+		query = query + " and ";
+		
+		if(isNotNull(search_prod_cond)) {
+			query = query + "p.product_condition='"+search_prod_cond+"' "+operator;
+		}
+		if(isNotNull(search_prod_bid_status)) {
+			query = query + "p.bid_status='"+search_prod_bid_status+"' "+operator;
+		}
+		if(isNotNull(text)) {
+			query = query + "p.product_name='"+text+"' "+operator;
+		}
+		if(isNotNull(category)) {
+			query = query + "p.category_id="+category+" "+operator;
+		}
+		if((u_range) && (l_range)) {
+			query = query + "p.price_per_unit between "+u_range+" and "+l_range+" "+operator;
+		}
+		query = query.substring(0, query.lastIndexOf("and"));
+		console.log(query);
+	}
+	console.log(query);
+	
+
+
+	mysql.fetchData(function(err,results){
+		if(err){
+			throw err;
+		}
+		else
+		{
+			("Serving from DB");
+			res.type('application/json');
+			//client.setex(query,500,JSON.stringify(results))
+			res.end(JSON.stringify(results));
+		}
+	},query);
+
+}
 function personDetails(req,res) {
 	
 	var name = req.param('name');
@@ -191,6 +243,60 @@ function personDetails(req,res) {
     		}
     	}
 	});
+	
+}
+
+//No caching
+
+function personDetailsNoCaching(req,res) {
+	
+	var name = req.param('name');
+	var type = req.param('type');
+	var email = req.param('email');
+	var zip = req.param('zip');
+	var city = req.param('city');
+	var mem_id = req.param('mem_id');
+	var operator = "and ";
+	var query = "select * from person where isactive=1";
+	if(isNotNull(name) || isNotNull(type) || isNotNull(email) || isNotNull(zip) || isNotNull(city) || isNotNull(mem_id)) {
+		query = query + " and ";
+		
+		if(isNotNull(name)) {
+			query = query + "(person_fname='"+name+"' or person_lname='"+name+"') "+operator;
+		}
+		if(isNotNull(type)) {
+			query = query + "person_type='"+type+"' "+operator;
+		}
+		if(isNotNull(email)) {
+			query = query + "person_email='"+email+"' "+operator;
+		}
+		if(isNotNull(zip)) {
+			query = query + "person_zip='"+zip+"' "+operator;
+		}
+		if(isNotNull(city)) {
+			query = query + "person_city='"+city+"' "+operator;
+		}
+		if(isNotNull(mem_id)) {
+			query = query + "membership_id='"+mem_id+"' "+operator;
+		}
+		query = query.substring(0, query.lastIndexOf("and"));
+		console.log(query);
+	}
+	console.log(query);
+
+    			mysql.fetchData(function(err,results){
+    				if(err){
+    					throw err;
+    				}
+    				else
+    				{
+    					("Serving from DB");
+    					res.type('application/json');
+    					//client.setex(query,500,JSON.stringify(results))
+    					res.end(JSON.stringify(results));
+    				}
+    			},query);
+
 	
 }
 
@@ -477,3 +583,5 @@ exports.getPersonZip=getPersonZip;
 exports.getProductNames=getProductNames;
 exports.getCategories=getCategories;
 exports.getAuditLogs=getAuditLogs;
+exports.productDetailsNoCaching=productDetailsNoCaching;
+exports.personDetailsNoCaching=personDetailsNoCaching;
