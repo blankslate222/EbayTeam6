@@ -8,27 +8,31 @@ var moment = require('moment');
 var redis = require('node-redis');
 var client = redis.createClient();
 
-function checkDuplicate(req,res){
-
-	var selsql = 'select distinct product_name from product where seller_id ='+req.session.pid;
-	db.executeQuery(selsql, function(err, status, result){
-		if(result.length == 0){
-			console.log('first product');
-		}
-		if(result.length != 0){
-			var product = ''+req.body.product_name;
-			for(var i=0; i< result.length; i++){
-			
-			var result_prod = ''+result[i].product_name;
-			
-			if(product.toLowerCase().equals(result_prod.trim().toLowerCase())){
-//				res.status(400);
-//				res.send('Duplicate Product');
-				return 0;
-			}
-		  }
-		}
+function displayWithError(req,res,errormsg){
+	var categoryList = '', productCondition = '', productStatus = '';
+	var categoryListSql = "select distinct `category_id`, `category_name` from category";
+	console.log('user in sess --'+req.session.pid);
+	runQuery(categoryListSql,req,res, function(status, result){
+		categoryList = result;
+	//	
+		
+		//also get select list for prod_condition and status
+		productCondition = getProductConditionList();
+		productStatus = getProductStatusList();
+		var sell_mode = getSellMode();
+		
+		res.status(404);
+		res.render("create-product",{errMsg:errormsg,
+			//add the session attributes to display
+			 category : categoryList,
+			 seller_id : req.session.pid,
+			 productCondition : productCondition,
+			 productStatus : productStatus,
+			 sell_mode : sell_mode
+		});
 	});
+	
+	return;
 }
 function list(req,res){
 
@@ -155,23 +159,35 @@ function handleNewProduct(req,res){
 	var statusList = getProductStatusList();
 
 	var sell_mode = getSellMode();
-	
-	//var dupchk = checkDuplicate(req,res);
-//	if(dupchk == 0){
-//		//return error
-//		res.status(400);
-//		res.send('duplicate alert!!');
-//	}
 
-	//1 - check for null fields
+	//1 - check for null fields and duplicate
 	//newProduct = JSON.stringify(newProduct);
-	//console.log('new product -'+ newProduct);
+	console.log('new product -'+ req.body.product_name.length);
+	var selsql = 'select distinct product_name from product where seller_id ='+req.session.pid;
+	db.executeQuery(selsql, function(err, status, result){
+		if(result.length == 0){
+			console.log('first product');
+		}
+		if(result.length != 0){
+			var product = ''+req.body.product_name;
+			for(var i=0; i< result.length; i++){
+			
+			var result_prod = ''+result[i].product_name;
+			console.log('in lower case -'+product.toLowerCase());
+			console.log('creating prod lower case--'+result_prod.trim().toString().toLowerCase());
+			if(product.trim().toLowerCase()== result_prod.toString().trim().toLowerCase()){
+//				res.status(400);
+				displayWithError(req,res,'Creating a duplicate product is not allowed');
+				return;
+			}
+		  }
+		}
+	
 		
-if(req.body.product_name == null || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
+if(req.body.product_name.length == 0 || req.body.product_desc.length == 0 || req.body.seller_id.length == 0 ||
+		req.body.category_id.length == 0){
 	console.log('error in 1');
-	res.status(400).render('create-product', {
-		errMsg : 'Mandatory fields cannot be null'
-	});
+	displayWithError(req,res,'Mandatory fields cannot be null');
 	return;
 }
 
@@ -190,39 +206,9 @@ if(req.body.seller_id != req.session.pid){
 	var modeList = getSellMode();
 	
 	if(modeList.indexOf(mode) == -1){
-//		console.log('error in 3');
-//		res.render('create-product', {
-//			errMsg : 'Invalid value for field sell mode',
-//			category : category,
-//			 seller_id : req.session.pid,
-//			 productCondition : productCondition,
-//			 productStatus : productStatus,
-//			 sell_mode : sell_mode
-//			
-//		});
-//		return;
-		var categoryList = '', productCondition = '', productStatus = '';
-		var categoryListSql = "select distinct `category_id`, `category_name` from category";
-		console.log('user in sess --'+req.session.pid);
-		runQuery(categoryListSql,req,res, function(status, result){
-			categoryList = result;
-		//	
-			
-			//also get select list for prod_condition and status
-			productCondition = getProductConditionList();
-			productStatus = getProductStatusList();
-			var sell_mode = getSellMode();
-			
-			res.render("create-product",{errMsg:'Mode of sale cannot be null..',
-				//add the session attributes to display
-				 category : categoryList,
-				 seller_id : req.session.pid,
-				 productCondition : productCondition,
-				 productStatus : productStatus,
-				 sell_mode : sell_mode
-			});
-		});
-		
+
+		console.log('invalid sale mode');
+		displayWithError(req,res,'Invalid Sale mode');
 		return;
 	}
 	
@@ -230,16 +216,12 @@ if(req.body.seller_id != req.session.pid){
 		bidtime = null;
 	if (isNaN(parseFloat(req.body.units_in_stock)) || req.body.units_in_stock < 0) {
 		console.log('error in 4');
-		res.status(400).render('error-nikhil', {
-			errMsg : 'Units in stock must be a valid positive number'
-		});
+		displayWithError(req,res,'Units in stock must be a valid positive number');
 		return;
 	}
 	if (isNaN(parseFloat(req.body.price_per_unit)) || req.body.price_per_unit < 0) {
 		console.log('error in 5');
-		res.status(400).render('error-nikhil', {
-			errMsg : 'Price per unit must be a valid positive number'
-		});
+		displayWithError(req,res,'Price per unit must be a valid positive number');
 		return;
 	}
 }
@@ -254,16 +236,12 @@ if(req.body.seller_id != req.session.pid){
 		
 		if (isNaN(parseFloat(req.body.start_amount)) || req.body.start_amount < 0) {
 			console.log('error in 6');
-			res.status(400).render('error-nikhil', {
-				errMsg : 'Start amount must be a valid positive number'
-			});
+			displayWithError(req,res,'Start amount must be a valid positive number');
 			return;
 		}
 		if( !bidexpiry.isValid()|| !bidexpiry.isAfter(now) ){
 			console.log('error in 7');
-			res.status(400).render('error-nikhil', {
-				errMsg : 'Please specify a valid bid expiry time greater than current time'
-			});
+			displayWithError(req,res,'Please specify a valid bid expiry time greater than current time');
 			return;
 		}
 		bidtime = bidexpiry.format('YYYY-MM-DD HH:mm:ss');
@@ -271,16 +249,12 @@ if(req.body.seller_id != req.session.pid){
 	}
 	if(condList.indexOf(req.body.product_condition) == -1){
 		console.log('error in 8');
-		res.status(400).render('error-nikhil', {
-			errMsg : 'invalid value for field product condition'
-		});
+		displayWithError(req,res,'Invalid value for field - product condition');
 		return;
 	}
 	if(statusList.indexOf(req.body.product_status) == -1){
 		console.log('error in 9');
-		res.status(400).render('error-nikhil', {
-			errMsg : 'invalid value for field product status'
-		});
+		displayWithError(req,res,'Invalid value for field - product status');
 		return;
 	}
 
@@ -312,7 +286,7 @@ if(req.body.seller_id != req.session.pid){
 		
 		
 		//Redis
-		redisQuery="select * from product where product_id="+insertId+";"
+		var redisQuery="select * from product where product_id="+insertId+";"
 		runQuery(redisQuery,req,res, function(status, result){
 
 			console.log("priniting new product id"+insertId);
@@ -352,6 +326,7 @@ if(req.body.seller_id != req.session.pid){
 			return;
 		}
 
+	});
 	});
 	return;
 }
@@ -472,7 +447,7 @@ function handleProductUpdate(req,res){
 	//1 - check for null fields
 	//newProduct = JSON.stringify(newProduct);
 	//console.log('new product -'+ newProduct);
-if(req.body.product_name == null || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
+if(req.body.product_name.length == 0 || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
 	console.log('error in 1');
 	res.status(400).render('error-nikhil', {
 		errMsg : 'mandatory fields cannot be null'
