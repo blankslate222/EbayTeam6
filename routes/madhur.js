@@ -78,7 +78,7 @@ function productDetails(req,res) {
 			query = query + "p.product_condition='"+search_prod_cond+"' "+operator;
 		}
 		if(isNotNull(search_prod_bid_status)) {
-			query = query + "p.bid_status='"+search_prod_bid_status+"' "+operator;
+			query = query + "p.product_listed_as='"+search_prod_bid_status+"' "+operator;
 		}
 		if(isNotNull(text)) {
 			query = query + "p.product_name='"+text+"' "+operator;
@@ -147,7 +147,8 @@ function productDetailsNoCaching(req,res) {
 			query = query + "p.product_condition='"+search_prod_cond+"' "+operator;
 		}
 		if(isNotNull(search_prod_bid_status)) {
-			query = query + "p.bid_status='"+search_prod_bid_status+"' "+operator;
+			
+			query = query + "p.product_listed_as='"+search_prod_bid_status+"' "+operator;
 		}
 		if(isNotNull(text)) {
 			query = query + "p.product_name='"+text+"' "+operator;

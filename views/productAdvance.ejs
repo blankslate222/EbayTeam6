@@ -71,7 +71,7 @@ function setTime() {
                     	    	var label = document.createElement('label');
                     	    	label.setAttribute("for",data[key].product_listed_as);
                     	    	var inputTag = document.createElement('input');
-                    	    	inputTag.name="product listed as";
+                    	    	inputTag.name="bid_status";
                     	    	inputTag.id=data[key].product_listed_as;
                     	    	inputTag.value=data[key].product_listed_as;
                     	    	inputTag.type="radio";
@@ -148,6 +148,7 @@ $("#_nkw").autocomplete({
 		search_prod_cond = $("input[name=product_cond]:checked").val();
 		
 		search_prod_bid_status = $("input[name=bid_status]:checked").val();
+		
 		category = document.getElementById('e1-1').options[document.getElementById('e1-1').selectedIndex].value;
 		text = document.getElementById('_nkw').value;
 		
