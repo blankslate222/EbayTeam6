@@ -1,10 +1,6 @@
-<html class="locale-us" lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" media="screen" type="text/css" href="/javax.faces.resource/primefaces.css.jsf?ln=primefaces&amp;v=4.0"><script type="text/javascript" src="/javax.faces.resource/jquery/jquery.js.jsf?ln=primefaces&amp;v=4.0"><!--
-
-//--></script><script type="text/javascript" src="/javax.faces.resource/primefaces.js.jsf?ln=primefaces&amp;v=4.0"><!--
-
-//--></script><script type="text/javascript" src="/javax.faces.resource/jsf.js.jsf?ln=javax.faces"><!--
-
-//--></script><title>Sell on eBay</title>
+<html class="locale-us" lang="en" xmlns="http://www.w3.org/1999/xhtml"><head>
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<title>Sell on eBay</title>
 <!-- meta --><meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
 <meta http-equiv="cache-control" content="max-age=0"><meta http-equiv="cache-control" content="no-cache">
@@ -46,7 +42,40 @@
  	<script src="/js/jquery.js"></script>
 	<script src='/js/anytime.js'></script>
 		</head>
-		<body id="body" class="listingPage" style="cursor: default;"><script type="text/javascript"> myfaces.config._autoeval = true; </script><!--[if IE 7]><form action="http://csr.ebay.com/cse/browser_upgrade.jsf" method="get" name="old_browser_redirect"></form><script> document.forms['old_browser_redirect'].submit() </script><![endif]--><!-- RcmdId cse,RlogId t6%60vcpfgh%7Fw%3F%3Cdka7e34e*%605ga-14a0591dd83-0xad --><!--[if IE 8]><div class="lt-ie9 ie8"><![endif]--><h1 class="offScr">Fill out the details below to complete your listing.</h1><a href="#mainContent" class="acc-skip-to-mc">Skip to main content</a><div class="header-wrap"><div class="container hidden-phone"><div class="row"><div class="span5"><div class="logo"><a id="lnkHdrLogo" href="/"><img id="imgEbayLogo" src="http://ir.ebaystatic.com/pictures/aw/pics/logos/logoEbayNew.png" border="0" alt="eBay logo"></a></div></div><span class="span19"><a id="mainContent" name="mainContent" tabindex="-1"></a><div id="lyrHdrControls" class="controls"></div></span></div></div><div id="mw-hdr" class="visible-phone"><div id="tbdHdr"><div class="cl lgoCl"><a id="lnkHdrLogoMweb" href="http://m.ebay.com/home?mfs=Header"><img id="imgEbayLogoMweb" src="http://ir.ebaystatic.com/pictures/aw/pics/logos/logoEbayNew.png" class="headerLogo" border="0" alt="eBay logo"></a></div></div></div></div><div class="hidden-desktop clr scroll-to-fixed-fixed sticky" id="mobileSidebar" style="z-index: 1000; position: fixed; top: 0px; margin-left: 0px; left: 0px;"><a href="javascript:;" id="listingFeesMobile" name="listingFeesMobile" class="fees-total-wrap">
+		<body id="body" class="listingPage" style="cursor: default;">
+			<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><![endif]--><!--<![endif]--></h1></td>
+			<td class="gh-td"></td>
+			<td class="gh-td-s">
+			</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u" style="padding-left:10px">
+			</li>
+		</ul>
+		
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<a href="/getCustomerInfo" class="gh-eb-li-a">My eBay</a>
+				</div>				
+			</li>
+			
+			<li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu">
+					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
+			</li>
+			
+		</ul>
+	</div>
+		<!--[if IE 7]><form action="http://csr.ebay.com/cse/browser_upgrade.jsf" method="get" name="old_browser_redirect"></form><script> document.forms['old_browser_redirect'].submit() </script><![endif]--><!-- RcmdId cse,RlogId t6%60vcpfgh%7Fw%3F%3Cdka7e34e*%605ga-14a0591dd83-0xad --><!--[if IE 8]><div class="lt-ie9 ie8"><![endif]--><h1 class="offScr">Fill out the details below to complete your listing.</h1><a href="#mainContent" class="acc-skip-to-mc">Skip to main content</a><div class="header-wrap"><div class="container hidden-phone"><div class="row"><div class="span5"><div class="logo" style="padding-top: 35px;"><a id="lnkHdrLogo" href="/"><img id="imgEbayLogo" src="http://ir.ebaystatic.com/pictures/aw/pics/logos/logoEbayNew.png" border="0" alt="eBay logo"></a></div></div><span class="span19"><a id="mainContent" name="mainContent" tabindex="-1"></a><div id="lyrHdrControls" class="controls"></div></span></div></div><div id="mw-hdr" class="visible-phone"><div id="tbdHdr"><div class="cl lgoCl"><a id="lnkHdrLogoMweb" href="http://m.ebay.com/home?mfs=Header"><img id="imgEbayLogoMweb" src="http://ir.ebaystatic.com/pictures/aw/pics/logos/logoEbayNew.png" class="headerLogo" border="0" alt="eBay logo"></a></div></div></div></div><div class="hidden-desktop clr scroll-to-fixed-fixed sticky" id="mobileSidebar" style="z-index: 1000; position: fixed; top: 0px; margin-left: 0px; left: 0px;"><a href="javascript:;" id="listingFeesMobile" name="listingFeesMobile" class="fees-total-wrap">
 					 
 <div id="feesItemized"><div class="fees-itemized-wrap"><h2>Listing fees</h2><div class="row-fluid fee"><div class="span16 fee-detail">Insertion fees:
 								</div><div class="span6 fee-amount pull-right">Free
@@ -59,50 +88,60 @@
 		    
 		<span class="tblts"><a id="rmcallmeclk" class="ccclk" available="" href="javascript:;" ur="2"><b class="wcontact-links wcallme rp"></b><span class="mtxt"> Call me </span></a></span>
 		 
-	</span></div><div class="container"><a href="#" onclick="return myfaces.oam.submitForm('selling','lnkSwitchForm');" id="lnkSwitchForm" aria-hidden="hidden" tabindex="-1"></a><ul id="errs"><li class="hdn">Draft has a listing policy warning/informational message</li></ul><div id="lyrCategoryBreadcrumb" class="row category hidden-phone"><div class="span24"><div class="well well-small"></div></div></div><div id="mainFormWrap" class="row" inflow=""><div id="mainForm" class="span19"><a name="describeSec"></a><span id="ccSecHdgPhonedescribe" class="mweb-h2 visible-phone"><span id="describe">Describe your item</span></span><span id="ccSecdescribe"><div class="describe well" inflow="{ &quot;property_name&quot; : &quot;sectionId&quot;, &quot;property_value&quot; : &quot;describe&quot;, &quot;section_title&quot; : &quot;Describe your item&quot; }"><div id="ccSecHdgdescribe" class="section-heading hidden-phone"><h2 id="describe">Welcome...</h2></div>
+	</span></div><div class="container"><ul id="errs"><li class="hdn">Draft has a listing policy warning/informational message</li></ul><div id="lyrCategoryBreadcrumb" class="row category hidden-phone"></div><div id="mainFormWrap" class="row" inflow=""><div id="mainForm" class="span19"><a name="describeSec"></a><span id="ccSecHdgPhonedescribe" class="mweb-h2 visible-phone"><span id="describe">Describe your item</span></span><span id="ccSecdescribe"><div class="describe well" inflow="{ &quot;property_name&quot; : &quot;sectionId&quot;, &quot;property_value&quot; : &quot;describe&quot;, &quot;section_title&quot; : &quot;Describe your item&quot; }"><div id="ccSecHdgdescribe" class="section-heading hidden-phone"><h3>Add a new product</h3></div>
 	<table class="mgtb " role="presentation"><tr><td width="80%" valign="top">
 	<tr><td width="20%" valign="top" id="lcont"><div class="pdLft"><div><div class="si-lr"><div class="si-re"><div class="si-pd"><div class="si-sp si-fl g-hlp si-fn">
 </div>
 <div id="middle">
-		<h3>Add a new product</h3>
+		
 	<form method="post" action="/product/new" name="new_product_form" target="_self">
 	<input type = "hidden" name = "seller_id" value="<%=seller_id%>"/>
 		<table>
 			<tr>
-				<td>Product Name</td>
+				<td style="font-weight: bold; font-size: small;">Product Name:</td>
 				<td><input type="text" name="product_name" required="required"></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 			<tr>
-				<td>Product Description</td>
+				<td style="font-weight: bold; font-size: small;">Product Description:</td>
 				<td><textarea name='product_desc'
 						placeholder="a short description" required="required"></textarea></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 			<tr>
-				<td>Product Category</td>
+				<td style="font-weight: bold; font-size: small;">Product Category:</td>
 				<td><select name="category_id">
 				<%for(var i=0;i<category.length;i++){%>
          			<option value="<%=category[i].category_id%>"><%=category[i].category_name%></option>
  				<%}%>
 				</select></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 			<tr>
-				<td>Product Status</td>
+				<td style="font-weight: bold; font-size: small;">Product Status:</td>
 				<td><select name="product_status">
 				<%for(var i=0;i<productStatus.length;i++){%>
          			<option value="<%=productStatus[i]%>"><%=productStatus[i]%></option>
  				<%}%>
 				</select></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 			<tr>
-				<td>Product Condition</td>
+				<td style="font-weight: bold; font-size: small;">Product Condition:</td>
 				<td><select name="product_condition">
 				<%for(var i=0;i<productCondition.length;i++){%>
          			<option value="<%=productCondition[i]%>"><%=productCondition[i]%></option>
  				<%}%>
 				</select></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 			<tr>
-				<td>Mode Of Sale</td>
+				<td style="font-weight: bold; font-size: small;">Mode Of Sale:</td>
 				<td><select name="sell_mode" id="sell_mode" required='required'>
 						<option>choose mode</option>
 					<% for(var i=0; i<sell_mode.length; i++){%>
@@ -115,11 +154,13 @@
 	<div id='fixed-price' style="display: none">
 		<table>
 			<tr>
-				<td>Units In Stock</td>
+				<td style="font-weight: bold; font-size: small;">Units In Stock:</td>
 				<td><input type="text" name="units_in_stock"></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 			<tr>
-				<td>Price per unit</td>
+				<td style="font-weight: bold; font-size: small;">Price per unit:</td>
 				<td><input type='text' name='price_per_unit'/></td>
 			</tr>
 		</table>
@@ -132,15 +173,22 @@
 				<td>Expiry Date</td>
 				<td><input type="text" name='bid_expiry' id="date" /></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 			<tr>
 				<td>Bid Start Amount in dollars:</td>
 				<td><input type='text' name='start_amount'></td>
 			</tr>
+			<tr><td><br>
+			</td></tr>
 		</table>
 	</div>
 	<table>
-		<tr><td><input type="submit" value="Create Product"></td></tr>
-		<tr><td><input type="button" onClick="location.href='/seller/<%=seller_id%>'" value="Cancel"></td></tr>
+			<tr><td><br>
+			</td></tr>
+		<tr><td><input type="button" onClick="location.href='/seller/<%=seller_id%>'" value="Cancel"></td>
+		<td><input type="submit" value="Create Product"></td>
+		</tr>
 	<div><h3 font color="red"><%=errMsg%></h3></div>				
 	</table>
 	</form>
