@@ -427,7 +427,7 @@ function updateForm(req,res){
 
 function handleProductUpdate(req,res){
 	
-	var productId = req.body.product_id, units_in_stock, mode = req.body.product_listed_as ;
+	var productId = req.body.product_id, units_in_stock=req.body.units_in_stock, mode = req.body.product_listed_as ;
 	var updateProductSql='UPDATE product SET ? WHERE product_id = ?';
 	
 	if(mode == 'Auction'){

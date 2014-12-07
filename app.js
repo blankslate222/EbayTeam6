@@ -58,6 +58,7 @@ app.get('/', routes.index);
 app.get('/productConditions', madhur.getDistinctProductConditions);
 app.get('/productBidStatus', madhur.getDistinctProductBidStatus);
 app.get('/search', madhur.productDetails);
+app.get('/search/nocaching', madhur.productDetailsNoCaching);
 app.get('/personType', madhur.getPersonType);
 app.post('/autocomplete/personName', madhur.getPersonNames);
 app.post('/autocomplete/membershipid', madhur.getmemIds);
@@ -66,6 +67,7 @@ app.post('/autocomplete/personCity', madhur.getPersonCities);
 app.post('/autocomplete/personEmail', madhur.getPersonEmail);
 app.post('/autocomplete/productName', madhur.getProductNames);
 app.get('/search/person', madhur.personDetails);
+app.get('/search/person/nocaching',madhur.personDetailsNoCaching)
 app.get('/advancesearch/product', routes.profile);
 app.get('/advancesearch/person',authenticate, routes.person);
 app.get('/categories', madhur.getCategories);
