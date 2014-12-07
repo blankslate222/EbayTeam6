@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><title>Ebay|Cart</title></head>
+<body>
+
+<p>Are you sure you want to add this item to your cart?</p>
+
+Quantity Available : <%=product_qty%>
+
+<form method='post' action='/c/cart/add' onsubmit="javascript:void window.close();">
+
+<input name='product_id' value='<%=product_id%>' type='hidden'/><br>
+
+Product: <input type='text' name='product_name' value='<%=product_name%>' readonly /><br>
+
+Price: $<input type='text' name='cart_price' value='<%=product_price%>' readonly /><br>
+
+Quantity: <input type='number' name='cart_qty' min=1 max=<%=product_qty%> value=1 /><br>
+
+<input type='submit' name='submit' value='Add'/><br>
+<button value='Cancel' name='Cancel' onclick="javascript:void window.close();return false;">Cancel</button><br><br>
+</form>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>Ebay|Cart</title></head>
+<body>
+<a href='/c/cart/view'> View unsaved</a> | <a href='/'>Shop</a>
+<div id='saved'>
+
+<%if(items.length == 0){%>
+<p>Your cart is empty. Start <a href='/'>shopping!!</a></p>
+<%}else{%>
+
+	<% for (var i=0; i<items.length; i++){%>
+<form method='post' action='/c/cart/remove/saved' >
+	<input type='hidden' name='prod_id' value='<%=items[i].prod_id%>'/>
+	<br>
+		<%=items[i].prod_id%><br>
+		<%=items[i].prod_name%><br>
+		<%=items[i].prod_qty%><br>
+		<%=items[i].prod_price%><br>
+		
+		<input type='submit' value='Remove Item' /><br>
+</form>
+	<%}%>	
+<p>Proceed for <a href='/c/checkout'>Check Out </a></p>
+<%}%>
+</div>
+
+</body>
+</html>

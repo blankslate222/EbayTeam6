@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Ebay|Checkout</title>
+
+	<style>
+	table, th, tr, td{
+	border : 1px solid black;
+	border-collapse:collapse;
+	}
+	</style>
+
+</head>
+<body>
+
+<div id='checkout'>
+
+<h2>Your Invoice Summary</h2>
+
+<%if(unsaved.length ==0 && saved.length == 0){%>
+<p>No item available in the cart for checkout</p>
+<%}else{%>
+
+<table>
+<tr> 
+<th>Product</th>
+<th>Quantity</th>
+<th>Price</th>
+</tr>
+
+<%if(unsaved.length !=0 ){
+	 for (var i=0; i<unsaved.length; i++){%>
+	<tr>
+		<td><%=unsaved[i].prod_name%></td>
+		<td><%=unsaved[i].prod_qty%></td>
+		<td><%=unsaved[i].prod_price%></td>
+	</tr>
+	<%}%>
+<%}%>
+
+<%if(saved.length !=0 ){
+	 for (var i=0; i<saved.length; i++){%>
+	<tr>
+		<td><%=saved[i].prod_name%></td>
+		<td><%=saved[i].prod_qty%></td>
+		<td><%=saved[i].prod_price%></td>
+	</tr>
+	<%}%>
+<%}%>
+</table>
+
+
+<form method='post' action='/c/checkout' onsubmit="javascript:void window.close();">
+<table>
+<tr>Please rate this seller: <input type="number" name="seller_rating" min="1" max="5" value=1 required /> 
+</tr>
+<tr>
+<td><input type='submit' name='submit' value='Buy'/></td>
+</tr>
+</table>
+</form>
+<%}%> <!--else ends -->
+</div>
+
+</body>
+</html>

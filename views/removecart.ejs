@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Ebay|Cart</title></head>
+<body>
+
+<p>Are you sure you want to remove this item from your cart?</p>
+
+<form method='post' action='/c/cart/remove' 
+onsubmit="javascript:window.opener.location.reload();setTimeout(function(){window.opener.location.reload()},10);void window.close();">
+
+<input name='product_id' value='<%=product_id%>' type='hidden'/><br>
+<input name='customer_id' value='<%=customer_id%>' type='hidden'/><br>
+
+<input type='submit' name='submit' value='Remove'/><br>
+<button value='Cancel' name='Cancel' onclick="javascript:void window.close();">Cancel</button><br><br>
+</form>
+</body>
+</html>

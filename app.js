@@ -19,6 +19,7 @@ var login = require('./routes/login');
 var bids = require('./routes/bidding');
 var product = require('./routes/nikhil');
 var home = require('./routes/home');
+var cartop = require('./routes/myCart');
 
 var io = require('socket.io');
 var db = require('./routes/mysql');
@@ -104,6 +105,18 @@ app.post('/updateEmail', home.updateEmail );
 app.post('/updateAddress', home.updateAddress );
 app.post('/updateCity', home.updateCity );
 app.post('/updateZip', home.updateZip);
+
+//cart function
+app.get('/c/cart/view',authenticate, cartop.view);
+app.get('/c/cart/add/:id',authenticate, cartop.confirmAdd);
+app.get('/c/cart/remove/:id',authenticate, cartop.removeConfirm);
+app.post('/c/cart/add',authenticate, cartop.add);
+app.post('/c/cart/remove/saved',authenticate, cartop.removeSaved);
+app.post('/c/cart/remove',authenticate, cartop.remove);
+app.post('/c/cart/save', authenticate,cartop.save);
+app.get('/c/cart/saved', authenticate,cartop.getSaved);
+app.get('/c/checkout', authenticate,cartop.checkoutSummary);
+app.post('/c/checkout', authenticate,cartop.checkout);
 
 app.post('/deleteAccount', home.deleteAccount);
 // Auditing
