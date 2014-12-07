@@ -21,9 +21,17 @@ function listAllBids(element){
 }
 
 var lastTimeLoggedIn = moment(new Date("<%=lastLoginTime%>")).format('lll');
-
+var username = "<%=userName%>";
 function setTime() {
-	document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+	if(username == "" || username == null || username == "undefined") { 
+		document.getElementById('lastLoggedIn-u').innerHTML = "<a href='/team6ebay/login' _sp='m570.l1524'>Sign in</a>&nbsp;";
+		document.getElementById('lastLoggedIn').innerHTML = "or <a href='/team6ebay/persons/new' _sp='m570.l2621'>register</a>";
+	} else {
+		document.getElementById('lastLoggedIn-u').innerHTML = username;
+		document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+		document.getElementById('my-ebay-div').innerHTML = "<a href='/getCustomerInfo' class='gh-eb-li-a'>My eBay</a>";
+		document.getElementById('logout-div').innerHTML = "<form method = 'post' action = '/logout' id='logoutForm' style='display:none'>	</form><a href='#' class='gh-eb-li-a' onClick=logout()>Logout</a>";
+	}
 }
 
 function logout(){
@@ -84,22 +92,22 @@ bootbox.dialog({
 	<div id="gh-top">
 		<ul id="gh-topl">
 			<li class="gh-t gh-spr" id="gh-eb-u" style="padding-left:10px">
-				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font color = "#00509d"><%=userName%>,</font color>&nbsp;
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! <font id="lastLoggedIn-u" color = "#00509d"><%=userName%>,</font color>&nbsp;
 				<span id="gh-ug-flex"> <font id="lastLoggedIn" color = "#00509d"></font color></span></span>
 			</li>
 		</ul>
 		
 		<ul id="gh-eb">
 			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
-				<div class="gh-menu">
-					<a href="/getCustomerInfo" class="gh-eb-li-a">My eBay</a>
+				<div class="gh-menu" id="my-ebay-div">
+					<!--<a href="/getCustomerInfo" class="gh-eb-li-a">My eBay</a>-->
 				</div>				
 			</li>
 			
 			<li class="gh-eb-li gh-dd" data-imp="10">
-				<div class="gh-menu">
-					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
-						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				<div class="gh-menu" id="logout-div">
+					<!--<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
+						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>-->
 				</div>				
 			</li>
 			
