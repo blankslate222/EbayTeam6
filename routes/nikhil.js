@@ -711,6 +711,7 @@ function aboutSeller(req,res){
 					averageRating+=history[i].seller_rating;
 				}
 				averageRating = averageRating/i;
+				averageRating = averageRating.toFixed(1);
 				
 				if(isNaN(averageRating)){
 					averageRating = 0;

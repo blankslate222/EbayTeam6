@@ -70,6 +70,7 @@ width: auto;
 	<table><tr><td><h3><%=details[0].person_fname%>'s sales page</h3></td><td style="text-indent: 2em;">Rating: <%=rating%></td></tr></table></div>
 	<table class="mgtb " role="presentation"><tbody><tr><td width="80%" valign="top">
 	</td></tr><tr><td width="20%" valign="top" id="lcont"><div class="pdLft"><div><div class="si-lr"><div class="si-re"><div class="si-pd"><div class="si-sp si-fl g-hlp si-fn"><div>
+  
   <%if(sellerHome == 'Y'){%> <!-- inner if -->
    <a href='/product/new'>Create a New product listing </a> for your business.<br> 
  	<%}%>
@@ -78,22 +79,24 @@ width: auto;
  <%if(products.length > 0){%> <!-- outer if -->
  	<br>
  	<div>
- 	<h4>My Current Products</h4>
+ 	<h4>My Products</h4>
 		<%for(var i=0; i<products.length;i++){%>
 		 	<p>
-			<%if(sellerHome == 'Y'){%> <!-- inner if -->
+			
 			<form method="post" action="/" id="update_form<%=i%>">
 			<table>
 				<tr>
 				<td><input type="hidden" name="product_id" value="<%=products[i].product_id%>"></td>
 				<td><input type="hidden" name="seller_id" value="<%=products[i].seller_id%>"></td>
 				<td style="width:300px;"><a href="/product/details?productidfordisplay=<%=products[i].product_id%>" class="vip" style="display:block" ><%=products[i].product_name%></a></td>
+				<%if(sellerHome == 'Y'){%> <!-- inner if -->
 				<td><input type="submit" id="delete" value="Delete" onclick="return submitform(this.id, this.form)"/></td> 
 				<td><input type="submit" id="update" value="Update" onclick="return submitform(this.id, this.form)"/></td>
+			<%}%><!-- inner if ends -->
 				</tr>
 			</table>
 			</form>
-			<%}%>
+			
  			</p>
 		<%}%>
  	</div>
@@ -101,7 +104,7 @@ width: auto;
  <%} else{%> <!-- outer if -->
  
  You do not have your product listed yet. Tell us what you would like to sell.
- <a href='/product/new'>Create a product listing </a> for your business. 
+ Create a product listing for your business. 
  
  <%}%>
  <br>
