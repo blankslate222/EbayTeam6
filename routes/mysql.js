@@ -4,6 +4,7 @@ var mysql = require('mysql');
 function getConnection(){
 	var connection = mysql.createConnection({
 	    host     : 'ebayteam6.cj2nm3ydyfao.us-west-2.rds.amazonaws.com',
+	    port	 :	'3306',
 	    user     : 'ebayteam6',
 	    password : 'ebayteam6',
 	    database : 'ebay',

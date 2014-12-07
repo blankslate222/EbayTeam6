@@ -7,6 +7,29 @@ var db = require('./mysql');
 var moment = require('moment');
 var redis = require('node-redis');
 var client = redis.createClient();
+
+function checkDuplicate(req,res){
+
+	var selsql = 'select distinct product_name from product where seller_id ='+req.session.pid;
+	db.executeQuery(selsql, function(err, status, result){
+		if(result.length == 0){
+			console.log('first product');
+		}
+		if(result.length != 0){
+			var product = ''+req.body.product_name;
+			for(var i=0; i< result.length; i++){
+			
+			var result_prod = ''+result[i].product_name;
+			
+			if(product.toLowerCase().equals(result_prod.trim().toLowerCase())){
+//				res.status(400);
+//				res.send('Duplicate Product');
+				return 0;
+			}
+		  }
+		}
+	});
+}
 function list(req,res){
 
 	var sql = 'select product_id, product_name, product_desc, product_condition, (select count(1) from bid_line_item, bid_header_item where product.product_id = bid_header_item.product_id and bid_header_item.bid_id = bid_line_item.bid_id ) numberOfBids  from product';
@@ -133,11 +156,17 @@ function handleNewProduct(req,res){
 
 	var sell_mode = getSellMode();
 	
-	
+	//var dupchk = checkDuplicate(req,res);
+//	if(dupchk == 0){
+//		//return error
+//		res.status(400);
+//		res.send('duplicate alert!!');
+//	}
 
 	//1 - check for null fields
 	//newProduct = JSON.stringify(newProduct);
 	//console.log('new product -'+ newProduct);
+		
 if(req.body.product_name == null || req.body.product_desc == null || req.body.seller_id == null || req.body.category_id == null){
 	console.log('error in 1');
 	res.status(400).render('create-product', {
@@ -216,9 +245,12 @@ if(req.body.seller_id != req.session.pid){
 }
 	if(mode=='Auction'){
 		
-		
-		var bidexpiry = moment(req.body.bid_expiry,'YYYY-MM-DD HH:mm:ss');
+		console.log('bid expiry req body' + req.body.bid_expiry);
+		var bexp = ''+req.body.bid_expiry;
+		var bidexpiry = moment(bexp);
 		var now = moment().format('YYYY-MM-DD HH:mm:ss');
+		console.log('bid expiry moment' + bidexpiry.format('YYYY-MM-DD HH:mm:ss'));
+		console.log('moment now' + now);
 		
 		if (isNaN(parseFloat(req.body.start_amount)) || req.body.start_amount < 0) {
 			console.log('error in 6');
@@ -234,7 +266,7 @@ if(req.body.seller_id != req.session.pid){
 			});
 			return;
 		}
-		bidtime = bidexpiry;
+		bidtime = bidexpiry.format('YYYY-MM-DD HH:mm:ss');
 		units_in_stock = 1;
 	}
 	if(condList.indexOf(req.body.product_condition) == -1){
@@ -330,7 +362,7 @@ var updcheck = [productId];
 prodsql = mysql.format(prodsql,updcheck);
 runQuery(prodsql, req, res, function(status, result1){
 	if (result1.length != 0 &&
-		moment(result1[0].bid_expiry_time,'YYYY-MM-DD HH:mm:ss').isAfter(moment().format('YYYY-MM-DD HH:mm:ss'))){
+		moment(result1[0].bid_expiry_time).isAfter(moment().format('YYYY-MM-DD HH:mm:ss'))){
 		res.status(403).render('error-nikhil',{
 			errMsg : 'Product cannot be updated right now. There are active bids for this product.'
 		});
@@ -484,8 +516,10 @@ if(req.body.seller_id != req.session.pid){
 	}
 }
 	if(mode=='Auction'){
-		var bidexpiry = moment(req.body.bid_expiry,'YYYY-MM-DD HH:mm:ss');
+		console.log('bid xpiry before --'+req.body.bid_expiry);
+		var bidexpiry = moment(req.body.bid_expiry).format('YYYY-MM-DD HH:mm:ss');
 		var now = moment().format('YYYY-MM-DD HH:mm:ss');
+		console.log('bid xpiry after --'+bidexpiry);
 		
 		if (isNaN(parseFloat(req.body.start_amount)) || req.body.start_amount < 0) {
 			console.log('error in 6');
@@ -494,7 +528,7 @@ if(req.body.seller_id != req.session.pid){
 			});
 			return;
 		}
-		if( !bidexpiry.isValid()|| !bidexpiry.isAfter(now) ){
+		if( !moment(req.body.bid_expiry).isValid()|| !moment(req.body.bid_expiry).isAfter(now) ){
 			console.log('error in 7');
 			res.status(400).render('error-nikhil', {
 				title : 'please specify a valid bid expiry time greater than current time'
@@ -517,7 +551,7 @@ if(req.body.seller_id != req.session.pid){
 		});
 		return;
 	}
-	var bidtime = req.body.bid_expiry;
+	var bidtime = bidexpiry;
 	if(bidtime == ''){
 		bidtime = null;
 	}
@@ -625,7 +659,7 @@ function handleDelete(req,res){
 	
 	runQuery(prodsql, req, res, function(status, result1){
 		if (result1.length != 0 &&
-			moment(result1[0].bid_expiry_time,'YYYY-MM-DD HH:mm:ss').isAfter(moment().format('YYYY-MM-DD HH:mm:ss'))){
+			moment(result1[0].bid_expiry_time).isAfter(moment().format('YYYY-MM-DD HH:mm:ss'))){
 			res.status(403).render('error-nikhil',{
 				errMsg : 'Product cannot be deleted. There are active bids for this product.'
 			});

@@ -12,10 +12,9 @@
 <form method='post' action='/c/cart/save' onsubmit="javascript:void window.close();">
 	<% for (var i=0; i<items.length; i++){%>
 	<br>
-		<%=items[i].prod_id%><br>
-		<%=items[i].prod_name%><br>
-		<%=items[i].prod_qty%><br>
-		<%=items[i].prod_price%><br>
+	Product Name 	 : <%=items[i].prod_name%><br>
+		Quantity 	 : <%=items[i].prod_qty%><br>
+		Price		 : <%=items[i].prod_price%><br>
 <a href="/c/cart/remove/<%=items[i].prod_id%>" onclick="javascript:
 void window.open('/c/cart/remove/<%=items[i].prod_id%>','1417728476930','width=250,height=250,toolbar=0,menubar=0,location=0,status=1,scrollbars=1,resizable=1,left=0,top=0');
 return false;">Remove from cart</a><br>

@@ -114,6 +114,7 @@ function displayProductDetails(req, res){
 					throw err;
 				}
 				else{
+					req.session.redirect_url = req.url;
 					console.log("person_email:"+resultSellerDetails[0].person_email);
 					var errorMessage = "";
 					if(resultProductDetails[0].product_status === "Sold")  errorMessage = "This product has been sold. The Auction has ended.";

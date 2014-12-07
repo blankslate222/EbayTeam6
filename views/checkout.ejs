@@ -51,12 +51,13 @@
 </table>
 
 
-<form method='post' action='/c/checkout' onsubmit="javascript:void window.close();">
+<form method='post' action='/c/checkout'>
 <table>
 <tr>Please rate this seller: <input type="number" name="seller_rating" min="1" max="5" value=1 required /> 
 </tr>
 <tr>
 <td><input type='submit' name='submit' value='Buy'/></td>
+<td><button name='cancel' onclick="window.location.href = '/c/cart/view'; return false;"> Cancel </button></td>
 </tr>
 </table>
 </form>

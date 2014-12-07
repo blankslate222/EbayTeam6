@@ -43,6 +43,7 @@ function add(req, res) {
 		cart.setItem(req.body.product_id,req.body.product_name,req.body.cart_qty,req.body.cart_price,req.session.pid);
 		console.log('items in cart' + cart.getCart());
 		//res.status(200);
+		res.redirect(req.session.redirect_url);
 }
 
 function remove(req, res) {
@@ -50,7 +51,7 @@ function remove(req, res) {
 	console.log('req body -'+id);
 		cart.removeFromCart(id);
 		res.status(200);
-		res.redirect('/c/cart/view');
+		res.redirect(req.session.redirect_url);
 		
 }
 
@@ -66,6 +67,7 @@ function view(req,res){
 		console.log('cust id'+itemList[i].cust_id);
 		
 	}
+	req.session.redirect_url = req.url;
 	
 		res.status(200);
 		res.render('mycart',{
