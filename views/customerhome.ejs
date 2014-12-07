@@ -11,9 +11,13 @@
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script type="text/javascript">
 var lastTimeLoggedIn = moment(new Date("<%=req.session.lasttimelog%>")).format('lll');
-
+var user = "<%=req.session.uname%>";
 function setTime() {
 	document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+	if(user == "admin") {
+		document.getElementById('audit').style.display="block";
+		document.getElementById('person-link').style.display="block";
+	}
 }
     		$.ajax({
                     url: "/categories",
@@ -186,6 +190,19 @@ $("#gh-ac").autocomplete({
 				<div class="gh-menu">
 					<form method = "post" action = "/logout" id='logoutForm' style="display:none">	</form>
 						<a href="#" class="gh-eb-li-a" onClick=logout()>Logout</a>
+				</div>				
+			</li>
+			
+			<li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu" id="audit" style="display:none">
+					<a href="/audit" class="gh-eb-li-a">Audit</a>
+				</div>				
+			</li>
+			
+			
+			<li class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu" id="person-link" style="display:none">
+					<a href="/advancesearch/person" class="gh-eb-li-a">Person search</a>
 				</div>				
 			</li>
 		</ul>

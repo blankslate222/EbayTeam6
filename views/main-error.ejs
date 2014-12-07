@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="shortcut icon" href="images/ebay-header.jpeg" type="image/jpeg"/>
+<title> eBay Product search</title>
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/js/jquery.slides.min.js"></script>
+<script type="text/javascript" src="/js/ejs_production.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script src="/js/moment.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-2.1.1.js" ></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>  
+<script type="text/javascript">
+var lastTimeLoggedIn = moment(new Date("<%=req.session.lasttimelog%>")).format('MMM Do YYYY');
+var username = "<%= req.session.uname%>";
+
+function setTime() {
+	if(username == "" || username == null || username == "undefined") { 
+		document.getElementById('lastLoggedIn-u').innerHTML = "<a href='/team6ebay/login' _sp='m570.l1524'>Sign in</a>&nbsp;";
+		document.getElementById('lastLoggedIn').innerHTML = "or <a href='/team6ebay/persons/new' _sp='m570.l2621'>register</a>";
+	} else {
+		document.getElementById('lastLoggedIn-u').innerHTML = username;
+		document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+		document.getElementById('my-ebay-div').innerHTML = "<a href='/getCustomerInfo' class='gh-eb-li-a'>My eBay</a>";
+	}
+}
+
+</script>
+</head>
+ <body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto" onload="setTime()">
+<div id="gh-gb" tabindex="-1"></div>
+<div class="header">
+	<div class="gh-acc-exp-div">
+	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
+	<!--[if lt IE 9]><div id="gh" class="gh-IE8 gh-flex gh-w gh-simpleH no-touch "><![endif]--><!--[if (gte IE 9)|!(IE)]><!-->
+	<div id="gh" class="gh-w gh-simpleH no-touch gh-flex"><!--<![endif]-->
+	<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img width="117" height="120" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo"></a><![endif]--><!--[if (gte IE 9)|!(IE)]><!--><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo" height="200" width="250"></a><!--<![endif]--></h1></td>
+			<td id="gh-title">Error !!!</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u">
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! &nbsp;<font id="lastLoggedIn-u" color = "blue"></font color>&nbsp;
+				<span id="gh-ug-flex"> <font id="lastLoggedIn" color = "blue"></font color></span></span>
+			</li>
+		</ul>
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu" id="my-ebay-div">
+					
+				</div>
+			</li>
+		</ul>
+	</div>
+	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
+	<div class="ribbon">
+		<div class="icon">
+		</div>
+	</div>
+	</div>
+	
+	<div style="margin-left:100px"><font size="6">Uh oh! Lost your way? Click here to go <a href="/">home</a></font></div>
+</html>

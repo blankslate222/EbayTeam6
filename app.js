@@ -127,6 +127,8 @@ app.get('/auditLogs', madhur.getAuditLogs);
 //
 //added get method of above to navigate from search to product details
 app.get('/product/details', bids.displayProductDetails);
+
+app.get('*', routes.error);
 var server = app.listen(port, function() {
 	console.log('Express server listening on port ' + port);
 });

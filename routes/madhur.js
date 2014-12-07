@@ -334,6 +334,7 @@ function getPersonType(req,res) {
 }
 
 function getPersonNames(req,res) {
+	var query = "select distinct person_fname from person where person_fname like '"+req.param('name')+"%' or person_lname like '"+req.param('name')+"%'";
 	client.get(query, function(err,redisResult){
     	if(err){
     		console.log("inside error while fetching from cache");

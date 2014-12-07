@@ -11,6 +11,10 @@ exports.index = function(req, res){
 	}
 };
 
+exports.error = function(req, res) {
+	res.render('main-error.ejs', {errMsg: 'Undefined url' , req:req});
+}
+
 exports.profile = function(req, res){
 	  res.render('productAdvance.ejs', {req:req, title: 'My profile' });
 };
