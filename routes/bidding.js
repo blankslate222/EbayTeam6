@@ -412,7 +412,7 @@ function buyProduct (req, res){
 					});
 				}
 				else{
-					displayProductDetailsWithMessage(req,res, "This product is out of stock");
+					displayProductDetailsWithMessage(req,res, "There is no enough units available!");
 					console.log('product out of stock');
 				}		
 				});

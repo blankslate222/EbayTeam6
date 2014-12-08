@@ -279,8 +279,8 @@ if(req.body.seller_id != req.session.pid){
 	//console.log("ins sql -"+insertProductSql);
 	//console.log(newProduct);
 	runQuery(insertProductSql,req,res, function(status, result){
-//		dba_audit(req.session.uname, req.connection.remoteAddress, 'insert', 'ebayTeam6', 'product',
-//		insertProductSql);
+		dba_audit(req.session.uname, req.connection.remoteAddress, 'insert', 'ebayTeam6', 'product',
+		insertProductSql);
 
 		var insertId = result.insertId;
 		

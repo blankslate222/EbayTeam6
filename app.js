@@ -133,7 +133,7 @@ var server = app.listen(port, function() {
 	console.log('Express server listening on port ' + port);
 });
 var socket = io.listen(server);
-var minutes = 5.1, the_interval = minutes * 60 * 1000;
+var minutes = 0.1, the_interval = minutes * 60 * 1000;
 setInterval(function() {
   //console.log("I am doing my 1 minutes check");
 	var hasAuctionExpired = "select product_id from product where bid_expiry_time < now() and product_status <> 'Sold'";
