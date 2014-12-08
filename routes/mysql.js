@@ -1,7 +1,7 @@
 var ejs= require('ejs');
 var mysql = require('mysql');
 
-/*
+
 function getConnection(){
 	var connection = mysql.createConnection({
 	    host     : 'ebayteam6.cj2nm3ydyfao.us-west-2.rds.amazonaws.com',
@@ -11,8 +11,8 @@ function getConnection(){
 	    multipleStatements: true
 	});
 	return connection;
-}*/
-
+}
+/*
 function getConnection(){
 	var connection = mysql.createConnection({
 	    host     : 'localhost',
@@ -22,7 +22,7 @@ function getConnection(){
 	    multipleStatements: true
 	});
 	return connection;
-}
+}*/
 
 
 function fetchData(callback,sqlQuery){
