@@ -18,7 +18,8 @@ function confirmAdd(req, res) {
 			product_name: result[0].product_name,
 			product_id : result[0].product_id
 			,product_qty : result[0].units_in_stock
-			,product_price : result[0].price_per_unit
+			,product_price : result[0].price_per_unit,
+			req:req
 		});
 	});
 	
@@ -71,7 +72,8 @@ function view(req,res){
 	
 		res.status(200);
 		res.render('mycart',{
-			items : itemList
+			items : itemList,
+			req:req
 		});
 	
 }
@@ -120,13 +122,15 @@ function getSaved(req,res){
 		if(result.length == 0){
 			res.status(404);
 			res.render('savedcart',{
-				items : ''
+				items : '',
+				req:req
 			});
 		}else{
 			res.status(200);
 			//res.send("Your saved cart <br>"+result);
 			res.render('savedcart',{
-				items : result
+				items : result,
+				req:req
 			});
 		}
 	});
@@ -165,7 +169,8 @@ function checkoutSummary(req,res){
 		res.status(200);
 		res.render('checkout',{
 			unsaved : notSaved,
-			saved : saved
+			saved : saved,
+			req:req
 		});
 		
 	});

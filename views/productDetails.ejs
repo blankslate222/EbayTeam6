@@ -239,8 +239,10 @@ bootbox.dialog({
 	<div class="u-flL ">
 		<!-- inserting code for another button -->
  		<!-- code ends  -->
+ 		<%if(productDetails[0].units_in_stock) {%>
 		<a role="button" _sp="p2047675.l4023" id="bidBtn_btn" style="" 
 		class="btn btn-prim btn-m vi-VR-btnWdth-L" href="/c/cart/add/<%=productDetails[0].product_id%>" vib="vib" rel="nofollow">Add to Cart</a>
+		<%}%>
 	</div>
 	<div class="spacer"></div>
 	<div class="spacer"></div>

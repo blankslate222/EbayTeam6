@@ -1,7 +1,62 @@
 <!DOCTYPE html>
 <html>
-<head><title>Products|Cart</title></head>
-<body>
+<head><title>Products|Cart</title>
+<link rel="shortcut icon" href="images/ebay-header.jpeg" type="image/jpeg">
+<title> Electronics, Cars, Fashion, Collectibles, Coupons and More | eBay </title>
+<link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/js/jquery.slides.min.js"></script>
+<script src="/js/moment.js"></script>
+<script type="text/javascript" src="/js/ejs_production.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script type="text/javascript">
+var lastTimeLoggedIn = moment(new Date("<%=req.session.lasttimelog%>")).format('lll');
+var user = "<%=req.session.uname%>";
+function setTime() {
+	document.getElementById('lastLoggedIn').innerHTML = " you last signed in on "+lastTimeLoggedIn;
+	document.getElementById('lastLoggedIn-u').innerHTML = user;
+}
+</script>
+
+</head>
+<body class="sz1200 index redux today stdln en_US rvi" style ="overflow-y:auto" onload="setTime()">
+<div id="gh-gb" tabindex="-1"></div>
+<div class="header">
+	<div class="gh-acc-exp-div">
+	<a id="gh-hdn-stm" class="gh-acc-a" href="#mainContent">Skip to main content</a></div>
+	<!--[if lt IE 9]><div id="gh" class="gh-IE8 gh-flex gh-w gh-simpleH no-touch "><![endif]--><!--[if (gte IE 9)|!(IE)]><!-->
+	<div id="gh" class="gh-w gh-simpleH no-touch gh-flex"><!--<![endif]-->
+	<table class="gh-tbl">
+		<tbody>
+			<tr>
+			<td class="gh-td"><h1 id="gh-l-h1"><!--[if lt IE 9]><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img width="117" height="120" style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo"></a><![endif]--><!--[if (gte IE 9)|!(IE)]><!--><a href="/" class="iclg" _sp="m570.l2586" id="gh-la">eBay<img style="clip:rect(47px, 118px, 95px, 0px); position:absolute; top:-47px;left:0" alt="" src="/images/ebay.png" id="gh-logo" height="200" width="250"></a><!--<![endif]--></h1></td>
+			<td id="gh-title">My cart</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="gh-top">
+		<ul id="gh-topl">
+			<li class="gh-t gh-spr" id="gh-eb-u">
+				<span aria-expanded="false" id="gh-ug" class="gh-ug-guest">Hi! &nbsp;<font id="lastLoggedIn-u" color = "blue"></font color>&nbsp;
+				<span id="gh-ug-flex"> <font id="lastLoggedIn" color = "blue"></font color></span></span>
+			</li>
+		</ul>
+		<ul id="gh-eb">
+			<li id="gh-eb-My" class="gh-eb-li gh-dd" data-imp="10">
+				<div class="gh-menu" id="my-ebay-div">
+					
+				</div>
+			</li>
+		</ul>
+	</div>
+	</div><!--ts:2014.11.19.11:52--><!--rq:--><!--rvr:59rc5-->
+	<div class="ribbon">
+		<div class="icon">
+		</div>
+	</div>
+	</div>
+
 
 <div id='current'>
 <p><a href='/c/cart/saved'>My Saved Cart</a></p>
