@@ -4,7 +4,7 @@ function checkLogInData(callback,username,password){
 	
 	console.log("USERNAME: " + username + "Password: " + password);
 	
-	var sql = "SELECT  person_id,person_email,last_login,isactive, person_fname, person_type FROM person where person_email = '"+username+"' and password = '"+password+"'";
+	var sql = "SELECT  person_id,person_email,last_login,isactive, person_fname, person_type FROM person where trim(person_email) = '"+username+"' and trim(password) = '"+password+"'";
 	console.log(sql);	
 	db.executeQuery(sql, function(err, status, result){
 			// console.log(rows);

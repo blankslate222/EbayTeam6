@@ -12,8 +12,8 @@ function save(req,res){
 	var zip = input.zip;
 	var membershipid = input.membershipid;
 	var persontype = input.person;
-	var email = input.email;
-	var pwd = input.pass;
+	var email = input.email.trim();
+	var pwd = input.pass.trim();
 	
 	var isactive = 1;
 	
