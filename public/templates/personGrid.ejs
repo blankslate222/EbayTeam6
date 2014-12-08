@@ -28,7 +28,7 @@
 						<div class="hotness bold">Zip Code: <%=data[i].person_zip%></div>
 					</li>
 					<li class="lvextras">
-						<div class="hotness bold">Type: <%=data[i].person_type%></div>
+						<div class="hotness bold">Type: <%if(data[i].person_type == 0){%>Customer<%}else{%>Seller<%}%></div>
 					</li>
 					<li class="lvextras">
 						<div class="hotness bold">Membership Id: <%=data[i].membership_id%></div>

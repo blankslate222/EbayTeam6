@@ -168,7 +168,12 @@ $("#mem_id").autocomplete({
                     	    	inputTag.style.position='static';
                     	    	label.appendChild(inputTag);
                     	    	label.appendChild(document.createTextNode( '\u00A0' ));
-                    	    	label.appendChild(document.createTextNode(data[key].person_type));
+                    	    	if(data[key].person_type == 0) {
+									label.appendChild(document.createTextNode("Customer"));
+								} else {
+									label.appendChild(document.createTextNode("Seller"));
+								}                  	    	
+                    	    	//label.appendChild(document.createTextNode(data[key].person_type));
                     	    	document.getElementById('person_type').appendChild(label);
                     	    	document.getElementById('person_type').appendChild(document.createElement('br'));
                     	    }
@@ -281,8 +286,8 @@ $("#mem_id").autocomplete({
 						<input aria-labelledby="kw_lengend" name="mem_id" id="mem_id" size="50" maxlength="300" value="" placeholder="Enter membership id" type="text">
 						</div>
 						</div>
-						<!--<div id="person_type" style="display:inline-block;width:30%;position:absolute;margin-left:120px" class="checkbox-set"><legend>Person type</legend></div>-->
-						<button type="submit" class="btn btn-prim" style="margin-left:200px;" onclick="search()">Search</button>
+						<div id="person_type" style="display:inline-block;width:30%;position:absolute;margin-left:120px" class="checkbox-set"><legend>Person type</legend></div>
+						<button type="submit" class="btn btn-prim" style="margin-left:400px;" onclick="search()">Search</button>
 					</fieldset>
 					
 			</div>

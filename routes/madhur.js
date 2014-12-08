@@ -58,6 +58,14 @@ function isNotNull(str) {
 	return false;
 }
 
+function isNotNullType(str) {
+	if(str !== undefined && str !== ""){
+		return true;
+	}
+	return false;
+}
+
+
 
 function productDetails(req,res) {
 	var search_prod_cond = req.param('search_prod_cond');
@@ -190,13 +198,13 @@ function personDetails(req,res) {
 	var mem_id = req.param('mem_id');
 	var operator = "and ";
 	var query = "select * from person where isactive=1";
-	if(isNotNull(name) || isNotNull(type) || isNotNull(email) || isNotNull(zip) || isNotNull(city) || isNotNull(mem_id)) {
+	if(isNotNull(name) || isNotNullType(type) || isNotNull(email) || isNotNull(zip) || isNotNull(city) || isNotNull(mem_id)) {
 		query = query + " and ";
 		
 		if(isNotNull(name)) {
 			query = query + "(person_fname='"+name+"' or person_lname='"+name+"') "+operator;
 		}
-		if(isNotNull(type)) {
+		if(isNotNullType(type)) {
 			query = query + "person_type='"+type+"' "+operator;
 		}
 		if(isNotNull(email)) {
@@ -259,13 +267,13 @@ function personDetailsNoCaching(req,res) {
 	var mem_id = req.param('mem_id');
 	var operator = "and ";
 	var query = "select * from person where isactive=1";
-	if(isNotNull(name) || isNotNull(type) || isNotNull(email) || isNotNull(zip) || isNotNull(city) || isNotNull(mem_id)) {
+	if(isNotNull(name) || isNotNullType(type) || isNotNull(email) || isNotNull(zip) || isNotNull(city) || isNotNull(mem_id)) {
 		query = query + " and ";
 		
 		if(isNotNull(name)) {
 			query = query + "(person_fname='"+name+"' or person_lname='"+name+"') "+operator;
 		}
-		if(isNotNull(type)) {
+		if(isNotNullType(type)) {
 			query = query + "person_type='"+type+"' "+operator;
 		}
 		if(isNotNull(email)) {
