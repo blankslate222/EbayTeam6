@@ -50,6 +50,10 @@ function buyProduct(element){
 
 function placeBid(){
 	console.log("inside place bid");
+	if(isNaN(document.getElementById("MaxBidId").value) || (!document.getElementById("MaxBidId").value)){
+		alert('Bid Amount value must be a valid number');
+		return false;
+	}
 bootbox.dialog({
   message: "Please confirm the bid amount: $"+document.getElementById("MaxBidId").value,
   title: "eBay - Place Bid",
@@ -179,7 +183,7 @@ bootbox.dialog({
 				<% if (productDetails[0].product_status === 'Sold') { %>
 					<input id="MaxBidId" placeholder="" aria-labelledby="maxbidlabel" class="notranslate MaxBidClass" type="text" autocomplete="off" size="11" maxlength="10" name="maxbid" disabled value=""> 
 				<% } else {%>
-					<input id="MaxBidId" placeholder="" aria-labelledby="maxbidlabel" class="notranslate MaxBidClass" type="text" autocomplete="off" size="11" maxlength="10" name="maxbid" value=""> 				
+					<input id="MaxBidId" placeholder="" aria-labelledby="maxbidlabel" class="notranslate MaxBidClass" type="text" autocomplete="off" size="11" maxlength="10" name="maxbid" value="" > 				
 				<% } %>
 			</div>
 			<div class=""></div>

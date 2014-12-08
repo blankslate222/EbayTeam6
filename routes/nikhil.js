@@ -177,7 +177,7 @@ function handleNewProduct(req,res){
 			console.log('creating prod lower case--'+result_prod.trim().toString().toLowerCase());
 			if(product.trim().toLowerCase()== result_prod.toString().trim().toLowerCase()){
 //				res.status(400);
-				displayWithError(req,res,'Creating a duplicate product is not allowed');
+				displayWithError(req,res,'Duplicate product - '+product);
 				return;
 			}
 		  }
