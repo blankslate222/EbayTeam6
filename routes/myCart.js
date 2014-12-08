@@ -157,16 +157,24 @@ function checkoutSummary(req,res){
 	var saved = '';
 	var total;
 	var customer = req.session.pid;
-	var sql = 'select a.prod_id, a.prod_name, a.prod_qty, a.prod_price, a.cust_id'+
-	' from cart_table a, product b where cust_id = ?'+
-	' and a.prod_id=b.product_id and b.isActiveProduct=1 and b.product_status=\'In-stock\'';
+	var sql = 'select a.prod_id, a.prod_name, a.prod_qty, b.units_in_stock, a.prod_price, a.cust_id, sum(a.prod_qty) as total_qty '+
+		' from cart_table a, product b where cust_id = ? and a.prod_id=b.product_id and b.isActiveProduct=1'+
+		' group by a.prod_id';
 	var cust=[customer];
 	sql = mysql.format(sql,cust);
 	db.executeQuery(sql,function(err,status,result){
 		saved = result;
 		total = 0;
 		for(var i=0;i<saved.length;i++){
-			total+=saved[i].prod_price;
+			if(saved[i].total_qty > saved[i].units_in_stock){
+				res.status(400);
+				res.render('error-nikhil',{
+					errMsg : 'You are trying to checkout checkout more than the available quantity. Please try again by decreasing the quantity.\n'+
+					'Product : '+saved[i].prod_name
+				});
+				return;
+			}
+			total+=saved[i].prod_price * saved[i].prod_qty;
 		}
 		console.log("total checkout --"+total);
 		res.status(200);
@@ -201,10 +209,8 @@ function checkout(req,res){
 	
 	var updsql='';
 	db.executeQuery(insquery, function(err,status,result){
-		
-		
+				
 		if(status == 200){
-			
 			
 			db.executeQuery(selForUpd, function(err,status,result1){
 				var selresult = result1;
