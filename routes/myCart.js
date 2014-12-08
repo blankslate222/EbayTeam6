@@ -154,9 +154,8 @@ function removeSaved(req,res){
 
 function checkoutSummary(req,res){
 	
-	var notSaved = cart.getCart();
 	var saved = '';
-	
+	var total;
 	var customer = req.session.pid;
 	var sql = 'select a.prod_id, a.prod_name, a.prod_qty, a.prod_price, a.cust_id'+
 	' from cart_table a, product b where cust_id = ?'+
@@ -165,11 +164,15 @@ function checkoutSummary(req,res){
 	sql = mysql.format(sql,cust);
 	db.executeQuery(sql,function(err,status,result){
 		saved = result;
-		
+		total = 0;
+		for(var i=0;i<saved.length;i++){
+			total+=saved[i].prod_price;
+		}
+		console.log("total checkout --"+total);
 		res.status(200);
 		res.render('checkout',{
-			unsaved : notSaved,
 			saved : saved,
+			total : total,
 			req:req
 		});
 		

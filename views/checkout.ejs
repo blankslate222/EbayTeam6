@@ -64,7 +64,7 @@ function setTime() {
 
 <div style="margin-left:30px"><h2>Your Invoice Summary</h2></div>
 
-<%if(unsaved.length ==0 && saved.length == 0){%>
+<%if(saved.length == 0){%>
 <p>No item available in the cart for checkout</p>
 <%}else{%>
 
@@ -72,28 +72,17 @@ function setTime() {
 <tr> 
 <th>Product</th>
 <th>Quantity</th>
-<th>Price</th>
+<th>Price ($)</th>
 </tr>
-
-<%if(unsaved.length !=0 ){
-	 for (var i=0; i<unsaved.length; i++){%>
-	<tr>
-		<td align="center" ><%=unsaved[i].prod_name%></td>
-		<td align="center" ><%=unsaved[i].prod_qty%></td>
-		<td align="center" ><%=unsaved[i].prod_price%></td>
-	</tr>
-	<%}%>
-<%}%>
-
-<%if(saved.length !=0 ){
-	 for (var i=0; i<saved.length; i++){%>
+	 <%for (var i=0; i<saved.length; i++){%>
 	<tr>
 		<td align="center" ><%=saved[i].prod_name%></td>
 		<td align="center"><%=saved[i].prod_qty%></td>
 		<td align="center"><%=saved[i].prod_price%></td>
 	</tr>
 	<%}%>
-<%}%>
+	
+	<tr><td></td><td></td><td>Grand Total - $ <%=total%></td></tr>
 </table>
 
 <br><br/>
