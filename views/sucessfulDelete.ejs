@@ -11,7 +11,13 @@ label {
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-2.1.1.js" ></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>  
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+function logout(){
+	console.log("inside logout form submit");
+    $("#logoutForm").submit();
+}
+</script>  
 </head>
  <body>
  <div class="modal-content" style="background-color:#c41200;">
@@ -19,6 +25,8 @@ label {
  <div>
   <body>
   <label>Account Deactivated</label>
+  <a href="#" onClick=logout()>eBay Home Link</a>
+  <form method = 'post' action = '/logout' id='logoutForm' style='display:none'>	</form>
  </div>
  </form>
   </body>

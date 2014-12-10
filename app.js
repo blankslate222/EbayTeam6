@@ -148,23 +148,47 @@ setInterval(function() {
 				console.log("There is an expired auction");
 				for (var i=0; i<resultAuction.length; i++){
 					//console.log("resultAuction[i].product_id:"+resultAuction[i].product_id);
-					var auctionDetailsQuery = "select product_id, seller_id, (select customer_id from bid_line_item where bid_amount = (select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and product_id = product.product_id)) customer_id, (select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and product_id = product.product_id) order_amount, (select bid_id from bid_header_item where product_id = product.product_id) bid_id, 4 seller_rating from product where product_id = "+resultAuction[i].product_id;
+					var auctionDetailsQuery = "select product_id, seller_id, (select customer_id from bid_line_item, bid_header_item where bid_amount = (select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and product_id = product.product_id) and bid_line_item.bid_id = bid_header_item.bid_id and product_id = product.product_id) customer_id, (select max(bid_amount) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and product_id = product.product_id) order_amount, (select bid_id from bid_header_item where product_id = product.product_id) bid_id, 4 seller_rating, (select count(1) from bid_line_item, bid_header_item where bid_line_item.bid_id = bid_header_item.bid_id and bid_header_item.product_id = product.product_id) noOfBids from product where product_id = "+resultAuction[i].product_id;
 					db.executeQuery(auctionDetailsQuery, function(err,status, resultAuctionDetails){
 						if(err){
 							console.log("unable to connect - try after sometime");
 						}
 						else{
 							if (resultAuctionDetails.length === 1){
-								var insertIntoOrderHistory = "insert into order_history(product_id, seller_id, customer_id, quantity, order_amount, bid_id, seller_rating, order_date) values ("+resultAuctionDetails[0].product_id+", "+resultAuctionDetails[0].seller_id+", "+resultAuctionDetails[0].customer_id+", 1, "+resultAuctionDetails[0].order_amount+", "+resultAuctionDetails[0].bid_id+",4, now()); update product set product_status = 'Sold', units_in_stock = 0 where product_id = "+resultAuctionDetails[0].product_id;
-								db.executeQuery(insertIntoOrderHistory, function(err,status, insertSuccess){
-									if(err){
-										throw err;
-									}
-									else{
-										var msg="There is an expired auction:"+resultAuctionDetails[0].product_id;
-										socket.send(msg);
-									}
-								});
+								if(resultAuctionDetails[0].noOfBids > 0){
+									console.log("Inserting into order history table");
+									var insertIntoOrderHistory = "insert into order_history(product_id, seller_id, customer_id, quantity, order_amount, bid_id, seller_rating, order_date) values ("+resultAuctionDetails[0].product_id+", "+resultAuctionDetails[0].seller_id+", "+resultAuctionDetails[0].customer_id+", 1, "+resultAuctionDetails[0].order_amount+", "+resultAuctionDetails[0].bid_id+",4, now()) ";
+									db.executeQuery(insertIntoOrderHistory, function(err,status, insertSuccess){
+										if(err){
+											throw err;
+										}
+										else{
+											var updateQuery = "update product set product_status = 'Sold' where product_id = "+resultAuctionDetails[0].product_id;
+											db.executeQuery(updateQuery, function(err,status, insertSuccess){
+												if(err){
+													throw err;
+												}
+												else{
+													var msg="There is an expired auction:"+resultAuctionDetails[0].product_id;
+													socket.send(msg);
+												}
+											});									
+										}
+									});									
+								} else {
+									console.log("no need of inserting into order history table");
+									var updateProductStatus = "update product set product_status = 'Sold', units_in_stock = 0 where product_id = "+resultAuctionDetails[0].product_id;
+									db.executeQuery(updateProductStatus, function(err,status, insertSuccess){
+										if(err){
+											throw err;
+										}
+										else{
+											var msg="There is an expired auction:"+resultAuctionDetails[0].product_id;
+											socket.send(msg);
+										}
+									});									
+								}
+
 								//console.log("insertIntoOrderHistory:"+insertIntoOrderHistory);
 								
 							}

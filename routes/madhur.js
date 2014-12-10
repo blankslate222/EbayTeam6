@@ -119,7 +119,7 @@ function productDetails(req,res) {
         				{
         					("Serving from DB");
         					res.type('application/json');
-        					client.setex(query,500,JSON.stringify(results))
+        					client.setex(query,50,JSON.stringify(results))
         					res.end(JSON.stringify(results));
         				}
         			},query);
@@ -518,7 +518,7 @@ function getProductNames(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,500,JSON.stringify(results))
+    					client.setex(query,5,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);
@@ -550,7 +550,7 @@ function getCategories(req,res) {
     				{
     					("Serving from DB");
     					res.type('application/json');
-    					client.setex(query,500,JSON.stringify(results))
+    					client.setex(query,5000,JSON.stringify(results))
     					res.end(JSON.stringify(results));
     				}
     			},query);

@@ -89,7 +89,7 @@ function save(req, res) {
 		console.log('prd qty'+itemList[i].prod_qty);
 		console.log('prd price'+itemList[i].prod_price);
 		console.log('cust id'+itemList[i].cust_id);
-	sql+='(\''+itemList[i].cust_id+'\',\''+itemList[i].prod_id+'\',\"'+itemList[i].prod_name+'\",\''+
+	sql+='(\''+itemList[i].cust_id+'\',\''+itemList[i].prod_id+'\',\''+itemList[i].prod_name+'\',\''+
 	itemList[i].prod_qty+'\',\''+itemList[i].prod_price+'\''+'),';
 	}
 	sql = sql.slice(0,-1);
@@ -169,7 +169,7 @@ function checkoutSummary(req,res){
 			if(saved[i].total_qty > saved[i].units_in_stock){
 				res.status(400);
 				res.render('error-nikhil',{
-					errMsg : 'You are trying to checkout checkout more than the available quantity. Please try again by decreasing the quantity.\n'+
+					errMsg : 'You are trying to checkout more than the available quantity. Please try again by decreasing the quantity.\n'+
 					'Product : '+saved[i].prod_name
 				});
 				return;

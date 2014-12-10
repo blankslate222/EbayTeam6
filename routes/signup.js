@@ -38,7 +38,7 @@ function save(req,res){
 		else{
 		res.status=status;
 		console.log(err);
-		res.render('signup',{err:'Email Id already in use...Please use different Email'});
+		res.render('signup',{err:'Email Id or MemberShip Id already in use. Please use a different one!'});
 		  //res.send("something is not right");	
 		}
 		

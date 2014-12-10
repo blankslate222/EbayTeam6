@@ -96,6 +96,7 @@ function logout(){
            		   <p><strong>Address: </strong><%=users[j].person_address%> &nbsp <a href="#" onClick="MyWindow=window.open('editAddress','MyWindow','width=400,height=300'); return false;"> edit </a></p>
            		   <p><strong>City: </strong><%=users[j].person_city%> &nbsp <a href="#" onClick="MyWindow=window.open('editCity','MyWindow','width=400,height=300'); return false;"> edit </a></p>
            		   <p><strong>Zipcode: </strong><%=users[j].person_zip%> &nbsp <a href="#" onClick="MyWindow=window.open('editZip','MyWindow','width=400,height=300'); return false;"> edit </a></p>
+            		<p><strong>Membership Id: </strong><%= users[j].membership_id %> </p>
            	<% 
 	            }
 	       %> 

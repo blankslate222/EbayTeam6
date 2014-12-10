@@ -155,6 +155,7 @@ function placeBid(req, res){
 			//console.log("product_name:"+resultProductDetails[0].product_name);
 			console.log("product_desc:"+resultProductDetails[0].product_desc);
 			console.log("current Bid:"+resultProductDetails[0].currentBid);
+			var currentBidValue = resultProductDetails[0].currentBid;
 			console.log("number of Bidders:"+resultProductDetails[0].noOfBidders);
 			var errorMessage = "";
 			if(resultProductDetails[0].product_status === "Sold")  errorMessage = "This product has been sold. The Auction has ended.";
@@ -249,11 +250,11 @@ function placeBid(req, res){
 													}else{
 														console.log("The max bid value is: "+resultLastBid[0].maxBidAmount);
 														minBidAmtReqd = resultLastBid[0].maxBidAmount;
-														if ( newBidAmt < minBidAmtReqd){
+														if ( newBidAmt < currentBidValue){
 															console.log("newBidAmt:"+newBidAmt);
 															console.log("minBidAmtReqd:"+minBidAmtReqd);															
 															console.log("Bid amount lesser than previous bid");
-															errorMessage = "Error - Bid amount should be greater than $"+minBidAmtReqd
+															errorMessage = "Error - Bid amount should be greater than $"+currentBidValue
 															ejs.renderFile('./views/productDetails.ejs',{ productDetails : resultProductDetails, sellerDetails: resultSellerDetails, customerId: req.session.pid, errormsg:errorMessage, lastLoginTime: req.session.lasttimelog, userName: req.session.uname},function(err, result) {
 																// render on success
 																if (!err) {

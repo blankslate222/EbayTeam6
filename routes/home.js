@@ -689,7 +689,7 @@ function getCustomerInfoById(req,res)
 	function deleteAccount(req,res)
 	{
 
-		var updateUser="UPDATE person SET is_valid='0'where person_id='"+req.session.pid+"'";
+		var updateUser="UPDATE person SET isactive='0'where person_id='"+req.session.pid+"'";
 
 		console.log("Query is:"+updateUser);
 
